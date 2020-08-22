@@ -1,1 +1,1 @@
-# LinRegOutliers.jl
+# LinRegOutliers
