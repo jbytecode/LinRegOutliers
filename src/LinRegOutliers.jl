@@ -15,6 +15,9 @@ include("smr98.jl")
 include("lms.jl")
 include("lts.jl")
 
+# Essentials from other packages
+export @formula, DataFrame
+
 # Basics 
 export RegressionSetting
 export createRegressionSetting
