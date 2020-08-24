@@ -50,8 +50,9 @@ function lts(setting::RegressionSetting; iters=nothing, crit=3)
     ltsreg = lm(setting.formula, setting.data[besthsubset, :])
     ltsbetas = coef(ltsreg)
     ltsres = [Y[i] - sum(X[i,:] .* ltsbetas) for i in 1:n]
-    ltsS = sqrt(sum(sort(ltsres.^2.0)[1:h]) / (h - p))
-    ltsScaledRes = ltsres / ltsS
+    ltsS = sqrt(sum((ltsres.^2.0)[1:h]) / (h - p))
+    ltsresmean = mean(ltsres[besthsubset])
+    ltsScaledRes = (ltsres .- ltsresmean) / ltsS
     outlierindices = filter(i -> abs(ltsScaledRes[i]) > crit, 1:n)
     result = Dict()
     result["objective"] = bestobjective
