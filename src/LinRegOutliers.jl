@@ -5,6 +5,7 @@ using DataFrames
 using Distributions
 using Clustering
 using StatsBase
+using LinearAlgebra
 
 include("basis.jl")
 include("data.jl")
@@ -14,6 +15,7 @@ include("ks89.jl")
 include("smr98.jl")
 include("lms.jl")
 include("lts.jl")
+include("mve.jl")
 
 # Essentials from other packages
 export @formula, DataFrame
@@ -41,5 +43,5 @@ export ks89
 export smr98
 export lms
 export lts 
-
+export mve
 end # module
