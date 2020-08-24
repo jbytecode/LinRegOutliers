@@ -6,6 +6,7 @@ using Distributions
 using Clustering
 using StatsBase
 using LinearAlgebra
+using Plots
 
 include("basis.jl")
 include("data.jl")
@@ -16,6 +17,7 @@ include("smr98.jl")
 include("lms.jl")
 include("lts.jl")
 include("mve.jl")
+include("mveltsplot.jl")
 
 # Essentials from other packages
 export @formula, DataFrame
@@ -44,4 +46,6 @@ export smr98
 export lms
 export lts 
 export mve
+export mveltsplot
+
 end # module
