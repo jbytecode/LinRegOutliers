@@ -11,6 +11,9 @@ function mahalabonisSquaredMatrix(data::DataFrame; meanvector=nothing, covmatrix
         MD2 = (datamat .- meanvector') * invm * (datamat .- meanvector')'
         return MD2
     catch e
+        if det(covmatrix) == 0
+            @warn "singular covariance matrix, mahalanobis distances can not be calculated"
+        end
         n = size(datamat)[1]
         return zeros(Float64, (n, n))
     end

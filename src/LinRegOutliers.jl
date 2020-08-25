@@ -18,6 +18,7 @@ include("lms.jl")
 include("lts.jl")
 include("mve.jl")
 include("mveltsplot.jl")
+include("bch.jl")
 
 # Essentials from other packages
 export @formula, DataFrame
@@ -29,7 +30,7 @@ export designMatrix
 export responseVector
 
 # Data
-export phones
+export phones, hbk
 
 # Diagnostics 
 export dffit
@@ -47,5 +48,6 @@ export lms
 export lts 
 export mve
 export mveltsplot
+export bch, bchplot
 
 end # module
