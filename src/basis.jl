@@ -17,3 +17,8 @@ function responseVector(setting::RegressionSetting)::Array{Float64,1}
     mf = ModelFrame(setting.formula, setting.data)
     return setting.data[mf.f.lhs.sym]
 end
+
+function applyColumns(f::Function, data::DataFrame)
+    return [f(col) for col = eachcol(data)]
+end
+

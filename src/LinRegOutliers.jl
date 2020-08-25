@@ -19,6 +19,7 @@ include("lts.jl")
 include("mve.jl")
 include("mveltsplot.jl")
 include("bch.jl")
+include("py95.jl")
 
 # Essentials from other packages
 export @formula, DataFrame
@@ -49,5 +50,6 @@ export lts
 export mve
 export mveltsplot
 export bch, bchplot
+export py95, py95SuspectedObservations
 
 end # module

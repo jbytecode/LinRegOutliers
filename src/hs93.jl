@@ -23,21 +23,15 @@ function hs93basicsubset(setting::RegressionSetting, initialindices::Array{Int,1
         for j in 1:n
             xxxx = X[j,:]' * inv(XM'XM) * X[j,:]
             if j in indices
-                d[j] = abs.(Y[j] - sum(X[j,:] .* betas) / sqrt(1 - xxxx))
+                d[j] = abs.(Y[j] - sum(X[j,:] .* betas)) / sqrt(1 - xxxx)
             else
-                d[j] = abs.(Y[j] - sum(X[j,:] .* betas) / sqrt(1 + xxxx))
+                d[j] = abs.(Y[j] - sum(X[j,:] .* betas)) / sqrt(1 + xxxx)
             end
         end
         orderingd = sortperm(abs.(d))
         indices = orderingd[1:Int(i)]
     end
     return indices
-end
-
-function sigmaM(Y::Array{Float64,1}, X::Array{Float64,2}, betas::Array{Float64,1})::Float64
-    res = (Y .- X * betas).^2.0
-    n, p = size(X)
-    return sqrt(sum(res) / (n - p))
 end
 
 
@@ -55,7 +49,8 @@ function hs93(setting::RegressionSetting; alpha=0.05, basicsubsetindices=nothing
         partialdata = setting.data[indices, :]
         ols = lm(setting.formula, partialdata)
         betas = coef(ols)
-        sigma = sigmaM(Y, X, betas)
+        resids = residuals(ols)
+        sigma = sqrt(sum(resids .^ 2.0) / (n - p))
         d = zeros(Float64, n)
         XM = X[indices,:]
         iXmXm = inv(XM'XM)
@@ -70,7 +65,7 @@ function hs93(setting::RegressionSetting; alpha=0.05, basicsubsetindices=nothing
         orderingd = sortperm(abs.(d))
         tdist = TDist(s - p)
         tcalc = quantile(tdist, alpha / (2 * (s + 1)))
-        if d[orderingd][s + 1] > tcalc
+        if abs(d[orderingd][s + 1]) > tcalc
             result = Dict()
             result["d"] = d
             result["t"] = tcalc
