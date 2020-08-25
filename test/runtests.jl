@@ -166,7 +166,7 @@ end
 @testset "MVE & LTS Plot - Algorithm - Phone data" begin
     df = phones
     reg = createRegressionSetting(@formula(calls ~ year), df)
-    result = mveltsplot(reg, showplot = false)
+    result = mveltsplot(reg, showplot=false)
     regulars = result["regular.points"]
     @test 1 in regulars
     @test 2 in regulars
@@ -194,3 +194,12 @@ end
     end
 end
 
+@testset "PY95 - Algorithm - Hawkins & Bradu & Kass data" begin
+    df = hbk
+    reg = createRegressionSetting(@formula(y ~ x1 + x2 + x3), df)
+    result = py95(reg)
+    outliers = result["outliers"]
+    for i in 1:14
+        @test i in outliers 
+    end
+end

@@ -1,7 +1,7 @@
 function mahalabonisSquaredMatrix(data::DataFrame; meanvector=nothing, covmatrix=nothing)::Array{Float64,2}
     datamat = convert(Matrix, data)
     if meanvector === nothing
-        meanvector = colwise(mean, data)
+        meanvector = applyColumns(mean, data)
     end
     if covmatrix === nothing
         covmatrix = cov(datamat)
@@ -24,7 +24,7 @@ function enlargesubset(initialsubset, data::DataFrame, dataMatrix::Matrix, h::In
     indices = collect(1:n)
     basicsubset = copy(initialsubset)
     while length(basicsubset) < h
-        meanvector = colwise(mean, data[basicsubset,:])
+        meanvector = applyColumns(mean, data[basicsubset,:])
         covmatrix = cov(dataMatrix[basicsubset, :])
         md2mat = mahalabonisSquaredMatrix(data, meanvector=meanvector, covmatrix=covmatrix)
         md2 = diag(md2mat)
@@ -55,7 +55,7 @@ function mve(data::DataFrame; alpha=0.05)
             initialsubset = sample(indices, k, replace=false)
             hsubset = enlargesubset(initialsubset, data, dataMatrix, h) 
             covmatrix = cov(dataMatrix[hsubset, :])
-            meanvector = colwise(mean, data[hsubset, :])
+            meanvector = applyColumns(mean, data[hsubset, :])
             md2mat = mahalabonisSquaredMatrix(data, meanvector=meanvector, covmatrix=covmatrix)
             DJ = sqrt(sort(diag(md2mat))[h])
             goal = (DJ / c)^p * det(covmatrix)
@@ -68,7 +68,7 @@ function mve(data::DataFrame; alpha=0.05)
             besthsubset = hsubset
         end
     end
-    meanvector = colwise(mean, data[besthsubset, :])
+    meanvector = applyColumns(mean, data[besthsubset, :])
     covariancematrix = cov(dataMatrix[besthsubset, :])
     md2 = diag(mahalabonisSquaredMatrix(data, meanvector=meanvector, covmatrix=covariancematrix))
     outlierset = filter(x -> md2[x] > chisqcrit, 1:n)
