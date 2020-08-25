@@ -15,5 +15,5 @@ end
 
 function responseVector(setting::RegressionSetting)::Array{Float64,1}
     mf = ModelFrame(setting.formula, setting.data)
-    return setting.data[:, mf.f.lhs.sym]
+    return setting.data[mf.f.lhs.sym]
 end

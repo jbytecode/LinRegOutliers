@@ -14,7 +14,7 @@ function lms(setting::RegressionSetting; iters=nothing, crit=2.5)
     for iter in 1:iters 
         try 
             k = rand(kindices, 1)[1]
-            sampledindices = sample(indices, k, replace=true)
+            sampledindices = sample(indices, k, replace=false)
             ols = lm(setting.formula, setting.data[sampledindices,:])
             betas = coef(ols)
             origres = Y .- X * betas
@@ -26,7 +26,7 @@ function lms(setting::RegressionSetting; iters=nothing, crit=2.5)
                 bestres = origres
             end
         catch e
-            @warn "Possibly singularity during iterations: " e
+            @warn e
         end
     end
     s = 1.4826 * sqrt((1.0 + (5.0 / (n - p))) * bestobjective)
