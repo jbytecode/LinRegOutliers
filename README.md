@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/jbytecode/LinRegOutliers.svg?branch=master)](https://travis-ci.org/jbytecode/LinRegOutliers)
+
 # LinRegOutliers
 
 A Julia package for outlier detection in linear regression.
