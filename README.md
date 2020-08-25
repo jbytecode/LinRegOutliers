@@ -10,3 +10,5 @@ A Julia package for outlier detection in linear regression.
 - Least Trimmed Squares 
 - Minimum Volume Ellipsoid (MVE)
 - MVE & LTS Plot 
+- Billor & Chatterjee & Hadi (2006)
+
