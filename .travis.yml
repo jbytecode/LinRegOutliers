@@ -9,7 +9,6 @@ os:
 
 env:
 - JULIA_PKG_SERVER="https://pkg.julialang.org"
-- JULIA_PKG_SERVER=""
 
 notifications:
   email: false
