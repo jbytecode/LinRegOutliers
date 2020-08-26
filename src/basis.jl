@@ -22,3 +22,6 @@ function applyColumns(f::Function, data::DataFrame)
     return [f(col) for col = eachcol(data)]
 end
 
+function applyColumns(f::Function, data::Matrix)
+    return [f(col) for col = eachcol(data)]
+end
