@@ -1,0 +1,2 @@
+- name: Code Lines Badge
+  uses: Kherrisan/cloc-badge-action@1.0.1
