@@ -59,3 +59,30 @@ function cooks(setting::RegressionSetting)::Array{Float64,1}
     end
     return d
 end
+
+function mahalabonisSquaredMatrix(data::DataFrame; meanvector=nothing, covmatrix=nothing)::Array{Float64,2}
+    datamat = convert(Matrix, data)
+    return mahalabonisSquaredMatrix(datamat, meanvector = meanvector, covmatrix = covmatrix)
+end
+
+
+function mahalabonisSquaredMatrix(data::Matrix; meanvector=nothing, covmatrix=nothing)::Array{Float64,2}
+    datamat = convert(Matrix, data)
+    if meanvector === nothing
+        meanvector = applyColumns(mean, data)
+    end
+    if covmatrix === nothing
+        covmatrix = cov(datamat)
+    end
+    try
+        invm = inv(covmatrix)
+        MD2 = (datamat .- meanvector') * invm * (datamat .- meanvector')'
+        return MD2
+    catch e
+        if det(covmatrix) == 0
+            @warn "singular covariance matrix, mahalanobis distances can not be calculated"
+        end
+        n = size(datamat)[1]
+        return zeros(Float64, (n, n))
+    end
+end
