@@ -14,4 +14,6 @@ A Julia package for outlier detection in linear regression.
 - MVE & LTS Plot 
 - Billor & Chatterjee & Hadi (2006)
 - Pena & Yohai (1995)
+- Satman (2013)
+
 
