@@ -21,6 +21,7 @@ include("mveltsplot.jl")
 include("bch.jl")
 include("py95.jl")
 include("satman2013.jl")
+include("satman2015.jl")
 
 # Essentials from other packages
 export @formula, DataFrame
@@ -53,5 +54,6 @@ export mveltsplot
 export bch, bchplot
 export py95, py95SuspectedObservations
 export satman2013
+export satman2015
 
 end # module
