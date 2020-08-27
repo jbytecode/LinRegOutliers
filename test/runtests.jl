@@ -53,7 +53,7 @@ end
 end
 
 
-@testset "Kianifard & Shallow 1989 - Algorithm" begin
+@testset "Kianifard & Swallow 1989 - Algorithm" begin
     df = phones
     reg = createRegressionSetting(@formula(calls ~ year), df)
     outset = ks89(reg)
@@ -215,3 +215,17 @@ end
     end
 end
 
+@testset "Satman2015 - Algorithm - Phone data" begin
+    @test LinRegOutliers.dominates([1,2,4], [1,2,3])
+    @test LinRegOutliers.dominates([1,2,3], [0,1,2])
+    @test !LinRegOutliers.dominates([1,2,3], [1,2,3])
+    @test !LinRegOutliers.dominates([1,2,3], [1,2,4])
+
+    df = phones
+    reg = createRegressionSetting(@formula(calls ~ year), df)
+    result = satman2015(reg)
+    outliers = result["outliers"]
+    for i in 15:20
+        @test i in outliers 
+    end
+end
