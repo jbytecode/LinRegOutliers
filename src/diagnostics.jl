@@ -66,8 +66,7 @@ function mahalabonisSquaredMatrix(data::DataFrame; meanvector=nothing, covmatrix
 end
 
 
-function mahalabonisSquaredMatrix(data::Matrix; meanvector=nothing, covmatrix=nothing)::Array{Float64,2}
-    datamat = convert(Matrix, data)
+function mahalabonisSquaredMatrix(datamat::Matrix; meanvector=nothing, covmatrix=nothing)::Array{Float64,2}
     if meanvector === nothing
         meanvector = applyColumns(mean, data)
     end
