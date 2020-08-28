@@ -43,3 +43,25 @@ julia> smr98(reg)
  13
  14
 ```
+
+
+```julia
+julia> py95(reg)["outliers"]
+14-element Array{Int64,1}:
+  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+ 10
+ 11
+ 12
+ 13
+ 14
+
+```
+
