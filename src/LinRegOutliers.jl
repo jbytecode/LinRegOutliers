@@ -46,7 +46,7 @@ export cooks
 # Algorithms
 export hs93, hs93initialset, hs93basicsubset
 export ks89
-export smr98
+export smr98, asm2000
 export lms
 export lts 
 export mve
@@ -54,6 +54,7 @@ export mveltsplot
 export bch, bchplot
 export py95, py95SuspectedObservations
 export satman2013
-export satman2015
+export satman2015, dominates
+
 
 end # module

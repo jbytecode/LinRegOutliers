@@ -205,7 +205,7 @@ end
 end
 
 
-@testset "Satman2013 - Algorithm - Hawkins & Bradu & Kass data" begin
+@testset "satman2013 - Algorithm - Hawkins & Bradu & Kass data" begin
     df = hbk
     reg = createRegressionSetting(@formula(y ~ x1 + x2 + x3), df)
     result = satman2013(reg)
@@ -215,15 +215,26 @@ end
     end
 end
 
-@testset "Satman2015 - Algorithm - Phone data" begin
-    @test LinRegOutliers.dominates([1,2,4], [1,2,3])
-    @test LinRegOutliers.dominates([1,2,3], [0,1,2])
-    @test !LinRegOutliers.dominates([1,2,3], [1,2,3])
-    @test !LinRegOutliers.dominates([1,2,3], [1,2,4])
+@testset "satman2015 - Algorithm - Phone data" begin
+    @test dominates([1,2,4], [1,2,3])
+    @test dominates([1,2,3], [0,1,2])
+    @test !dominates([1,2,3], [1,2,3])
+    @test !dominates([1,2,3], [1,2,4])
 
     df = phones
     reg = createRegressionSetting(@formula(calls ~ year), df)
     result = satman2015(reg)
+    outliers = result["outliers"]
+    for i in 15:20
+        @test i in outliers 
+    end
+end
+
+
+@testset "asm2000 - Algorithm - Phone data" begin
+    df = phones
+    reg = createRegressionSetting(@formula(calls ~ year), df)
+    result = asm2000(reg)
     outliers = result["outliers"]
     for i in 15:20
         @test i in outliers 
