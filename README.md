@@ -5,6 +5,7 @@
 A Julia package for outlier detection in linear regression.
 
 ## Implemented Methods
+- Basic diagnostics
 - Hadi & Simonoff (1993)
 - Kianifard & Swallow (1989)
 - Sebert & Montgomery & Rollier (1998)
@@ -15,5 +16,30 @@ A Julia package for outlier detection in linear regression.
 - Billor & Chatterjee & Hadi (2006)
 - Pena & Yohai (1995)
 - Satman (2013)
+- Satman (2015)
+- Setan & Halim & Mohd (2000)
 
 
+## Example
+
+```julia
+julia> using LinRegOutliers
+julia> # Regression setting for Hawkins & Bradu & Kass data
+julia> reg = createRegressionSetting(@formula(y ~ x1 + x2 + x3), hbk)
+julia> smr98(reg)
+14-element Array{Int64,1}:
+  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+ 10
+ 11
+ 12
+ 13
+ 14
+```
