@@ -18,6 +18,7 @@ A Julia package for outlier detection in linear regression.
 - Satman (2013)
 - Satman (2015)
 - Setan & Halim & Mohd (2000)
+- Least Absolute Deviations
 
 
 ## Example
