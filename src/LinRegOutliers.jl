@@ -7,6 +7,7 @@ using Clustering
 using StatsBase
 using LinearAlgebra
 using Plots
+using Optim
 
 include("basis.jl")
 include("data.jl")
@@ -22,6 +23,7 @@ include("bch.jl")
 include("py95.jl")
 include("satman2013.jl")
 include("satman2015.jl")
+include("lad.jl")
 
 # Essentials from other packages
 export @formula, DataFrame
@@ -55,6 +57,6 @@ export bch, bchplot
 export py95, py95SuspectedObservations
 export satman2013
 export satman2015, dominates
-
+export lad
 
 end # module
