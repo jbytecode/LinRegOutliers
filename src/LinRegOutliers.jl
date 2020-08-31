@@ -1,13 +1,23 @@
 module LinRegOutliers
 
-using GLM
-using DataFrames
-using Distributions
-using Clustering
-using StatsBase
-using LinearAlgebra
-using Plots
-using Optim
+#using GLM
+#using DataFrames
+#using Distributions
+#using Clustering
+#using StatsBase
+#using LinearAlgebra
+#using Plots
+#using Optim
+
+import GLM: @formula, lm, FormulaTerm, ModelFrame, ModelMatrix, predict, coef, residuals
+import DataFrames: DataFrame
+import Distributions: TDist, Chisq, Normal, std, cov, median
+import Clustering: Hclust, hclust, cutree
+import StatsBase: quantile, standardize, ZScoreTransform, mean, sample
+import LinearAlgebra: inv, det, diag, eigen
+import Plots: scatter, title!, xlabel!, ylabel!, hline!, vline!
+import Optim: optimize, NelderMead
+import Combinatorics: combinations
 
 include("basis.jl")
 include("data.jl")
@@ -24,6 +34,7 @@ include("py95.jl")
 include("satman2013.jl")
 include("satman2015.jl")
 include("lad.jl")
+include("lta.jl")
 
 # Essentials from other packages
 export @formula, DataFrame
@@ -58,5 +69,6 @@ export py95, py95SuspectedObservations
 export satman2013
 export satman2015, dominates
 export lad
+export lta
 
 end # module

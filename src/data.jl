@@ -90,7 +90,8 @@ Stack loss data
 - `acidcond::Float64`: concentration of acid (independent variable).
 - `stackloss::Float64`: stack loss (dependent variable).
 
-
+# Outliers
+    Observations 1, 3, 4, and 21 are outliers.
 
 # References
     Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) _The New S Language_.  Wadsworth & Brooks/Cole.
