@@ -1,13 +1,13 @@
 module LinRegOutliers
 
-#using GLM
-#using DataFrames
-#using Distributions
-#using Clustering
-#using StatsBase
-#using LinearAlgebra
-#using Plots
-#using Optim
+# using GLM
+# using DataFrames
+# using Distributions
+# using Clustering
+# using StatsBase
+# using LinearAlgebra
+# using Plots
+# using Optim
 
 import GLM: @formula, lm, FormulaTerm, ModelFrame, ModelMatrix, predict, coef, residuals
 import DataFrames: DataFrame
@@ -35,15 +35,19 @@ include("satman2013.jl")
 include("satman2015.jl")
 include("lad.jl")
 include("lta.jl")
+include("hadi1992.jl")
 
 # Essentials from other packages
 export @formula, DataFrame
+export mean, quantile
 
 # Basics 
 export RegressionSetting
 export createRegressionSetting
 export designMatrix
 export responseVector
+export applyColumns
+export find_minimum_nonzero
 
 # Data
 export phones, hbk
@@ -70,5 +74,5 @@ export satman2013
 export satman2015, dominates
 export lad
 export lta
-
+export hadi1992
 end # module
