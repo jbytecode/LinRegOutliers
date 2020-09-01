@@ -5,6 +5,33 @@ using GLM
 
 using LinRegOutliers
 
+@testset "Apply function to columns" begin
+    ones_vector = ones(Float64, 10)
+    zeros_vector = zeros(Float64, 10)
+    mat = hcat(ones_vector, zeros_vector)
+    
+    @test applyColumns(sum, mat) == [10.0, 0.0]
+    @test applyColumns(mean, mat) == [1.0, 0.0]
+end
+
+@testset "Basis - createRegressionSetting, designMatrix, responseVector" begin
+    dataset = DataFrame(
+        x=[1.0, 2, 3, 4, 5],
+        y=[2.0, 4, 6, 8, 10]
+    )
+    setting = createRegressionSetting(@formula(y ~ x), dataset)
+
+    @test designMatrix(setting) == hcat(ones(5), dataset[:, "x"])
+    @test responseVector(setting) == dataset[:, "y"]
+    @test setting.formula == @formula(y ~ x)
+end
+
+@testset "Find nonzero minimum" begin
+    arr = [0.0, 2.0, 0.0, 0.0, 0.0, 9.0, 1.0]
+    val = find_minimum_nonzero(arr)
+    @test val == 1.0
+end
+
 @testset "Hadi & Simonoff 1993 - initial subset" begin
     # Create simple data
     rng = MersenneTwister(12345) 
@@ -150,6 +177,7 @@ end
     @test 21 in outset  
 end
 
+
 @testset "MVE - Algorithm - Phone data" begin
     df = phones
     outset = mve(df)["outliers"]
@@ -194,6 +222,7 @@ end
     end
 end
 
+
 @testset "PY95 - Algorithm - Hawkins & Bradu & Kass data" begin
     df = hbk
     reg = createRegressionSetting(@formula(y ~ x1 + x2 + x3), df)
@@ -203,7 +232,6 @@ end
         @test i in outliers 
     end
 end
-
 
 @testset "satman2013 - Algorithm - Hawkins & Bradu & Kass data" begin
     df = hbk
@@ -265,9 +293,26 @@ end
     eps = 0.0001
     df = phones
     reg = createRegressionSetting(@formula(calls ~ year), df)
-    result = lta(reg, exact = true)
+    result = lta(reg, exact=true)
     betas = result["betas"]
     @test abs(betas[1] - -55.5) < eps 
     @test abs(betas[2] -  1.15) < eps
 end
 
+@testset "Hadi 1992 - Algorithm - with several case" begin
+    phones_matrix = hcat(phones[:, "calls"], phones[:, "year"])
+    result = hadi1992(phones_matrix)
+    outlier_indices = result["outliers"]
+    for i in 15:20
+        @test i in outlier_indices
+    end
+
+    hbk_matrix = hcat(hbk[:, "x1"], hbk[:, "x2"], hbk[:, "x3"])
+    hbk_n, hbk_p = size(hbk_matrix)
+    result = hadi1992(hbk_matrix)
+    outlier_indices = result["outliers"]
+    for i in 15:hbk_n
+        @test !(i in outlier_indices)
+    end
+
+end
