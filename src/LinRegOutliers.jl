@@ -36,6 +36,7 @@ include("satman2015.jl")
 include("lad.jl")
 include("lta.jl")
 include("hadi1992.jl")
+include("dataimage.jl")
 
 # Essentials from other packages
 export @formula, DataFrame
@@ -75,4 +76,6 @@ export satman2015, dominates
 export lad
 export lta
 export hadi1992
+export dataimage
+
 end # module

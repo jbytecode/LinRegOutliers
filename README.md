@@ -21,6 +21,7 @@ A Julia package for outlier detection in linear regression.
 - Least Absolute Deviations (LAD)
 - Least Trimmed Absolute Deviations (LTA)
 - Hadi (1992)
+- Marchette & Solka (2003) Data Images
 
 ## Example
 

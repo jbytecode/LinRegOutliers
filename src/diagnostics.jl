@@ -62,13 +62,13 @@ end
 
 function mahalabonisSquaredMatrix(data::DataFrame; meanvector=nothing, covmatrix=nothing)::Array{Float64,2}
     datamat = convert(Matrix, data)
-    return mahalabonisSquaredMatrix(datamat, meanvector = meanvector, covmatrix = covmatrix)
+    return mahalabonisSquaredMatrix(datamat, meanvector=meanvector, covmatrix=covmatrix)
 end
 
 
 function mahalabonisSquaredMatrix(datamat::Matrix; meanvector=nothing, covmatrix=nothing)::Array{Float64,2}
     if meanvector === nothing
-        meanvector = applyColumns(mean, data)
+        meanvector = applyColumns(mean, datamat)
     end
     if covmatrix === nothing
         covmatrix = cov(datamat)
@@ -85,3 +85,4 @@ function mahalabonisSquaredMatrix(datamat::Matrix; meanvector=nothing, covmatrix
         return zeros(Float64, (n, n))
     end
 end
+
