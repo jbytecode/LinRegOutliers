@@ -39,7 +39,7 @@ function gwcga(setting::RegressionSetting)
 
     result_cga = cga(chsize = n, costfunction = costfunction, popsize = 10)
     initial_indices = filter(i -> result_cga[i] == 1, all_indices)
-    @info "Initial subset: " result_cga initial_indices
+    # @info "Initial subset: " result_cga initial_indices
 
     objective, clean_subset = iterateCSteps(setting, initial_indices, h)
     

@@ -316,3 +316,14 @@ end
     end
 
 end
+
+
+@testset "gwcga - Algorithm - phone data" begin
+    df = phones
+    reg = createRegressionSetting(@formula(calls ~ year), df)
+    result = gwcga(reg)
+    clean_indices = result["clean.subset"]
+    for i in 15:20
+        @test !(i in clean_indices)
+    end
+end
