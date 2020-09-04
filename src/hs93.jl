@@ -50,7 +50,7 @@ function hs93(setting::RegressionSetting; alpha=0.05, basicsubsetindices=nothing
         ols = lm(setting.formula, partialdata)
         betas = coef(ols)
         resids = residuals(ols)
-        sigma = sqrt(sum(resids .^ 2.0) / (n - p))
+        sigma = sqrt(sum(resids.^2.0) / (length(resids) - p))
         d = zeros(Float64, n)
         XM = X[indices,:]
         iXmXm = inv(XM'XM)
@@ -64,8 +64,8 @@ function hs93(setting::RegressionSetting; alpha=0.05, basicsubsetindices=nothing
         end
         orderingd = sortperm(abs.(d))
         tdist = TDist(s - p)
-        tcalc = quantile(tdist, alpha / (2 * (s + 1)))
-        if abs(d[orderingd][s + 1]) > tcalc
+        tcalc = quantile(tdist,  alpha / (2 * (s + 1)))
+        if abs(d[orderingd][s + 1]) > abs(tcalc)
             result = Dict()
             result["d"] = d
             result["t"] = tcalc
