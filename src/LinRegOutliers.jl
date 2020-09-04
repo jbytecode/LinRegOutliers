@@ -37,6 +37,7 @@ include("lad.jl")
 include("lta.jl")
 include("hadi1992.jl")
 include("dataimage.jl")
+include("cga.jl")
 include("gwlts.jl")
 
 # Essentials from other packages
