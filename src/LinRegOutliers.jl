@@ -37,6 +37,7 @@ include("lad.jl")
 include("lta.jl")
 include("hadi1992.jl")
 include("dataimage.jl")
+include("gwlts.jl")
 
 # Essentials from other packages
 export @formula, DataFrame
@@ -77,5 +78,6 @@ export lad
 export lta
 export hadi1992
 export dataimage
+export gwcga
 
 end # module
