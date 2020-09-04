@@ -77,8 +77,9 @@ function bch(setting::RegressionSetting; alpha=0.05, maxiter=1000, epsilon=0.000
     for i in 1:maxiter
         Yw = Y .* weights
         Xw = Xdesign .* weights
-        betas = (inv((Xw)' * Xw) * Xw' * Yw) 
-        resids = Yw - Xw * betas
+        wols = lm(setting.formula, setting.data, wts=weights)
+        betas = coef(wols)
+        resids = residuals(wols)
         squared_normalized_resids = (resids.^2.0) / (sum(resids.^2.0))
         abssnresids = abs.(squared_normalized_resids)
         medsnresids = median(squared_normalized_resids)
@@ -100,6 +101,7 @@ function bch(setting::RegressionSetting; alpha=0.05, maxiter=1000, epsilon=0.000
     result["squared.normalized.residuals"] = squared_normalized_resids
     result["squared.normalized.robust.distances"] = squared_normalized_robust_distances
     result["residuals"] = resids
+    result["outliers"] = filter(i -> abs(resids[i]) > 2.5, 1:n)
     result["basic.subset"] = sort(basicsubsetindices)
     return result
 end
