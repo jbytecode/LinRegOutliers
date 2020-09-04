@@ -20,7 +20,8 @@ function detectOutliers(setting::RegressionSetting; methods=[])
             "lts",
             "sat13",
             "sat15",
-            "asm20"
+            "asm20",
+            "bch"
             ]
     end
 
@@ -47,6 +48,8 @@ function detectOutliers(setting::RegressionSetting; methods=[])
             result = satman2015(setting)["outliers"]
         elseif method == "asm20"
             result = asm2000(setting)["outliers"]
+        elseif method == "bch"
+            result = bch(setting)["outliers"]
         else
             @error "Method not found " method
             result = []
