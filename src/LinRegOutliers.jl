@@ -39,6 +39,7 @@ include("hadi1992.jl")
 include("dataimage.jl")
 include("cga.jl")
 include("gwlts.jl")
+include("summary.jl")
 
 # Essentials from other packages
 export @formula, DataFrame
@@ -80,5 +81,7 @@ export lta
 export hadi1992
 export dataimage
 export gwcga
+export detectOutliers
+
 
 end # module
