@@ -1,4 +1,4 @@
-function distances(resids::Array{Float64, 1}, fitteds::Array{Float64})::Array{Float64, 2}
+function distances(resids::Array{Float64,1}, fitteds::Array{Float64})::Array{Float64,2}
     n = length(resids)
     d = zeros(Float64, n, n)
     for i in 1:n
@@ -6,7 +6,7 @@ function distances(resids::Array{Float64, 1}, fitteds::Array{Float64})::Array{Fl
             if i != j 
                 p1 = [resids[i], fitteds[i]]
                 p2 = [resids[j], fitteds[j]]
-                d[i, j] = sqrt(sum((p1 .- p2).^ 2.0))
+                d[i, j] = sqrt(sum((p1 .- p2).^2.0))
                 d[j, i] = d[i, j]
             end
         end
@@ -19,17 +19,48 @@ function majona(cluster::Hclust)::Float64
     return mean(heights) + 1.25 * std(heights)
 end
 
+"""
+
+    smr98(setting)
+
+Perform the Sebert, Monthomery and Rollier (1998) algorithm for the given regression setting.
+
+# Arguments
+- `setting::RegressionSetting`: RegressionSetting object with a formula and dataset.
+
+# Examples
+```julia-repl
+julia> reg0001 = createRegressionSetting(@formula(calls ~ year), phones);
+julia> smr98(reg0001)
+10-element Array{Int64,1}:
+ 15
+ 16
+ 17
+ 18
+ 19
+ 20
+ 21
+ 22
+ 23
+ 24
+```
+
+# References
+Sebert, David M., Douglas C. Montgomery, and Dwayne A. Rollier. "A clustering algorithm for 
+identifying multiple outliers in linear regression." Computational statistics & data analysis 
+27.4 (1998): 461-484.
+"""
 function smr98(setting::RegressionSetting)
     design = designMatrix(setting)
     ols = lm(setting.formula, setting.data)
-    stdres = standardize(ZScoreTransform, residuals(ols), dims = 1)
-    stdfit = standardize(ZScoreTransform, predict(ols), dims = 1)
+    stdres = standardize(ZScoreTransform, residuals(ols), dims=1)
+    stdfit = standardize(ZScoreTransform, predict(ols), dims=1)
     n, p = size(design)
     d = distances(stdres, stdfit)
     h = floor((n + p - 1) / 2)
-    hcl = hclust(d, linkage = :single)
+    hcl = hclust(d, linkage=:single)
     majonacrit = majona(hcl)
-    clustermappings = cutree(hcl, h = majonacrit)
+    clustermappings = cutree(hcl, h=majonacrit)
     uniquemappings = unique(clustermappings)
     for clustid in uniquemappings
         cnt = count(x -> x == clustid, clustermappings)
@@ -98,20 +129,20 @@ function asm2000(setting::RegressionSetting)
 
     predicteds = [sum(X[i,:] .* betas) for i in 1:n]
     resids = Y .- predicteds
-    stdres = standardize(ZScoreTransform, resids, dims = 1)
-    stdfit = standardize(ZScoreTransform, predicteds, dims = 1)
+    stdres = standardize(ZScoreTransform, resids, dims=1)
+    stdfit = standardize(ZScoreTransform, predicteds, dims=1)
     pairs = hcat(stdfit, stdres)
 
     pairs = hcat(resids, predicteds)
 
     covmatrix = cov(pairs[hsubset, :])
-    mahdist = mahalanobisSquaredBetweenPairs(pairs, covmatrix = covmatrix)
+    mahdist = mahalanobisSquaredBetweenPairs(pairs, covmatrix=covmatrix)
 
-    outlierset = Array{Int, 1}()
+    outlierset = Array{Int,1}()
 
-    hcl = hclust(mahdist, linkage = :single)
+    hcl = hclust(mahdist, linkage=:single)
     majonacrit = majona(hcl)
-    clustermappings = cutree(hcl, h = majonacrit)
+    clustermappings = cutree(hcl, h=majonacrit)
     uniquemappings = unique(clustermappings)
     for clustid in uniquemappings
         cnt = count(x -> x == clustid, clustermappings)
