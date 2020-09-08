@@ -1,3 +1,29 @@
+"""
+
+    hs93initialset(setting)
+
+Perform the Hadi & Simonoff (1993) algorithm's first part for a given regression setting.
+The returned array of indices are indices of clean subset length of p + 1
+where p is the number of regression parameters.
+
+# Arguments
+- `setting::RegressionSetting`: RegressionSetting object with a formula and dataset.
+
+# Examples
+```julia-repl
+julia> reg0001 = createRegressionSetting(@formula(calls ~ year), phones);
+julia> hs93initialset(reg0001)
+3-element Array{Int64,1}:
+ 4
+ 3
+ 5
+```
+
+# References
+Hadi, Ali S., and Jeffrey S. Simonoff. "Procedures for the identification of 
+multiple outliers in linear models." Journal of the American Statistical 
+Association 88.424 (1993): 1264-1272.
+"""
 function hs93initialset(setting::RegressionSetting)::Array{Int,1}
     n, p = size(designMatrix(setting))
     s = p + 1
@@ -7,6 +33,48 @@ function hs93initialset(setting::RegressionSetting)::Array{Int,1}
     return basicsetindices
 end
 
+"""
+
+    hs93basicsubset(setting, initialindices)
+
+Perform the Hadi & Simonoff (1993) algorithm's second part for a given regression setting.
+The returned array of indices are indices of clean subset of length h
+where h is at least the half of the number of observations. h is set to 
+integer part of (n + p - 1) / 2.
+
+# Arguments
+- `setting::RegressionSetting`: RegressionSetting object with a formula and dataset.
+- `initialindices::Array{Int, 1}`: (p + 1) subset of clean observations. 
+
+# Examples
+```julia-repl
+julia> reg0001 = createRegressionSetting(@formula(calls ~ year), phones);
+julia> initialsetindices = hs93initialset(reg0001)
+3-element Array{Int64,1}:
+ 4
+ 3
+ 5
+ julia> hs93basicsubset(reg0001, initialsetindices)
+12-element Array{Int64,1}:
+  5
+  9
+ 10
+  3
+  6
+  4
+  7
+ 22
+ 11
+  8
+ 12
+ 13
+```
+
+# References
+Hadi, Ali S., and Jeffrey S. Simonoff. "Procedures for the identification of 
+multiple outliers in linear models." Journal of the American Statistical 
+Association 88.424 (1993): 1264-1272.
+"""
 function hs93basicsubset(setting::RegressionSetting, initialindices::Array{Int,1})::Array{Int,1}
     X = designMatrix(setting)
     Y = responseVector(setting)
@@ -49,7 +117,7 @@ Perform the Hadi & Simonoff (1993) algorithm for the given regression setting.
 ```julia-repl
 julia> reg0001 = createRegressionSetting(@formula(calls ~ year), phones);
 julia> hs93(reg0001)
-ict{Any,Any} with 3 entries:
+Dict{Any,Any} with 3 entries:
   "outliers" => [14, 15, 16, 17, 18, 19, 20, 21]
   "t"        => -3.59263
   "d"        => [2.04474, 1.14495, -0.0633255, 0.0632934, -0.354349, -0.766818, -1.06862, -1.47638, -0.7…
