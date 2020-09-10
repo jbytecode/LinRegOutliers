@@ -11,7 +11,7 @@ env:
 - JULIA_PKG_SERVER="https://pkg.julialang.org"
 
 notifications:
-  email: false
+  email: true
 
 before_script:
   - export PATH=$HOME/.local/bin:$PATH
