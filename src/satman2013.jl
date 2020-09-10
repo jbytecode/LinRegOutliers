@@ -1,3 +1,25 @@
+"""
+
+    satman2013(setting)
+
+Perform Satman (2013) algorithm for the given regression setting.
+
+# Arguments
+- `setting::RegressionSetting`: RegressionSetting object with a formula and dataset.
+
+# Examples
+```julia-repl
+julia> eg0001 = createRegressionSetting(@formula(y ~ x1 + x2 + x3), hbk);
+julia> satman2013(reg0001)
+Dict{Any,Any} with 1 entry:
+  "outliers" => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 47]
+
+```
+
+# References
+Satman, Mehmet Hakan. "A new algorithm for detecting outliers in linear regression." 
+International Journal of statistics and Probability 2.3 (2013): 101.
+"""
 function satman2013(setting::RegressionSetting)
     X = designMatrix(setting)
     Y = responseVector(setting)
