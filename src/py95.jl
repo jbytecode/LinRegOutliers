@@ -1,4 +1,18 @@
-function py95ProcessEigenVector(v)
+"""
+
+    py95ProcessEigenVector(v)
+
+Process eigen vectors of EDHDE matrix as defined in the Pena & Yohai (1995) algorithm.
+
+# Arguments
+- `v::Array{Float64, 1}`: Eigen vector of EDHDE matrix.
+
+# References
+Peña, Daniel, and Victor J. Yohai. "The detection of influential subsets in linear 
+regression by using an influence matrix." Journal of the Royal Statistical Society: 
+Series B (Methodological) 57.1 (1995): 145-156.
+"""
+function py95ProcessEigenVector(v::Array{Float64,1})
     eps = 0.0001
     n = length(v)
     k = 2.5
@@ -32,7 +46,20 @@ function py95ProcessEigenVector(v)
     (outliersetI, outliersetJ)
 end
 
+"""
 
+    py95SuspectedObservations(setting)
+
+Determine suspected observations (outliers) as defined in the Pena & Yohai (1995) algorithm.
+
+# Arguments
+- `setting::RegressionSetting`: RegressionSetting object with a formula and dataset.
+
+# References
+Peña, Daniel, and Victor J. Yohai. "The detection of influential subsets in linear 
+regression by using an influence matrix." Journal of the Royal Statistical Society: 
+Series B (Methodological) 57.1 (1995): 145-156.
+"""
 function py95SuspectedObservations(setting::RegressionSetting)
     X = designMatrix(setting)
     Y = responseVector(setting)
@@ -74,6 +101,22 @@ function py95SuspectedObservations(setting::RegressionSetting)
 end
 
 
+
+"""
+
+    jacknifedS(setting, omittedIndices)
+
+Calculate Jacknife standard error in which the given indices are omitted from the data.
+
+# Arguments
+- `setting::RegressionSetting`: RegressionSetting object with a formula and dataset.
+- `omittedIndices::Array{Int, 1}`: Indices of omitted variables.
+
+# References
+Peña, Daniel, and Victor J. Yohai. "The detection of influential subsets in linear 
+regression by using an influence matrix." Journal of the Royal Statistical Society: 
+Series B (Methodological) 57.1 (1995): 145-156.
+"""
 function jacknifedS(setting::RegressionSetting, omittedIndices::Array{Int,1})::Float64
     n, p = size(designMatrix(setting))
     indices = [i for i in 1:n if !(i in omittedIndices)]
@@ -83,6 +126,32 @@ function jacknifedS(setting::RegressionSetting, omittedIndices::Array{Int,1})::F
     return s
 end
 
+
+
+
+"""
+
+    py95(setting)
+
+Perform the Pena & Yohai (1995) algorithm for the given regression setting.
+
+# Arguments
+- `setting::RegressionSetting`: RegressionSetting object with a formula and dataset.
+
+# Examples
+```julia-repl
+julia> reg0001 = createRegressionSetting(@formula(y ~ x1 + x2 + x3), hbk);
+julia> py95(reg0001)
+ict{Any,Any} with 2 entries:
+  "outliers"       => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+  "suspected.sets" => Set([[14, 13], [43, 54, 24, 38, 22], [6, 10], [14, 7, 8, 3, 10, 2, 5, 6, 1, 9, 4…
+```
+
+# References
+Peña, Daniel, and Victor J. Yohai. "The detection of influential subsets in linear 
+regression by using an influence matrix." Journal of the Royal Statistical Society: 
+Series B (Methodological) 57.1 (1995): 145-156.
+"""
 function py95(setting::RegressionSetting)
     X = designMatrix(setting)
     Y = responseVector(setting)
