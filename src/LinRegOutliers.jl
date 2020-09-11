@@ -9,6 +9,7 @@ module LinRegOutliers
 # using Plots
 # using Optim
 
+# import functions from corresponding packages
 import GLM: @formula, lm, FormulaTerm, ModelFrame, ModelMatrix, predict, coef, residuals
 import DataFrames: DataFrame
 import Distributions: TDist, Chisq, Normal, std, cov, median
@@ -19,26 +20,71 @@ import Plots: scatter, title!, xlabel!, ylabel!, hline!, vline!, RGB, plot, font
 import Optim: optimize, NelderMead
 import Combinatorics: combinations
 
+# Basis
 include("basis.jl")
+
+# Predefined datasets used in outlier detection literature
 include("data.jl")
+
+# Regression diagnostics
 include("diagnostics.jl")
+
+# Hadi & Simonoff (1993) algorithm
 include("hs93.jl")
+
+# Kianifard & Swallow (1989) algorithm
 include("ks89.jl")
+
+# Sebert et. al. (1998) algorithm
 include("smr98.jl")
+
+# Rousseeuw's Least Median of Squares estimator
 include("lms.jl")
+
+# Rousseeuw's Least Trimmed Squares estimator
 include("lts.jl")
+
+# Minimum Volume Ellipsoid estimator
+# for robust covariance matrix
 include("mve.jl")
+
+# MVE - LTS plot for visual detection of regression outliers
 include("mveltsplot.jl")
+
+# Billor & Chatterjee & Hadi Algorithm for detecting outliers
 include("bch.jl")
+
+# Pena & Yohai (1995) algorithm
 include("py95.jl")
+
+# Satman (2013) algorithm
 include("satman2013.jl")
+
+# Satman (2015) algorithm
 include("satman2015.jl")
+
+# Least Absolute Deviations estimator
 include("lad.jl")
+
+# Least Trimmed Absolute Deviations estimator
 include("lta.jl")
+
+# Hadi (1992) detecting outliers in multivariate data
+# This algorithm is not directly related with the regression
+# however, detecting bad leverage points is same as detecting
+# outliers in X-space 
 include("hadi1992.jl")
+
+# Gray-scale images of distance matrices
 include("dataimage.jl")
+
+# Compact genetic algorithm
 include("cga.jl")
+
+# Modified Satman (2012) algorithm
 include("gwlts.jl")
+
+# All-in-one
 include("summary.jl")
 
 # Essentials from other packages
