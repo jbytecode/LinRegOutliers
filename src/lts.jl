@@ -1,3 +1,24 @@
+"""
+
+    iterateCSteps(setting, subsetindices, h)
+
+Perform a concentration step for a given subset of a regression setting. 
+
+# Arguments
+- `setting::RegressionSetting`: RegressionSetting object with a formula and dataset.
+- `subsetindices::Array{Int, 1}`: Indicies of observations in the initial subset.
+- `h::Int`: A constant at least half of the number of observations.
+
+# Notes
+    This function is a helper for the lts function. A concentration step starts with a 
+    initial subset. The size of the subset is enlarged to h, a constant at least half of the 
+    observations. Please refer to the citation given below.
+
+# References
+Rousseeuw, Peter J., and Katrien Van Driessen. "An algorithm for positive-breakdown 
+regression based on concentration steps." Data Analysis. 
+Springer, Berlin, Heidelberg, 2000. 335-346.
+"""
 function iterateCSteps(setting::RegressionSetting, subsetindices::Array{Int,1}, h::Int)
     Xall = designMatrix(setting)
     Yall = responseVector(setting)
@@ -6,8 +27,9 @@ function iterateCSteps(setting::RegressionSetting, subsetindices::Array{Int,1}, 
     objective = Inf
     iter = 0
     maxiter = 10000
+    n, p = size(Xall)
     while iter < maxiter
-        n, p = size(Xall)
+        try
         X = Xall[subsetindices, :]
         Y = Yall[subsetindices, :]
         ols = lm(setting.formula, setting.data[subsetindices, :])
@@ -21,6 +43,10 @@ function iterateCSteps(setting::RegressionSetting, subsetindices::Array{Int,1}, 
         end
         oldobjective = objective
         iter += 1
+        catch er
+            @warn er
+            return (objective, subsetindices)
+        end
     end
     if iter >= maxiter
         @warn "in c-step stage of LTS, a h-subset is not converged for starting indices " starterset
@@ -28,7 +54,39 @@ function iterateCSteps(setting::RegressionSetting, subsetindices::Array{Int,1}, 
     return (objective, subsetindices)
 end
 
-function lts(setting::RegressionSetting; iters=nothing, crit=3)
+
+
+"""
+
+    lts(setting; iters, crit)
+
+Perform the Fast-LTS (Least Trimmed Squares) algorithm for a given regression setting. 
+
+# Arguments
+- `setting::RegressionSetting`: RegressionSetting object with a formula and dataset.
+- `iters::Int`: Number of iterations.
+- `crit::Float64`: Critical value.
+
+# Examples
+```julia-repl
+julia> reg = createRegressionSetting(@formula(calls ~ year), phones);
+julia> lts(reg)
+Dict{Any,Any} with 6 entries:
+  "betas"            => [-56.5219, 1.16488]
+  "S"                => 1.10918
+  "hsubset"          => [11, 10, 5, 6, 23, 12, 13, 9, 24, 7, 3, 4, 8]
+  "outliers"         => [14, 15, 16, 17, 18, 19, 20, 21]
+  "scaled.residuals" => [2.41447, 1.63472, 0.584504, 0.61617, 0.197052, -0.222066, -0.551027, -0.970146, -0.397538, -0.185558  …  …
+  "objective"        => 3.43133
+
+```
+
+# References
+Rousseeuw, Peter J., and Katrien Van Driessen. "An algorithm for positive-breakdown 
+regression based on concentration steps." Data Analysis. 
+Springer, Berlin, Heidelberg, 2000. 335-346.
+"""
+function lts(setting::RegressionSetting; iters=nothing, crit=2.5)
     X = designMatrix(setting)
     Y = responseVector(setting)
     n, p = size(X)
@@ -63,3 +121,4 @@ function lts(setting::RegressionSetting; iters=nothing, crit=3)
     result["scaled.residuals"] = ltsScaledRes
     return result
 end
+
