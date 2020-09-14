@@ -1,3 +1,19 @@
+"""
+
+    euclideanDistances(dataMatrix)
+
+Calculate Euclidean distances between pairs. 
+
+# Arguments
+- `dataMatrix::Array{Float64, 1}`: Data matrix with dimensions n x p, where n is the number of observations and p is the number of variables.
+
+# Notes
+    This is the helper function for the dataimage() function defined in Marchette & Solka (2003).
+    
+# References
+Marchette, David J., and Jeffrey L. Solka. "Using data images for outlier detection." 
+Computational Statistics & Data Analysis 43.4 (2003): 541-552.
+"""
 function euclideanDistances(dataMatrix::Array{Float64,2})::Array{Float64,2}
     n, p = size(dataMatrix)
     d = zeros(Float64, n, n)
@@ -12,6 +28,25 @@ function euclideanDistances(dataMatrix::Array{Float64,2})::Array{Float64,2}
     return d
 end
 
+
+"""
+
+    mahalanobisBetweenPairs(dataMatrix)
+
+Calculate Mahalanobis distances between pairs. 
+
+# Arguments
+- `dataMatrix::Array{Float64, 1}`: Data matrix with dimensions n x p, where n is the number of observations and p is the number of variables.
+
+# Notes
+    Differently from Mahalabonis distances, this function calculates Mahalanobis distances between 
+    pairs, rather than the distances to center of the data. This is the helper function for the 
+    dataimage() function defined in Marchette & Solka (2003).
+    
+# References
+Marchette, David J., and Jeffrey L. Solka. "Using data images for outlier detection." 
+Computational Statistics & Data Analysis 43.4 (2003): 541-552.
+"""
 function mahalanobisBetweenPairs(dataMatrix::Array{Float64,2})::Array{Float64,2}
     n, p = size(dataMatrix)
     d = zeros(Float64, n, n)
@@ -31,6 +66,39 @@ function mahalanobisBetweenPairs(dataMatrix::Array{Float64,2})::Array{Float64,2}
     return d
 end
 
+
+
+"""
+
+    dataimage(dataMatrix; distance = :mahalanobis)
+
+Generate the Marchette & Solka (2003) data image for a given data matrix. 
+
+# Arguments
+- `dataMatrix::Array{Float64, 1}`: Data matrix with dimensions n x p, where n is the number of observations and p is the number of variables.
+- `distance::Symbol`: Optional argument for the distance function.
+
+# Notes
+    distance is :mahalanobis by default, for the Mahalanobis distances. 
+    use 
+
+        dataimage(mat, distance = :euclidean)
+    
+    to use Euclidean distances.
+    
+# Examples
+```julia-repl
+julia> x1 = hbk[:,"x1"];
+julia> x2 = hbk[:,"x2"];
+julia> x3 = hbk[:,"x3"];
+julia> mat = hcat(x1, x2, x3);
+julia> dataimage(mat)
+```
+
+# References
+Marchette, David J., and Jeffrey L. Solka. "Using data images for outlier detection." 
+Computational Statistics & Data Analysis 43.4 (2003): 541-552.
+"""
 function dataimage(dataMatrix::Array{Float64,2}; distance=:mahalanobis)
     d = nothing
     if distance == :mahalanobis
