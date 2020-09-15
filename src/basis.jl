@@ -154,19 +154,101 @@ function designMatrix(setting::RegressionSetting)::Array{Float64,2}
 end
 
 
+
+"""
+
+    responseVector(setting)
+
+    Return vector of dependent variable of a given regression setting.
+
+# Arguments
+- `setting::RegressionSetting`: A regression setting object.
+
+
+# Examples
+```julia-repl
+julia> setting = createRegressionSetting(@formula(calls ~ year), phones);
+julia> responseVector(setting)
+24-element Array{Float64,1}:
+   4.4
+   4.7
+   4.7
+   5.9
+   6.6
+   7.3
+   8.1
+   8.8
+  10.6
+  12.0
+  13.5
+  14.9
+  16.1
+  21.2
+ 119.0
+ 124.0
+ 142.0
+ 159.0
+ 182.0
+ 212.0
+  43.0
+  24.0
+  27.0
+  29.0
+```
+"""
 function responseVector(setting::RegressionSetting)::Array{Float64,1}
     mf = ModelFrame(setting.formula, setting.data)
     return setting.data[:,mf.f.lhs.sym]
 end
 
+
+"""
+
+    applyColumns(f, data)
+
+    Apply function f to each columns of data.
+
+# Arguments
+- `f::Function`: A function that takes a one dimensional array as argument.
+- `data::DataFrame`: A DataFrame object.
+
+"""
 function applyColumns(f::Function, data::DataFrame)
     return [f(col) for col = eachcol(data)]
 end
 
+
+"""
+
+    applyColumns(f, data)
+
+    Apply function f to each columns of data.
+
+# Arguments
+- `f::Function`: A function that takes a one dimensional array as argument.
+- `data::Matrix`: A Matrix object.
+"""
 function applyColumns(f::Function, data::Matrix)
     return [f(col) for col = eachcol(data)]
 end
 
+
+
+"""
+
+    find_minimum_nonzero(arr)
+
+    Return minimum of numbers greater than zero.
+
+# Arguments
+- `arr::Array{Float64, 1}`: A function that takes a one dimensional array as argument.
+
+# Example
+```julia-repl
+julia> find_minimum_nonzero([0.0, 0.0, 5.0, 1.0])
+1.0
+```
+"""
 function find_minimum_nonzero(arr::Array{Float64,1})
     arr_sorted = sort(arr)
     minval = arr_sorted[length(arr)]
