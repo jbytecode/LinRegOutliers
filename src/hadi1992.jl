@@ -1,3 +1,15 @@
+"""
+    hadi1992_handle_singularity(S)
+
+Perform the sub-algorithm of handling singularity defined in Hadi (1992).
+
+# Arguments 
+- `S::Array{Float64, 2}`: A covariance matrix.
+
+# Reference
+Hadi, Ali S. "Identifying multiple outliers in multivariate data." 
+Journal of the Royal Statistical Society: Series B (Methodological) 54.3 (1992): 761-771.
+ """
 function hadi1992_handle_singularity(S::Array{Float64,2})::Array{Float64,2}
     p, _ = size(S)
     eigen_structure = eigen(S)
@@ -12,6 +24,29 @@ function hadi1992_handle_singularity(S::Array{Float64,2})::Array{Float64,2}
     return newS
 end
 
+"""
+    hadi1992(multivariateData)
+
+Perform Hadi (1992) algorithm for a given multivariate data. 
+
+# Arguments
+-`multivariate::Array{Float64, 2}`: Multivariate data.
+
+# Examples
+```julia-repl
+julia> multidata = hcat(hbk.x1, hbk.x2, hbk.x3);
+
+julia> hadi1992(multidata)
+Dict{Any,Any} with 3 entries:
+  "outliers"              => [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+  "criticial.chi.squared" => 7.81473
+  "rth.robust.distance"   => 5.04541
+```
+
+# Reference
+Hadi, Ali S. "Identifying multiple outliers in multivariate data." 
+Journal of the Royal Statistical Society: Series B (Methodological) 54.3 (1992): 761-771.
+"""
 function hadi1992(multivariateData::Array{Float64,2}; alpha=0.05)
     n, p = size(multivariateData)
     h = Int(floor((n + p + 1.0) / 2.0))

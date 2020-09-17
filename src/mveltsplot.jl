@@ -1,3 +1,17 @@
+"""
+    mveltsplot(setting; alpha = 0.05, showplot = true)
+
+Generate MVE - LTS plot for visual detecting of regression outliers.
+
+# Arguments
+- `setting::RegressionSetting`: A regression setting object.
+- `alpha::Float64`: Probability for quantiles of Chi-Squared statistic.
+- `showplot::Bool`: Whether a plot is shown or only return statistics.
+
+# References
+Van Aelst, Stefan, and Peter Rousseeuw. "Minimum volume ellipsoid." Wiley 
+Interdisciplinary Reviews: Computational Statistics 1.1 (2009): 71-82.
+"""
 function mveltsplot(setting::RegressionSetting; alpha=0.05, showplot=true)
     ltsresult = lts(setting)
     mveresult = mve(setting.data)

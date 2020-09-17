@@ -1,3 +1,31 @@
+"""
+    lms(setting; iters = nothing, crit = 2.5)
+
+Perform Least Median of Squares regression estimator with random sampling.
+
+# Arguments
+- `setting::RegressionSetting`: A regression setting object.
+- `iters::Int`: Number of random samples.
+- `crit::Float64`: Critical value for standardized residuals. 
+
+# Examples 
+```julia-repl 
+julia> reg = createRegressionSetting(@formula(calls ~ year), phones);
+
+julia> lms(reg)
+Dict{Any,Any} with 6 entries:
+  "stdres"    => [2.28328, 1.55551, 0.573308, 0.608843, 0.220321, -0.168202, -0.471913, -0.860435, -0.31603, -0.110871  …  85.7265, 88.9849, 103.269, 116.705, 135.229, 159.69,…
+  "S"         => 1.17908
+  "outliers"  => [14, 15, 16, 17, 18, 19, 20, 21]
+  "objective" => 0.515348
+  "coef"      => [-56.1972, 1.1581]
+  "crit"      => 2.5
+```
+
+# References
+Rousseeuw, Peter J. "Least median of squares regression." Journal of the American 
+statistical association 79.388 (1984): 871-880.
+"""
 function lms(setting::RegressionSetting; iters=nothing, crit=2.5)
     X = designMatrix(setting)
     Y = responseVector(setting)
