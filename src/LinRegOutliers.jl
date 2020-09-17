@@ -109,6 +109,7 @@ export studentizedResiduals
 export adjustedResiduals
 export jacknifedS
 export cooks
+export mahalabonisSquaredMatrix 
 
 # Algorithms
 export hs93, hs93initialset, hs93basicsubset
