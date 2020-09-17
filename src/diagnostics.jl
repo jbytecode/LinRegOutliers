@@ -207,7 +207,7 @@ function adjustedResiduals(setting::RegressionSetting)::Array{Float64,1}
     ols = lm(setting.formula, setting.data)
     n, p = size(designMatrix(setting))
     e = residuals(ols)
-    hat = hatmatrix(reg)
+    hat = hatmatrix(setting)
     stde = [e[i] / (sqrt(1 - hat[i, i])) for i in 1:n]
     return stde
 end
