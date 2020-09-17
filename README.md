@@ -84,5 +84,17 @@ Dict{Any,Any} with 6 entries:
 ```
 
 
+```julia
+julia> reg = createRegressionSetting(@formula(calls ~ year), phones);
+
+julia> lts(reg)
+Dict{Any,Any} with 6 entries:
+  "betas"            => [-56.5219, 1.16488]
+  "S"                => 1.10918
+  "hsubset"          => [11, 10, 5, 6, 23, 12, 13, 9, 24, 7, 3, 4, 8]
+  "outliers"         => [14, 15, 16, 17, 18, 19, 20, 21]
+  "scaled.residuals" => [2.41447, 1.63472, 0.584504, 0.61617, 0.197052, -0.222066, -0.551027, -0.970146, -0.397538, -0.185558  …  91.0312, 94.4889, 109.667, 123.943, 143.629, …
+  "objective"        => 3.43133
+```  
 
 ![detectOutliersImage](https://github.com/jbytecode/jbytecode/blob/master/images/detectoutliers.png)
