@@ -26,11 +26,124 @@ end
     @test setting.formula == @formula(y ~ x)
 end
 
+@testset "dffit - single case" begin
+    # Since this regression setting is deterministic, 
+    # omission of a single observation has not an effect on 
+    # the predicted response. 
+    myeps = 10.0^(-6.0)
+    dataset = DataFrame(
+        x=[1.0, 2, 3, 4, 5],
+        y=[2.0, 4, 6, 8, 10]
+    )
+    setting = createRegressionSetting(@formula(y ~ x), dataset)
+    n, _ = size(dataset)
+    for i in 1:n
+        mydiff = dffit(setting, i)
+        @test abs(mydiff) < myeps 
+    end
+end
+
+@testset "dffit - for all observations" begin
+    # Since this regression setting is deterministic, 
+    # omission of a single observation has not an effect on 
+    # the predicted response. 
+    myeps = 10.0^(-6.0)
+    dataset = DataFrame(
+        x=[1.0, 2, 3, 4, 5],
+        y=[2.0, 4, 6, 8, 10]
+    )
+    setting = createRegressionSetting(@formula(y ~ x), dataset)
+    stats = dffit(setting)
+    for element in stats
+        @test abs(element) < myeps 
+    end
+end
+
+@testset "hat matrix" begin
+    X = [1.0 1.0; 1.0 2.0; 1.0 3.0; 1.0 4.0; 1.0 5.0];
+    hats_real = X * inv(X' * X) * X' 
+    dataset = DataFrame(
+        x=[1.0, 2, 3, 4, 5],
+        y=[2.0, 4, 6, 8, 10]
+    )
+    setting = createRegressionSetting(@formula(y ~ x), dataset)
+    hats_calculated = hatmatrix(setting)
+
+    @test hats_real == hats_calculated
+end
+
+@testset "studentized residuals" begin
+    dataset = DataFrame(
+        x=[1.0, 2, 3, 4, 50],
+        y=[2.0, 4, 6, 8, 100]
+    )
+    setting = createRegressionSetting(@formula(y ~ x), dataset)
+    resi = studentizedResiduals(setting)
+    @test abs(resi[1]) < 2.5
+    @test abs(resi[2]) < 2.5
+    @test abs(resi[3]) < 2.5
+    @test abs(resi[4]) < 2.5
+    @test abs(resi[5]) > 2.5
+end
+
+
+@testset "adjusted residuals" begin
+    dataset = DataFrame(
+        x=[1.0, 2, 3, 4, 5],
+        y=[2.0, 4, 6, 8, 10]
+    )
+    setting = createRegressionSetting(@formula(y ~ x), dataset)
+    resi = adjustedResiduals(setting)
+    @test resi == zeros(Float64, 5)
+end
+
+@testset "Cook's distance" begin
+    dataset = DataFrame(
+        x=[1.0, 2, 3, 4, 5.0],
+        y=[2.0, 4, 6, 8, 10.0]
+    )
+    setting = createRegressionSetting(@formula(y ~ x), dataset)
+    cookdists = cooks(setting)
+    @test map(x -> isnan(x), cookdists) == trues(5)
+end
+
+
+@testset "Jacknifed standard error of regression" begin
+    dataset = DataFrame(
+        x=[1.0, 2, 3, 4, 5000],
+        y=[2.0, 4, 6, 8, 1000]
+    )
+    setting = createRegressionSetting(@formula(y ~ x), dataset)
+    @test jacknifedS(setting, 1) != 0
+    @test jacknifedS(setting, 2) != 0
+    @test jacknifedS(setting, 3) != 0
+    @test jacknifedS(setting, 4) != 0
+    @test jacknifedS(setting, 5) == 0
+end
+
+@testset "Mahalanobis squared distances" begin
+    myeps = 10.0^(-6.0)
+    x = [1.0, 2.0, 3.0, 4.0, 5.0]
+    y = reverse(x)
+    y[1] = y[1] * 10.0
+    x[1] = x[1] * 10.0
+    datamat = DataFrame(x=x, y=y)
+    dmat = mahalabonisSquaredMatrix(datamat)
+    d = diag(dmat)
+    @test abs(d[1] - 3.2) < myeps
+    @test abs(d[2] - 2.0) < myeps
+    @test abs(d[3] - 0.4) < myeps
+    @test abs(d[4] - 0.4) < myeps
+    @test abs(d[5] - 2.0) < myeps
+end
+
 @testset "Find nonzero minimum" begin
     arr = [0.0, 2.0, 0.0, 0.0, 0.0, 9.0, 1.0]
     val = find_minimum_nonzero(arr)
     @test val == 1.0
 end
+
+
 
 @testset "Hadi & Simonoff 1993 - initial subset" begin
     # Create simple data
@@ -326,4 +439,5 @@ end
     for i in 15:20
         @test !(i in clean_indices)
     end
+
 end
