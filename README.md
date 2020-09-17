@@ -70,3 +70,6 @@ julia> py95(reg)["outliers"]
 
 ```
 
+
+
+![detectOutliersImage](https://github.com/jbytecode/jbytecode/blob/master/images/detectoutliers.png)
