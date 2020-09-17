@@ -13,6 +13,19 @@ function enlargesubset(initialsubset, data::DataFrame, dataMatrix::Matrix, h::In
     return basicsubset
 end
 
+"""
+    mve(data; alpha = 0.05)
+
+Performs the Minimum Volume Ellipsoid algorithm for a robust covariance matrix.
+
+# Arguments
+- `data::DataFrame`: Multivariate data.
+- `alpha::Float64`: Probability for quantiles of Chi-Squared statistic.
+
+# References
+Van Aelst, Stefan, and Peter Rousseeuw. "Minimum volume ellipsoid." Wiley 
+Interdisciplinary Reviews: Computational Statistics 1.1 (2009): 71-82.
+"""
 function mve(data::DataFrame; alpha=0.05)
     dataMatrix = convert(Matrix, data)
     n, p = size(dataMatrix)
