@@ -19,6 +19,10 @@ function Base.:-(c1::RealChromosome, c2::RealChromosome)::RealChromosome
     RealChromosome(c1.genes .- c2.genes, Inf64)
 end
 
+function Base.isless(c1::RealChromosome, c2::RealChromosome)::Bool
+    return c1.cost < c2.cost
+end
+
 function LinearCrossover(c1::RealChromosome, c2::RealChromosome)::Tuple{RealChromosome,RealChromosome,RealChromosome}
     offspring1 = 0.5 * c1 + 0.5 * c2
     offspring2 = 1.5 * c1 - 0.5 * c2
@@ -52,6 +56,66 @@ function TournamentSelection(pop::Array{RealChromosome,1})::Tuple{RealChromosome
         lucky2 = pop[indices[4]]
     end
     return (lucky1, lucky2)
+end
+
+
+function createPopulation(popsize::Int, 
+        chsize::Int, 
+        mins::Array{Float64,1}, 
+        maxs::Array{Float64,1})::Array{RealChromosome,1}
+    pop = Array{RealChromosome,1}(undef, popsize)
+    for i in 1:popsize
+        c = RealChromosome(mins .+ rand(chsize) .* (maxs - mins), Inf64)
+        pop[i] = c
+    end
+    return pop
+end
+
+function Evaluate(pop::Array{RealChromosome,1}, fcost::Function)::Array{RealChromosome,1}
+    tasks = []
+    for i in eachindex(pop)
+        t = Task(() -> pop[i].cost = fcost(pop[i].genes))
+        push!(tasks, t)
+        schedule(t) 
+    end
+    for i in eachindex(tasks)
+        wait(tasks[i]) 
+    end
+    return pop
+end
+
+function Generation(pop::Array{RealChromosome,1}, 
+                    fcost::Function, 
+                    elitism::Int, 
+                    pcross::Float64,
+                    pmutate::Float64)::Array{RealChromosome,1}
+    popsize = length(pop)
+    newpop = []
+    pop = sort(Evaluate(pop, fcost))
+    for i in 1:elitism
+        push!(newpop, pop[i])
+    end
+    while length(newpop) != popsize 
+        parent1, parent2 = TournamentSelection(pop)
+        winner1 = nothing
+        winner2 = nothing
+        if rand(1)[1] < pcross
+            offspring1, offspring2, offspring3 = LinearCrossover(parent1, parent2)
+            offpop = sort(Evaluate([offspring1, offspring2, offspring3], fcost))
+            winner1 = Mutate(offpop[1], pmutate)
+            winner2 = Mutate(offpop[2], pmutate)
+            Evaluate([winner1, winner2], fcost)
+        else
+            winner1, winner2 = parent1, parent2
+        end
+        if (length(newpop) < popsize)
+            push!(newpop, winner1)
+        end
+        if (length(newpop) < popsize)
+            push!(newpop, winner2)
+        end
+    end
+    return sort(newpop)
 end
 
 
