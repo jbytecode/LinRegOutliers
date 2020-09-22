@@ -33,26 +33,46 @@ function detectOutliers(setting::RegressionSetting; methods=[])
 
     for method in methods
         if method == "hs93"
-            result = hs93(setting)["outliers"]
+            try
+                result = hs93(setting)["outliers"]
+            catch
+                result = Int[]
+            end
         elseif method == "ks89"
-            result = ks89(setting)
+            try
+                result = ks89(setting)
+            catch
+                result = Int[]
+            end
         elseif method == "py95"
             result = py95(setting)["outliers"]
         elseif method == "smr98"
             result = smr98(setting)
         elseif method == "lts"
-            result = lts(setting)["outliers"]
+            try
+                result = lts(setting)["outliers"]
+            catch
+                result = Int[]
+            end
         elseif method == "sat13"
             result = satman2013(setting)["outliers"]
         elseif method == "sat15"
             result = satman2015(setting)["outliers"]
         elseif method == "asm20"
-            result = asm2000(setting)["outliers"]
+            try
+                result = asm2000(setting)["outliers"]
+            catch
+                result = Int[]
+            end
         elseif method == "bch"
-            result = bch(setting)["outliers"]
+            try
+                result = bch(setting)["outliers"]
+            catch
+                result = Int[]
+            end
         else
             @error "Method not found " method
-            result = []
+            result = Int[]
         end
         outlier_matrix[:, method] = makeColorColumn(result, n)
     end

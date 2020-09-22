@@ -81,7 +81,10 @@ include("dataimage.jl")
 # Compact genetic algorithm
 include("cga.jl")
 
-# Modified Satman (2012) algorithm
+# Genetic Algorithm
+include("ga.jl")
+
+# Modified and original Satman (2012) algorithms
 include("gwlts.jl")
 
 # All-in-one
@@ -127,7 +130,7 @@ export lad
 export lta
 export hadi1992
 export dataimage
-export gwcga
+export gwcga, galts, ga, RealChromosome
 export detectOutliers
 
 
