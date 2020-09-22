@@ -159,7 +159,7 @@ function studentizedResiduals(setting::RegressionSetting)::Array{Float64,1}
     e = residuals(ols)
     s = sqrt(sum(e.^2.0) / (n - p))
     hat = hatmatrix(setting)
-    stde = [e[i] / (s * sqrt(1 - hat[i, i])) for i in 1:n]
+    stde = [e[i] / (s * sqrt(1.0 - hat[i, i])) for i in 1:n]
     return stde
 end
 

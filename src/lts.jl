@@ -55,6 +55,16 @@ function iterateCSteps(setting::RegressionSetting, subsetindices::Array{Int,1}, 
 end
 
 
+function iterateCSteps(setting::RegressionSetting, initialBetas::Array{Float64,1}, h::Int)
+    Xall = designMatrix(setting)
+    Yall = responseVector(setting)
+    n, p = size(Xall)
+    res = [Yall[i] - sum(Xall[i,:] .* initialBetas) for i in 1:n]
+    sortedresindices = sortperm(abs.(res))
+    subsetindices = sortedresindices[1:p]
+    return iterateCSteps(setting, subsetindices, h)    
+end
+
 
 """
 

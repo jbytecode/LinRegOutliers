@@ -119,3 +119,21 @@ function Generation(pop::Array{RealChromosome,1},
 end
 
 
+function ga(
+            popsize::Int,
+            chsize::Int,
+            fcost::Function,
+            mins::Array{Float64, 1},
+            maxs::Array{Float64, 1},
+            pcross::Float64,
+            pmutate::Float64,
+            elitisim::Int,
+            iterations::Int
+            )::Array{RealChromosome, 1}
+    pop = createPopulation(popsize, chsize, mins, maxs)
+    for i in 1:iterations
+        pop = Generation(pop, fcost, elitisim, pcross, pmutate)
+    end
+    return pop
+end
+
