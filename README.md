@@ -22,7 +22,7 @@ A Julia package for outlier detection in linear regression.
 - Least Trimmed Absolute Deviations (LTA)
 - Hadi (1992)
 - Marchette & Solka (2003) Data Images
-- Satman (2012) (fast CGA modified)
+- Satman's GA based LTS estimation (2012)
 - Summary
 
 ## Example
@@ -98,3 +98,14 @@ Dict{Any,Any} with 6 entries:
 ```  
 
 ![detectOutliersImage](https://github.com/jbytecode/jbytecode/blob/master/images/detectoutliers.png)
+
+
+
+
+```julia
+julia> # Matrix of independent variables of Hawkins & Bradu & Kass data
+julia> data = hcat(hbk.x1, hbk.x2, hbk.x3);
+julia> dataimage(reg)
+``` 
+
+![detectOutliersImage](https://github.com/jbytecode/jbytecode/blob/master/images/dataimages.png)
