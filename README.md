@@ -105,7 +105,7 @@ Dict{Any,Any} with 6 entries:
 ```julia
 julia> # Matrix of independent variables of Hawkins & Bradu & Kass data
 julia> data = hcat(hbk.x1, hbk.x2, hbk.x3);
-julia> dataimage(reg)
+julia> dataimage(data)
 ``` 
 
 ![detectOutliersImage](https://github.com/jbytecode/jbytecode/blob/master/images/dataimages.png)
