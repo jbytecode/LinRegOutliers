@@ -463,7 +463,7 @@ end
 end
 
 @testset "Satman(2012) (Csteps and GA based LTS) Algorithm - Phones data" begin
-    epsilon = 10.0^(-3.0)    
+    epsilon = 10.0^(-2.0)    
     df = phones
     reg = createRegressionSetting(@formula(calls ~ year), df)
     result = galts(reg)
