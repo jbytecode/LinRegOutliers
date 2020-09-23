@@ -150,7 +150,7 @@ julia> designMatrix(setting)
 function designMatrix(setting::RegressionSetting)::Array{Float64,2}
     mf = ModelFrame(setting.formula, setting.data)
     mm = ModelMatrix(mf)
-    return mm.m
+    return convert(Array{Float64, 2}, mm.m)
 end
 
 
@@ -198,7 +198,7 @@ julia> responseVector(setting)
 """
 function responseVector(setting::RegressionSetting)::Array{Float64,1}
     mf = ModelFrame(setting.formula, setting.data)
-    return setting.data[:,mf.f.lhs.sym]
+return convert(Array{Float64,1}, setting.data[:,mf.f.lhs.sym])
 end
 
 

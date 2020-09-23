@@ -1,4 +1,6 @@
-mutable struct RealChromosome
+abstract type Chromosome end
+
+mutable struct RealChromosome <: Chromosome
     genes::Array{Float64,1}
     cost::Float64
 end
@@ -28,6 +30,11 @@ function LinearCrossover(c1::RealChromosome, c2::RealChromosome)::Tuple{RealChro
     offspring2 = 1.5 * c1 - 0.5 * c2
     offspring3 = 1.5 * c2 - 0.5 * c1
     return (offspring1, offspring2, offspring3)
+end
+
+function ArithmeticCrossOver(c1::RealChromosome, c2::RealChromosome)::Tuple{RealChromosome,RealChromosome}
+    alpha = rand()
+    return alpha * c1 + (1.0 - alpha) * c2
 end
 
 function Mutate(c::RealChromosome, prob::Float64)::RealChromosome
@@ -123,13 +130,13 @@ function ga(
             popsize::Int,
             chsize::Int,
             fcost::Function,
-            mins::Array{Float64, 1},
-            maxs::Array{Float64, 1},
+            mins::Array{Float64,1},
+            maxs::Array{Float64,1},
             pcross::Float64,
             pmutate::Float64,
             elitisim::Int,
             iterations::Int
-            )::Array{RealChromosome, 1}
+            )::Array{RealChromosome,1}
     pop = createPopulation(popsize, chsize, mins, maxs)
     for i in 1:iterations
         pop = Generation(pop, fcost, elitisim, pcross, pmutate)

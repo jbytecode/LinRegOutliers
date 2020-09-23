@@ -32,7 +32,7 @@ Belsley, David A., Edwin Kuh, and Roy E. Welsch. Regression diagnostics:
 Identifying influential data and sources of collinearity. Vol. 571. John Wiley & Sons, 2005.
 """
 function dffit(setting::RegressionSetting, i::Int)::Float64
-    n = size(setting.data)[1]
+    n, _ = size(setting.data)
     indices = [j for j in 1:n if i != j]
     olsfull = lm(setting.formula, setting.data) 
     olsjacknife = lm(setting.formula, setting.data[indices,:])
@@ -86,7 +86,7 @@ Belsley, David A., Edwin Kuh, and Roy E. Welsch. Regression diagnostics:
 Identifying influential data and sources of collinearity. Vol. 571. John Wiley & Sons, 2005.
 """
 function dffit(setting::RegressionSetting)::Array{Float64,1}
-    n = size(setting.data)[1]
+    n, _ = size(setting.data)
     result = [dffit(setting, i) for i in 1:n]
     return result    
 end
