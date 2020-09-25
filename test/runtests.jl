@@ -452,6 +452,17 @@ end
 
 end
 
+@testset "Compact Genetic Algorithm" begin
+    Random.seed!(12345)
+    function fcost(bits)
+        return sum(bits) 
+    end
+    result = LinRegOutliers.cga(chsize=10, costfunction=fcost, popsize=100)
+    for element in result
+        @test element == 0
+    end
+end
+
 
 @testset "Floating-point Genetic Algorithm" begin
     Random.seed!(12345)
