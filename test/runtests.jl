@@ -76,7 +76,7 @@ end
 # This test is passed in MacOS and problematic in Linux AMD
 # The problem is not resolved.
 # TODO: Try in a local Linux machine again.
-#=
+#= 
 @testset "studentized residuals" begin
     dataset = DataFrame(
         x=[1.0, 2, 3, 4, 50],
@@ -454,6 +454,7 @@ end
 
 
 @testset "Floating-point Genetic Algorithm" begin
+    Random.seed!(12345)
     fcost(genes) = (genes[1] - 3.14159265)^2 + (genes[2] - 2.71828)^2
     epsilon = 10.0^(-6.0)
     popsize = 30
@@ -469,6 +470,7 @@ end
 end
 
 @testset "Satman(2012) (Csteps and GA based LTS) Algorithm - Phones data" begin
+    Random.seed!(12345)
     epsilon = 10.0^(-2.0)
     df = phones
     reg = createRegressionSetting(@formula(calls ~ year), df)
