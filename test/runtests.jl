@@ -1,6 +1,6 @@
 using Test
 using DataFrames
-using Random 
+using Random
 using GLM
 using LinearAlgebra
 
@@ -10,7 +10,7 @@ using LinRegOutliers
     ones_vector = ones(Float64, 10)
     zeros_vector = zeros(Float64, 10)
     mat = hcat(ones_vector, zeros_vector)
-    
+
     @test applyColumns(sum, mat) == [10.0, 0.0]
     @test applyColumns(mean, mat) == [1.0, 0.0]
 end
@@ -28,9 +28,9 @@ end
 end
 
 @testset "dffit - single case" begin
-    # Since this regression setting is deterministic, 
-    # omission of a single observation has not an effect on 
-    # the predicted response. 
+    # Since this regression setting is deterministic,
+    # omission of a single observation has not an effect on
+    # the predicted response.
     myeps = 10.0^(-6.0)
     dataset = DataFrame(
         x=[1.0, 2, 3, 4, 5],
@@ -40,14 +40,14 @@ end
     n, _ = size(dataset)
     for i in 1:n
         mydiff = dffit(setting, i)
-        @test abs(mydiff) < myeps 
+        @test abs(mydiff) < myeps
     end
 end
 
 @testset "dffit - for all observations" begin
-    # Since this regression setting is deterministic, 
-    # omission of a single observation has not an effect on 
-    # the predicted response. 
+    # Since this regression setting is deterministic,
+    # omission of a single observation has not an effect on
+    # the predicted response.
     myeps = 10.0^(-6.0)
     dataset = DataFrame(
         x=[1.0, 2, 3, 4, 5],
@@ -56,13 +56,13 @@ end
     setting = createRegressionSetting(@formula(y ~ x), dataset)
     stats = dffit(setting)
     for element in stats
-        @test abs(element) < myeps 
+        @test abs(element) < myeps
     end
 end
 
 @testset "hat matrix" begin
     X = [1.0 1.0; 1.0 2.0; 1.0 3.0; 1.0 4.0; 1.0 5.0];
-    hats_real = X * inv(X' * X) * X' 
+    hats_real = X * inv(X' * X) * X'
     dataset = DataFrame(
         x=[1.0, 2, 3, 4, 5],
         y=[2.0, 4, 6, 8, 10]
@@ -74,9 +74,9 @@ end
 end
 
 # This test is passed in MacOS and problematic in Linux AMD
-# The problem is not resolved. 
-# TODO: Try in a local Linux machine again. 
-#= 
+# The problem is not resolved.
+# TODO: Try in a local Linux machine again.
+#=
 @testset "studentized residuals" begin
     dataset = DataFrame(
         x=[1.0, 2, 3, 4, 50],
@@ -151,7 +151,7 @@ end
 
 @testset "Hadi & Simonoff 1993 - initial subset" begin
     # Create simple data
-    rng = MersenneTwister(12345) 
+    rng = MersenneTwister(12345)
     n = 50
     x = collect(1:n)
     e = randn(rng, n) .* 2.0
@@ -160,14 +160,14 @@ end
     y[n - 1] = y[n - 1] * 2.0
     df = DataFrame(x=x, y=y)
     reg = createRegressionSetting(@formula(y ~ x), df)
-    subset = hs93initialset(reg)    
+    subset = hs93initialset(reg)
     @test !(49 in subset)
     @test !(50 in subset)
 end
 
 @testset "Hadi & Simonoff 1993 - basic subset" begin
     # Create simple data
-    rng = MersenneTwister(12345) 
+    rng = MersenneTwister(12345)
     n = 50
     x = collect(1:n)
     e = randn(rng, n) .* 2.0
@@ -176,7 +176,7 @@ end
     y[n - 1] = y[n - 1] * 2.0
     df = DataFrame(x=x, y=y)
     reg = createRegressionSetting(@formula(y ~ x), df)
-    initialsubset = hs93initialset(reg)    
+    initialsubset = hs93initialset(reg)
     basicsubset = hs93basicsubset(reg, initialsubset)
     @test !(49 in basicsubset)
     @test !(50 in basicsubset)
@@ -184,7 +184,7 @@ end
 
 @testset "Hadi & Simonoff 1993 - Algorithm" begin
     # Create simple data
-    rng = MersenneTwister(12345) 
+    rng = MersenneTwister(12345)
     n = 50
     x = collect(1:n)
     e = randn(rng, n) .* 2.0
@@ -200,19 +200,25 @@ end
 @testset "Kianifard & Swallow 1989 - Algorithm" begin
     df = phones
     reg = createRegressionSetting(@formula(calls ~ year), df)
-    outset = ks89(reg)
+    outset = ks89(reg, alpha=0.1)
     @test 15 in outset
     @test 16 in outset
     @test 17 in outset
     @test 18 in outset
     @test 19 in outset
     @test 20 in outset
+
+    df2 = stackloss
+    reg2 = createRegressionSetting(@formula(stackloss ~ airflow + watertemp + acidcond), stackloss)
+    outset2 = ks89(reg2)
+    @test 4 in outset2
+    @test 21 in outset2
 end
 
 
 @testset "Sebert & Montgomery & Rollier 1998 - Algorithm" begin
     # Create simple data
-    rng = MersenneTwister(12345) 
+    rng = MersenneTwister(12345)
     n = 50
     x = collect(1:n)
     e = randn(rng, n) .* 2.0
@@ -258,7 +264,7 @@ end
     @test 18 in outset
     @test 19 in outset
     @test 20 in outset
-    @test 21 in outset  
+    @test 21 in outset
 end
 
 
@@ -291,7 +297,7 @@ end
     @test 18 in outset
     @test 19 in outset
     @test 20 in outset
-    @test 21 in outset  
+    @test 21 in outset
 end
 
 
@@ -304,7 +310,7 @@ end
     @test 18 in outset
     @test 19 in outset
     @test 20 in outset
-    @test 21 in outset  
+    @test 21 in outset
 end
 
 
@@ -319,13 +325,13 @@ end
     @test 4 in regulars
     @test 5 in regulars
     @test 6 in regulars
-    @test 7 in regulars  
-    @test 8 in regulars  
-    @test 9 in regulars  
-    @test 10 in regulars  
-    @test 11 in regulars  
-    @test 12 in regulars  
-    @test 13 in regulars  
+    @test 7 in regulars
+    @test 8 in regulars
+    @test 9 in regulars
+    @test 10 in regulars
+    @test 11 in regulars
+    @test 12 in regulars
+    @test 13 in regulars
 end
 
 
@@ -335,7 +341,7 @@ end
     result = bch(reg)
     regulars = result["basic.subset"]
     for i in 15:75
-        @test i in regulars  
+        @test i in regulars
     end
 end
 
@@ -346,7 +352,7 @@ end
     result = py95(reg)
     outliers = result["outliers"]
     for i in 1:14
-        @test i in outliers 
+        @test i in outliers
     end
 end
 
@@ -356,7 +362,7 @@ end
     result = satman2013(reg)
     outliers = result["outliers"]
     for i in 1:14
-        @test i in outliers 
+        @test i in outliers
     end
 end
 
@@ -371,7 +377,7 @@ end
     result = satman2015(reg)
     outliers = result["outliers"]
     for i in 15:20
-        @test i in outliers 
+        @test i in outliers
     end
 end
 
@@ -382,7 +388,7 @@ end
     result = asm2000(reg)
     outliers = result["outliers"]
     for i in 15:20
-        @test i in outliers 
+        @test i in outliers
     end
 end
 
@@ -412,7 +418,7 @@ end
     reg = createRegressionSetting(@formula(calls ~ year), df)
     result = lta(reg, exact=true)
     betas = result["betas"]
-    @test abs(betas[1] - -55.5) < eps 
+    @test abs(betas[1] - -55.5) < eps
     @test abs(betas[2] -  1.15) < eps
 end
 
@@ -463,7 +469,7 @@ end
 end
 
 @testset "Satman(2012) (Csteps and GA based LTS) Algorithm - Phones data" begin
-    epsilon = 10.0^(-2.0)    
+    epsilon = 10.0^(-2.0)
     df = phones
     reg = createRegressionSetting(@formula(calls ~ year), df)
     result = galts(reg)
