@@ -109,3 +109,11 @@ julia> dataimage(data)
 ``` 
 
 ![detectOutliersImage](https://github.com/jbytecode/jbytecode/blob/master/images/dataimages.png)
+
+## Want to have contributions?
+You are probably the right contributor
+
+- If you have statistics background
+- If you like Julia
+
+However, the second condition is more important because an outlier detection algorithm is just an algorithm. Reading the implemented methods is enough to implement new ones. Please follow the issues. If you want to implement an algorithm which is not listed in issues, open a new issue. I am also in the Julia's Slack channel. Welcome and thank you in advance!
