@@ -72,7 +72,7 @@ include("lta.jl")
 # Hadi (1992) detecting outliers in multivariate data
 # This algorithm is not directly related with the regression
 # however, detecting bad leverage points is same as detecting
-# outliers in X-space 
+# outliers in X-space
 include("hadi1992.jl")
 
 # Gray-scale images of distance matrices
@@ -94,7 +94,7 @@ include("summary.jl")
 export @formula, DataFrame
 export mean, quantile
 
-# Basics 
+# Basics
 export RegressionSetting
 export createRegressionSetting
 export designMatrix
@@ -103,23 +103,23 @@ export applyColumns
 export find_minimum_nonzero
 
 # Data
-export phones, hbk
+export phones, hbk, stackloss
 
-# Diagnostics 
+# Diagnostics
 export dffit
 export hatmatrix
 export studentizedResiduals
 export adjustedResiduals
 export jacknifedS
 export cooks
-export mahalabonisSquaredMatrix 
+export mahalabonisSquaredMatrix
 
 # Algorithms
 export hs93, hs93initialset, hs93basicsubset
 export ks89
 export smr98, asm2000
 export lms
-export lts 
+export lts
 export mve
 export mveltsplot
 export bch, bchplot
