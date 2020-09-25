@@ -250,12 +250,5 @@ julia> find_minimum_nonzero([0.0, 0.0, 5.0, 1.0])
 ```
 """
 function find_minimum_nonzero(arr::Array{Float64,1})
-    arr_sorted = sort(arr)
-    minval = arr_sorted[length(arr)]
-    for val in arr_sorted
-        if val < minval && val > 0
-            minval = val
-        end
-    end
-    return minval
+    return minimum(filter(x -> x != 0, arr))
 end
