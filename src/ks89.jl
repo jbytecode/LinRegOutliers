@@ -4,12 +4,12 @@ Calculate recursive residual for the given regression setting and observation.
 # Arguments
 - `setting::RegressionSetting`: RegressionSetting object with a formula and dataset.
 - `indices::ArrayInt,1`: Indices of observations used in the linear model.
-- `k::Int`: Observation indice the recursive residual is calculated for. 
+- `k::Int`: Observation indice the recursive residual is calculated for.
 # Notes
     This is a helper function for the ks89 function and it is not directly used.
 # References
-Kianifard, Farid, and William H. Swallow. "Using recursive residuals, calculated on 
-adaptively-ordered observations, to identify outliers in linear regression." 
+Kianifard, Farid, and William H. Swallow. "Using recursive residuals, calculated on
+adaptively-ordered observations, to identify outliers in linear regression."
 Biometrics (1989): 571-585.
 """
 function ks89RecursiveResidual(setting::RegressionSetting, indices::Array{Int,1}, k::Int)
@@ -21,7 +21,7 @@ function ks89RecursiveResidual(setting::RegressionSetting, indices::Array{Int,1}
     useX = X[indices, :]
     useY = Y[indices]
     XX = inv(useX'useX)
-    w = Y[k] - sum(X[k,:] .* betas) / sqrt(1 + X[k,:]' * XX * X[k,:])
+    w = (Y[k] - X[k,:]' * betas) / sqrt(1 + X[k,:]' * XX * X[k,:])
     return w
 end
 
@@ -35,19 +35,15 @@ Perform the Kianifard & Swallow (1989) algorithm for the given regression settin
 - `alpha::Float64`: Optional argument of the probability of rejecting the null hypothesis.
 # Examples
 ```julia-repl
-julia> reg0001 = createRegressionSetting(@formula(calls ~ year), phones);
+julia> reg0001 = createRegressionSetting(@formula(stackloss ~ airflow + watertemp + acidcond), stackloss)
 julia> ks89(reg0001)
-6-element Array{Int64,1}:
- 15
- 16
- 17
- 18
- 19
- 20
+2-element Array{Int64,1}:
+  4
+ 21
 ```
 # References
-Kianifard, Farid, and William H. Swallow. "Using recursive residuals, calculated on 
-adaptively-ordered observations, to identify outliers in linear regression." 
+Kianifard, Farid, and William H. Swallow. "Using recursive residuals, calculated on
+adaptively-ordered observations, to identify outliers in linear regression."
 Biometrics (1989): 571-585.
 """
 function ks89(setting::RegressionSetting; alpha=0.05)
@@ -60,9 +56,10 @@ function ks89(setting::RegressionSetting; alpha=0.05)
     s = zeros(Float64, n)
     ws = zeros(Float64, n)
     for i in (p + 1):n
-        w[i] = ks89RecursiveResidual(setting, basisindices, i)
-        s[i] = jacknifedS(setting, i)
-        ws[i] = w[i] / s[i]
+        index = orderingindices[i]
+        w[index] = ks89RecursiveResidual(setting, basisindices, index)
+        s[index] = jacknifedS(setting, index)
+        ws[index] = w[index] / s[index]
         basisindices = orderingindices[1:i]
     end
     td = TDist(n - p - 1)
