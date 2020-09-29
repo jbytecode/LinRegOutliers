@@ -23,6 +23,7 @@ A Julia package for outlier detection in linear regression.
 - Hadi (1992)
 - Marchette & Solka (2003) Data Images
 - Satman's GA based LTS estimation (2012)
+- Fischler & Bolles(1981) RANSAC Algorithm
 - Summary
 
 ## Example
