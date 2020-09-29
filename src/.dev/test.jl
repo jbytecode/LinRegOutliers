@@ -450,7 +450,7 @@ end
 @testset "Compact Genetic Algorithm" begin
     Random.seed!(12345)
     function fcost(bits)
-        return sum(bits) 
+        return sum(bits)
     end
     result = cga(chsize=10, costfunction=fcost, popsize=100)
     for element in result
@@ -483,4 +483,12 @@ end
     betas = result["betas"]
     @test abs(betas[1] - (-56.5219)) < epsilon
     @test abs(betas[2] - 1.16488) < epsilon
+end
+
+@testset "RANSAC (1981) Algorithm - Paper example" begin
+    Random.seed!(12345)
+    df = DataFrame(y=[0,1,2,3,3,4,10], x=[0,1,2,2,3,4,2])
+    reg = createRegressionSetting(@formula(y ~ x), df)
+    result = ransac(reg, t=0.8, w=0.85)
+    @test result == [7]
 end
