@@ -1,6 +1,9 @@
 """
+
     ransac(setting; t, w=0.5, m=0, k=0, d=0, confidence=0.99)
+
 Run the RANSAC (1981) algorithm for the given regression setting
+
 # Arguments
  - `setting::RegressionSetting`: RegressionSetting object with a formula and a dataset.
  - `t::Float64`: The threshold distance of a sample point to the regression hyperplane to determine if it fits the model well.
@@ -11,13 +14,13 @@ Run the RANSAC (1981) algorithm for the given regression setting
  - `confidence::Float64`: Required to determine the number of optimum iterations if k is not specified.
 
  # Examples
- ```julia-repl
+```julia-repl
 julia> df = DataFrame(y=[0,1,2,3,3,4,10], x=[0,1,2,2,3,4,2])
 julia> reg = createRegressionSetting(@formula(y ~ x), df)
 julia> ransac(reg, t=0.8, w=0.85)
 1-element Array{Int64,1}:
  7
- ```
+```
 
 # References
 Martin A. Fischler & Robert C. Bolles (June 1981). "Random Sample Consensus: A Paradigm for Model Fitting with Applications to Image Analysis and Automated Cartography"
@@ -54,7 +57,7 @@ function ransac(setting::RegressionSetting; t::Float64, w::Float64=0.5, m::Int=0
         ols = lm(setting.formula, setting.data[sampled_indices, :])
         betas = coef(ols)
 
-        e = abs.(Y - X*betas) ./ norm([1; betas[2:end]], 2)
+        e = abs.(Y - X * betas) ./ norm([1; betas[2:end]], 2)
 
         iteration_inlier_indices = filter(i -> e[i] < t, 1:n)
         inliers_count = length(iteration_inlier_indices)

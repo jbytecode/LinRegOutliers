@@ -48,7 +48,12 @@ function satman2013(setting::RegressionSetting)
     end
 
     medians = applyColumns(median, X0)
-    md2 = diag(mahalabonisSquaredMatrix(X0, meanvector = medians, covmatrix = covmat))
+    mhs = mahalabonisSquaredMatrix(X0, meanvector=medians, covmatrix=covmat)
+    if mhs isa Nothing
+        md2 = zeros(Float64, n)
+    else
+        md2 = diag(mhs)
+    end
     md = sqrt.(md2)
 
     sorted_indices = sortperm(md)

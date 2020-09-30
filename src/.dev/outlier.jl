@@ -61,3 +61,5 @@ include("../ransac.jl")
 
 println("ready")
 
+X = DataFrame(calls=phones.calls, year=phones.year)
+result = mve(X)

@@ -50,7 +50,7 @@ function mve(data::DataFrame; alpha=0.05)
             meanvector = applyColumns(mean, data[hsubset, :])
             md2mat = mahalabonisSquaredMatrix(data, meanvector=meanvector, covmatrix=covmatrix)
             DJ = sqrt(sort(diag(md2mat))[h])
-            goal = (DJ / c)^p * det(covmatrix)
+            goal =  (DJ / c)^p * det(covmatrix)
         catch e
             # Possibly singularity
         end

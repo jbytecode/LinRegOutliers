@@ -233,7 +233,12 @@ function satman2015(setting::RegressionSetting)
 
     meanvector = applyColumns(mean, X[basic_subset_indices,:])
     covmat = cov(X[basic_subset_indices,:])
-    md2 = diag(mahalabonisSquaredMatrix(X, meanvector = meanvector, covmatrix = covmat))
+    mhs = mahalabonisSquaredMatrix(X, meanvector = meanvector, covmatrix = covmat)
+    if mhs isa Nothing
+        md2 = zeros(Float64, n)
+    else
+        md2 = diag(mhs)
+    end
     md = sqrt.(md2)
     sorted_indices = sortperm(md)
     best_h_indices = sorted_indices[1:h]
