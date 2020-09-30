@@ -319,13 +319,13 @@ Calculate Mahalanobis distances.
 Mahalanobis, Prasanta Chandra. "On the generalized distance in statistics." 
 National Institute of Science of India, 1936.
 """
-function mahalabonisSquaredMatrix(data::DataFrame; meanvector=nothing, covmatrix=nothing)::Array{Float64,2}
+function mahalabonisSquaredMatrix(data::DataFrame; meanvector=nothing, covmatrix=nothing)::Union{Nothing,Array{Float64,2}}
     datamat = convert(Matrix, data)
     return mahalabonisSquaredMatrix(datamat, meanvector=meanvector, covmatrix=covmatrix)
 end
 
 
-function mahalabonisSquaredMatrix(datamat::Matrix; meanvector=nothing, covmatrix=nothing)::Array{Float64,2}
+function mahalabonisSquaredMatrix(datamat::Matrix; meanvector=nothing, covmatrix=nothing)::Union{Nothing,Array{Float64,2}}
     if meanvector === nothing
         meanvector = applyColumns(mean, datamat)
     end
@@ -340,8 +340,7 @@ function mahalabonisSquaredMatrix(datamat::Matrix; meanvector=nothing, covmatrix
         if det(covmatrix) == 0
             @warn "singular covariance matrix, mahalanobis distances can not be calculated"
         end
-        n = size(datamat)[1]
-        return zeros(Float64, (n, n))
+        return nothing
     end
 end
 
