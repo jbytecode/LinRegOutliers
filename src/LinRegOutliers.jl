@@ -106,7 +106,7 @@ export applyColumns
 export find_minimum_nonzero
 
 # Data
-export phones, hbk, stackloss
+export phones, hbk, stackloss, weightloss, hs93randomdata
 
 # Diagnostics
 export dffit
