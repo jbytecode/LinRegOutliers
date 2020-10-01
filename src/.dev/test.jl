@@ -192,6 +192,13 @@ end
     @test 50 in outset["outliers"]
 end
 
+@testset "Hadi & Simonoff 1993 - with Hadi & Simonoff random data" begin
+    reg = createRegressionSetting(@formula(y ~ x1 + x2), hs93randomdata)
+    outset = hs93(reg)
+    @test 1 in outset["outliers"]
+    @test 2 in outset["outliers"]
+    @test 3 in outset["outliers"]
+end
 
 @testset "Kianifard & Swallow 1989 - Algorithm" begin
     df = phones
