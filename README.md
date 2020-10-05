@@ -32,6 +32,27 @@ A Julia package for outlier detection in linear regression.
 - Minimum Covariance Determinant Estimator
 - Hadi (1994) Algorithm
 
+## Installation
+```julia
+julia> ]
+(@v1.5) pkg> add LinRegOutliers
+```
+
+or
+
+```julia
+julia> using Pgk
+julia> Pkg.add("LinRegOutliers")
+```
+
+then
+
+```julia
+julia> using LinRegOutliers
+```
+
+to make all the stuff be ready!
+
 
 ## Example
 
