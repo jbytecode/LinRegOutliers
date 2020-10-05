@@ -26,11 +26,11 @@ Performs the Minimum Volume Ellipsoid algorithm for a robust covariance matrix.
 Van Aelst, Stefan, and Peter Rousseeuw. "Minimum volume ellipsoid." Wiley 
 Interdisciplinary Reviews: Computational Statistics 1.1 (2009): 71-82.
 """
-function mve(data::DataFrame; alpha=0.05)
+function mve(data::DataFrame; alpha=0.01)
     dataMatrix = convert(Matrix, data)
     n, p = size(dataMatrix)
     chisquared = Chisq(p)
-    chisqcrit = quantile(chisquared, 1 - alpha)
+    chisqcrit = quantile(chisquared, 1.0 - alpha)
     c = sqrt(chisqcrit)
     h = Int(floor((n + p + 1.0) / 2.0)) 
     indices = collect(1:n)
@@ -69,7 +69,14 @@ function mve(data::DataFrame; alpha=0.05)
     result["best.subset"] = sort(besthsubset)
     result["robust.location"] = meanvector
     result["robust.covariance"] = covariancematrix
-    result["squared.mahalanobis"] = md2 
+    result["squared.mahalanobis"] = md2
+    result["chisq.crit"] = chisqcrit 
+    result["alpha"] = alpha
     result["outliers"] = outlierset
     return result 
+end
+
+
+function mve(data::Array{Float64,2}; alpha=0.01)
+    return mve(DataFrame(data), alpha=alpha)
 end
