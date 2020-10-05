@@ -26,6 +26,13 @@ A Julia package for outlier detection in linear regression.
 - Fischler & Bolles(1981) RANSAC Algorithm
 - Summary
 
+
+## Unimplemented Methods
+- BACON Algorithm (Billor & Hadi & Velleman (2000))
+- Minimum Covariance Determinant Estimator
+- Hadi (1994) Algorithm
+
+
 ## Example
 
 ```julia
