@@ -13,20 +13,8 @@ function enlargesubset(initialsubset, data::DataFrame, dataMatrix::Matrix, h::In
     return basicsubset
 end
 
-"""
-    mve(data; alpha = 0.05)
 
-Performs the Minimum Volume Ellipsoid algorithm for a robust covariance matrix.
-
-# Arguments
-- `data::DataFrame`: Multivariate data.
-- `alpha::Float64`: Probability for quantiles of Chi-Squared statistic.
-
-# References
-Van Aelst, Stefan, and Peter Rousseeuw. "Minimum volume ellipsoid." Wiley 
-Interdisciplinary Reviews: Computational Statistics 1.1 (2009): 71-82.
-"""
-function mve(data::DataFrame; alpha=0.01)
+function robcov(data::DataFrame; alpha=0.01, estimator=:mve)
     dataMatrix = convert(Matrix, data)
     n, p = size(dataMatrix)
     chisquared = Chisq(p)
@@ -47,10 +35,14 @@ function mve(data::DataFrame; alpha=0.01)
             initialsubset = sample(indices, k, replace=false)
             hsubset = enlargesubset(initialsubset, data, dataMatrix, h) 
             covmatrix = cov(dataMatrix[hsubset, :])
-            meanvector = applyColumns(mean, data[hsubset, :])
-            md2mat = mahalabonisSquaredMatrix(data, meanvector=meanvector, covmatrix=covmatrix)
-            DJ = sqrt(sort(diag(md2mat))[h])
-            goal =  (DJ / c)^p * det(covmatrix)
+            if estimator == :mve
+                meanvector = applyColumns(mean, data[hsubset, :])
+                md2mat = mahalabonisSquaredMatrix(data, meanvector=meanvector, covmatrix=covmatrix)
+                DJ = sqrt(sort(diag(md2mat))[h])
+                goal =  (DJ / c)^p * det(covmatrix)
+            else
+                goal = det(covmatrix)
+            end
         catch e
             # Possibly singularity
         end
@@ -77,6 +69,49 @@ function mve(data::DataFrame; alpha=0.01)
 end
 
 
+"""
+    mve(data; alpha = 0.01)
+
+Performs the Minimum Volume Ellipsoid algorithm for a robust covariance matrix.
+
+# Arguments
+- `data::DataFrame`: Multivariate data.
+- `alpha::Float64`: Probability for quantiles of Chi-Squared statistic.
+
+# References
+Van Aelst, Stefan, and Peter Rousseeuw. "Minimum volume ellipsoid." Wiley 
+Interdisciplinary Reviews: Computational Statistics 1.1 (2009): 71-82.
+"""
+function mve(data::DataFrame; alpha=0.01)
+    robcov(data, alpha=alpha, estimator=:mve) 
+end
+
 function mve(data::Array{Float64,2}; alpha=0.01)
     return mve(DataFrame(data), alpha=alpha)
+end
+
+
+"""
+    mcd(data; alpha = 0.01)
+
+Performs the Minimum Covariance Determinant algorithm for a robust covariance matrix.
+
+# Arguments
+- `data::DataFrame`: Multivariate data.
+- `alpha::Float64`: Probability for quantiles of Chi-Squared statistic.
+
+# Notes
+Algorithm is implemented using concentration steps as described in the reference paper.
+However, details about number of iterations are slightly different.
+
+# References
+Rousseeuw, Peter J., and Katrien Van Driessen. "A fast algorithm for the minimum covariance 
+determinant estimator." Technometrics 41.3 (1999): 212-223.
+"""
+function mcd(data::DataFrame; alpha=0.01)
+    robcov(data, alpha=alpha, estimator=:mcd)
+end
+
+function mcd(data::Array{Float64,2}; alpha=0.01)
+    return mcd(DataFrame(data), alpha=alpha)
 end
