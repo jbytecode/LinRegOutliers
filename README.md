@@ -24,12 +24,12 @@ A Julia package for outlier detection in linear regression.
 - Marchette & Solka (2003) Data Images
 - Satman's GA based LTS estimation (2012)
 - Fischler & Bolles(1981) RANSAC Algorithm
+- Minimum Covariance Determinant Estimator
 - Summary
 
 
 ## Unimplemented Methods
 - BACON Algorithm (Billor & Hadi & Velleman (2000))
-- Minimum Covariance Determinant Estimator
 - Hadi (1994) Algorithm
 
 ## Installation

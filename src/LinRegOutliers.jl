@@ -123,7 +123,7 @@ export ks89
 export smr98, asm2000
 export lms
 export lts
-export mve
+export mve, mcd
 export mveltsplot
 export bch, bchplot
 export py95, py95SuspectedObservations
