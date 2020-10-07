@@ -22,7 +22,24 @@ Dict{Any,Any} with 2 entries:
 """
 function lad(setting::RegressionSetting; starting_betas=nothing)
     X = designMatrix(setting)
-    Y = responseVector(setting)
+    y = responseVector(setting)
+    return lad(X, y, starting_betas=starting_betas)
+end
+
+
+"""
+
+    lad(X, y; starting_betas = nothing)
+
+Perform Least Absolute Deviations regression for a given regression setting.
+
+# Arguments
+- `X::Array{Float64, 2}`: Design matrix of the linear model.
+- `y::Array{Float64, 1}`: Response vector of the linear model.
+- `starting_betas::Array{Float64,1}`: Starting values of parameter estimations that fed to local search optimizer.
+
+"""
+function lad(X::Array{Float64,2}, y::Array{Float64,1}; starting_betas=nothing)
     n, p = size(X)
 
     if starting_betas isa Nothing
@@ -30,12 +47,12 @@ function lad(setting::RegressionSetting; starting_betas=nothing)
     end
 
     function goal(betas::Array{Float64,1})::Float64
-        sum(abs.(Y .- X * betas))
+        sum(abs.(y .- X * betas))
     end
 
     optim_result = optimize(goal, starting_betas, NelderMead())
     betas = optim_result.minimizer 
-    residuals = Y .- X * betas
+    residuals = y .- X * betas
 
     result = Dict()
     result["betas"] = optim_result.minimizer
