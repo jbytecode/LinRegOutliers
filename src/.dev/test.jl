@@ -74,41 +74,51 @@ end
 
 @testset "studentized residuals" begin
     dataset = DataFrame(
-        x=[1.0, 2.0, 3.0, 4.0, 50.0],
-        y=[2.0, 4.0, 6.0, 8.0, 100.0]
+        x=Float64[1.0, 2.0, 3.0, 4.0, 5.0, 6.0],
+        y=Float64[2.1, 3.9, 6.2, 7.8, 11.0, 18.0]
     )
     setting = createRegressionSetting(@formula(y ~ x), dataset)
     resi = studentizedResiduals(setting)
-    @test abs(resi[1]) < 2.5
-    @test abs(resi[2]) < 2.5
-    @test abs(resi[3]) < 2.5
-    @test abs(resi[4]) < 2.5
-    @test abs(resi[5]) > 2.5
+    @test abs(resi[1]) < 1.5
+    @test abs(resi[2]) < 1.5
+    @test abs(resi[3]) < 1.5
+    @test abs(resi[4]) < 1.5
+    @test abs(resi[5]) < 1.5
+    @test abs(resi[6]) > 1.5
 end
 
 
 @testset "adjusted residuals" begin
+    eps = 0.0001
     dataset = DataFrame(
         x=[1.0, 2, 3, 4, 5],
         y=[2.0, 4, 6, 8, 10]
     )
     setting = createRegressionSetting(@formula(y ~ x), dataset)
     resi = adjustedResiduals(setting)
-    @test resi == zeros(Float64, 5)
+    for element in resi
+        @test abs(element) < eps 
+    end
 end
 
-@testset "Cook's distance" begin
-    dataset = DataFrame(
-        x=[1.0, 2, 3, 4, 5.0],
-        y=[2.0, 4, 6, 8, 10.0]
-    )
-    setting = createRegressionSetting(@formula(y ~ x), dataset)
+@testset "Cook's distance - Phone data" begin
+    eps = 0.00001
+    setting = createRegressionSetting(@formula(calls ~ year), phones)
+    knowncooks = [0.005344774190779771, 0.0017088194691033181, 0.00016624914057961155, 
+                    3.16444525831206e-5, 0.0005395058666404081, 0.0014375008774859539, 
+                    0.0024828140956511258, 0.0036279720445167277, 0.004357605989540906, 
+                    0.005288503758364767, 0.006313578057565415, 0.0076561205696857254, 
+                    0.009568574875389256, 0.009970039008782357, 0.02610396373381051, 
+                    0.029272523880917646, 0.05091236198400663, 0.08176555044049343, 
+                    0.14380266904640235, 0.26721539425047447, 0.051205153558783356, 
+                    0.13401084683481085, 0.16860324592350226, 0.2172819114905912]
     cookdists = cooks(setting)
-    @test map(x -> isnan(x), cookdists) == trues(5)
+    @test map((x, y) -> abs(x - y) < eps, cookdists, knowncooks) == trues(24)
 end
 
 
 @testset "Jacknifed standard error of regression" begin
+    eps = 0.00001
     dataset = DataFrame(
         x=[1.0, 2, 3, 4, 5000],
         y=[2.0, 4, 6, 8, 1000]
@@ -118,7 +128,7 @@ end
     @test jacknifedS(setting, 2) != 0
     @test jacknifedS(setting, 3) != 0
     @test jacknifedS(setting, 4) != 0
-    @test jacknifedS(setting, 5) == 0
+    @test jacknifedS(setting, 5) < eps
 end
 
 @testset "Mahalanobis squared distances" begin

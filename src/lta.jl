@@ -68,8 +68,8 @@ function lta(X::Array{Float64,2}, y::Array{Float64,1}; exact=false)
         try
             subX = X[subsetindices,:]
             suby = y[subsetindices]
-            ols = OLS(subX, suby)
-            betas = coef(ols)
+            olsreg = ols(subX, suby)
+            betas = coef(olsreg)
             res_abs = abs.(y .- X * betas)
             ordered_res = sort(res_abs)
             cost = sum(ordered_res[1:h])
