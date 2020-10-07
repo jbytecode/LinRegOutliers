@@ -37,6 +37,7 @@ import Combinatorics: combinations
 include("../basis.jl")
 include("../data.jl")
 include("../diagnostics.jl")
+include("../ols.jl")
 include("../hs93.jl")
 include("../ks89.jl")
 include("../smr98.jl")
