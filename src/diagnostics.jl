@@ -328,7 +328,7 @@ Technometrics 19.1 (1977): 15-18.
 """
 function cooks(setting::RegressionSetting)::Array{Float64,1}
     X = designMatrix(setting)
-    Y = responseVector(setting)
+    y = responseVector(setting)
     return cooks(X, y)
 end
 
