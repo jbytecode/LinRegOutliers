@@ -51,11 +51,34 @@ identifying multiple outliers in linear regression." Computational statistics & 
 27.4 (1998): 461-484.
 """
 function smr98(setting::RegressionSetting)
-    design = designMatrix(setting)
-    ols = lm(setting.formula, setting.data)
+    X = designMatrix(setting)
+    y = responseVector(setting)
+    return smr98(X, y)
+end
+
+
+"""
+
+    smr98(X, y)
+
+Perform the Sebert, Monthomery and Rollier (1998) algorithm for the given regression setting.
+
+# Arguments
+- `X::Array{Float64, 2}`: Desing matrix of the linear regression model.
+- `y::Array{Float64, 1}`: Response vector of the linear regression model.
+
+
+# References
+Sebert, David M., Douglas C. Montgomery, and Dwayne A. Rollier. "A clustering algorithm for 
+identifying multiple outliers in linear regression." Computational statistics & data analysis 
+27.4 (1998): 461-484.
+"""
+
+function smr98(X::Array{Float64,2}, y::Array{Float64,1})
+    ols = OLS(X, y)
     stdres = standardize(ZScoreTransform, residuals(ols), dims=1)
     stdfit = standardize(ZScoreTransform, predict(ols), dims=1)
-    n, p = size(design)
+    n, p = size(X)
     d = distances(stdres, stdfit)
     h = floor((n + p - 1) / 2)
     hcl = hclust(d, linkage=:single)
