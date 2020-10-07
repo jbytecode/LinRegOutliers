@@ -25,13 +25,20 @@ multiple outliers in linear models." Journal of the American Statistical
 Association 88.424 (1993): 1264-1272.
 """
 function hs93initialset(setting::RegressionSetting)::Array{Int,1}
-    n, p = size(designMatrix(setting))
+    X = designMatrix(setting)
+    y = responseVector(setting)
+    return hs93initialset(X, y)
+end
+
+function hs93initialset(X::Array{Float64,2}, y::Array{Float64,1})::Array{Int,1}
+    n, p = size(X)
     s = p + 1
-    dfs = abs.(dffit(setting))
+    dfs = abs.(dffit(X, y))
     sortedindices = sortperm(dfs)
     basicsetindices = sortedindices[1:s]
     return basicsetindices
 end
+
 
 """
 
@@ -77,23 +84,27 @@ Association 88.424 (1993): 1264-1272.
 """
 function hs93basicsubset(setting::RegressionSetting, initialindices::Array{Int,1})::Array{Int,1}
     X = designMatrix(setting)
-    Y = responseVector(setting)
+    y = responseVector(setting)
+    return hs93basicsubset(X, y, initialindices)
+end
+
+
+function hs93basicsubset(X::Array{Float64,2}, y::Array{Float64,1}, initialindices::Array{Int,1})::Array{Int,1}
     n, p = size(X)
     h = floor((n + p - 1) / 2)
     s = length(initialindices)
     indices = initialindices
     for i in range(s + 1, stop=h)
-        partialdata = setting.data[indices, :]
-        ols = lm(setting.formula, partialdata)
-        betas = coef(ols)
+        olsreg = ols(X[indices,:], y[indices])
+        betas = coef(olsreg)
         d = zeros(Float64, n)
         XM = X[indices,:]
         for j in 1:n
             xxxx = X[j,:]' * inv(XM'XM) * X[j,:]
             if j in indices
-                d[j] = abs.(Y[j] - sum(X[j,:] .* betas)) / sqrt(1 - xxxx)
+                d[j] = abs.(y[j] - sum(X[j,:] .* betas)) / sqrt(1 - xxxx)
             else
-                d[j] = abs.(Y[j] - sum(X[j,:] .* betas)) / sqrt(1 + xxxx)
+                d[j] = abs.(y[j] - sum(X[j,:] .* betas)) / sqrt(1 + xxxx)
             end
         end
         orderingd = sortperm(abs.(d))
@@ -101,7 +112,6 @@ function hs93basicsubset(setting::RegressionSetting, initialindices::Array{Int,1
     end
     return indices
 end
-
 """
 
     hs93(setting; alpha = 0.05, basicsubsetindices = nothing)
@@ -129,20 +139,24 @@ multiple outliers in linear models." Journal of the American Statistical
 Association 88.424 (1993): 1264-1272.
 """
 function hs93(setting::RegressionSetting; alpha=0.05, basicsubsetindices=nothing)
-    if basicsubsetindices === nothing
-        initialsetindices = hs93initialset(setting)
-        basicsubsetindices = hs93basicsubset(setting, initialsetindices)
-    end
     X = designMatrix(setting)
-    Y = responseVector(setting)
+    y = responseVector(setting)
+    return hs93(X, y, alpha=alpha, basicsubsetindices=basicsubsetindices)
+end
+
+
+function hs93(X::Array{Float64,2}, y::Array{Float64,1}; alpha=0.05, basicsubsetindices=nothing)
+    if basicsubsetindices === nothing
+        initialsetindices = hs93initialset(X, y)
+        basicsubsetindices = hs93basicsubset(X, y, initialsetindices)
+    end
     indices = basicsubsetindices
     n, p = size(X)
     s = length(indices)
     while s < n
-        partialdata = setting.data[indices, :]
-        ols = lm(setting.formula, partialdata)
-        betas = coef(ols)
-        resids = residuals(ols)
+        olsreg = ols(X[indices, :], y[indices])
+        betas = coef(olsreg)
+        resids = residuals(olsreg)
         sigma = sqrt(sum(resids.^2.0) / (length(resids) - p))
         d = zeros(Float64, n)
         XM = X[indices,:]
@@ -150,9 +164,9 @@ function hs93(setting::RegressionSetting; alpha=0.05, basicsubsetindices=nothing
         for j in 1:n
             xMMx = X[j,:]' * iXmXm * X[j,:]
             if j in indices
-                d[j] = (Y[j] - sum(X[j,:] .* betas)) / (sigma * sqrt(1.0 - xMMx))
+                d[j] = (y[j] - sum(X[j,:] .* betas)) / (sigma * sqrt(1.0 - xMMx))
             else
-                d[j] = (Y[j] - sum(X[j,:] .* betas)) / (sigma * sqrt(1.0 + xMMx))
+                d[j] = (y[j] - sum(X[j,:] .* betas)) / (sigma * sqrt(1.0 + xMMx))
             end
         end
         orderingd = sortperm(abs.(d))
