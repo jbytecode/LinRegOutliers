@@ -30,7 +30,30 @@ absolute deviations regression." Computational Statistics & Data Analysis 32.2 (
 """
 function lta(setting::RegressionSetting; exact=false)
     X = designMatrix(setting)
-    Y = responseVector(setting)
+    y = responseVector(setting)
+    return lta(X, y, exact=exact)
+end
+
+
+
+"""
+
+    lta(X, y; exact = false)
+
+Perform the Hawkins & Olive (1999) algorithm (Least Trimmed Absolute Deviations) 
+for the given regression setting.
+
+# Arguments
+- `X::Array{Float64, 2}`: Design matrix of linear regression model.
+- `y::Array{Float64, 1}`: Response vector of linear regression model.
+- `exact::Bool`: Consider all possible subsets of p or not where p is the number of regression parameters.
+
+
+# References
+Hawkins, Douglas M., and David Olive. "Applications and algorithms for least trimmed sum of 
+absolute deviations regression." Computational Statistics & Data Analysis 32.2 (1999): 119-134.
+"""
+function lta(X::Array{Float64,2}, y::Array{Float64,1}; exact=false)
     n, p = size(X)
     h = Int(floor((n + p + 1.0) / 2.0))
 
@@ -38,14 +61,16 @@ function lta(setting::RegressionSetting; exact=false)
         psubsets = combinations(1:n, p)
     else
         iters = p * 3000
-        psubsets = [sample(1:n, p, replace=true) for i in 1:iters]
+        psubsets = [sample(1:n, p, replace=false) for i in 1:iters]
     end
 
     function lta_cost(subsetindices::Array{Int,1})::Tuple{Float64,Array{Float64,1}}
         try
-            ols = lm(setting.formula, setting.data[subsetindices,:])
+            subX = X[subsetindices,:]
+            suby = y[subsetindices]
+            ols = OLS(subX, suby)
             betas = coef(ols)
-            res_abs = abs.(Y .- X * betas)
+            res_abs = abs.(y .- X * betas)
             ordered_res = sort(res_abs)
             cost = sum(ordered_res[1:h])
             return (cost, betas) 
@@ -66,3 +91,4 @@ function lta(setting::RegressionSetting; exact=false)
     result["objective"] = cost
     return result
 end
+
