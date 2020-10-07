@@ -62,12 +62,18 @@ Series B (Methodological) 57.1 (1995): 145-156.
 """
 function py95SuspectedObservations(setting::RegressionSetting)
     X = designMatrix(setting)
-    Y = responseVector(setting)
+    y = responseVector(setting)
+    return py95SuspectedObservations(X, y)
+end
+
+
+
+function py95SuspectedObservations(X::Array{Float64,2}, y::Array{Float64,1})
     n, p = size(X)
     nhalf = Int(floor(n / 2.0))
-    ols = lm(setting.formula, setting.data)
-    resids = residuals(ols)
-    H = hatmatrix(setting)
+    olsreg = ols(X, y)
+    resids = residuals(olsreg)
+    H = hatmatrix(X)
     s2 = sum(resids.^2.0) / (n - p)
     D = zeros(Float64, (n, n))
     E = zeros(Float64, (n, n))
@@ -118,14 +124,19 @@ regression by using an influence matrix." Journal of the Royal Statistical Socie
 Series B (Methodological) 57.1 (1995): 145-156.
 """
 function jacknifedS(setting::RegressionSetting, omittedIndices::Array{Int,1})::Float64
-    n, p = size(designMatrix(setting))
+    X = designMatrix(setting)
+    y = responseVector(setting)
+    return jacknifedS(X, y, omittedIndices)
+end
+
+function jacknifedS(X::Array{Float64,2}, y::Array{Float64,1}, omittedIndices::Array{Int,1})::Float64
+    n, p = size(X)
     indices = [i for i in 1:n if !(i in omittedIndices)]
-    ols = lm(setting.formula, setting.data[indices,:])
-    e = residuals(ols)
+    olsreg = ols(X[indices,:], y[indices])
+    e = residuals(olsreg)
     s = sqrt(sum(e.^2.0) / (n - p - length(omittedIndices)))
     return s
 end
-
 
 
 
@@ -154,17 +165,22 @@ Series B (Methodological) 57.1 (1995): 145-156.
 """
 function py95(setting::RegressionSetting)
     X = designMatrix(setting)
-    Y = responseVector(setting)
+    y = responseVector(setting)
+    return py95(X, y)
+end
+
+
+function py95(X::Array{Float64,2}, y::Array{Float64,1})
     n, p = size(X)
     all_indices = collect(1:n)
-    suspicious_sets = py95SuspectedObservations(setting)
+    suspicious_sets = py95SuspectedObservations(X, y)
     outlierset = Set{Int}()
     for aset in suspicious_sets
         clean_indices = setdiff(all_indices, aset)
-        ols = lm(setting.formula, setting.data[clean_indices,:])
-        betas = coef(ols)
-        e = [Y[i] - sum(X[i,:] .* betas) for i in 1:n]
-        jks = jacknifedS(setting, aset)
+        olsreg = ols(X[clean_indices,:], y[clean_indices])
+        betas = coef(olsreg)
+        e = [y[i] - sum(X[i,:] .* betas) for i in 1:n]
+        jks = jacknifedS(X, y, aset)
         stds = e / jks
         outlier_indices = filter(i -> abs(stds[i]) > 2.5, 1:n)
         for element in outlier_indices
