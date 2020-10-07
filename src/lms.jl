@@ -28,7 +28,12 @@ statistical association 79.388 (1984): 871-880.
 """
 function lms(setting::RegressionSetting; iters=nothing, crit=2.5)
     X = designMatrix(setting)
-    Y = responseVector(setting)
+    y = responseVector(setting)
+    return lms(X, y, iters=iters, crit=crit)
+end
+
+
+function lms(X::Array{Float64,2}, y::Array{Float64,1}; iters=nothing, crit=2.5)
     n, p = size(X)
     h = Int(floor((n + 1.0) / 2.0))
     if iters === nothing
@@ -43,9 +48,9 @@ function lms(setting::RegressionSetting; iters=nothing, crit=2.5)
         try 
             k = rand(kindices, 1)[1]
             sampledindices = sample(indices, k, replace=false)
-            ols = lm(setting.formula, setting.data[sampledindices,:])
-            betas = coef(ols)
-            origres = Y .- X * betas
+            olsreg = ols(X[sampledindices,:], y[sampledindices])
+            betas = coef(olsreg)
+            origres = y .- X * betas
             res = sort(origres.^2.0)
             m2 = res[h]
             if m2 < bestobjective

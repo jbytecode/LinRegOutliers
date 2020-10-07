@@ -13,18 +13,20 @@ adaptively-ordered observations, to identify outliers in linear regression."
 Biometrics (1989): 571-585.
 """
 function ks89RecursiveResidual(setting::RegressionSetting, indices::Array{Int,1}, k::Int)
-    ols = lm(setting.formula, setting.data[indices, :])
-    betas = coef(ols)
     X = designMatrix(setting)
-    Y = responseVector(setting)
-    n, p = size(X)
-    useX = X[indices, :]
-    useY = Y[indices]
-    XX = inv(useX'useX)
-    w = (Y[k] - X[k,:]' * betas) / sqrt(1 + X[k,:]' * XX * X[k,:])
-    return w
+    y = responseVector(setting)
+    return ks89RecursiveResidual(X, y, indices, k)
 end
 
+function ks89RecursiveResidual(X::Array{Float64,2}, y::Array{Float64,1}, indices::Array{Int,1}, k::Int)
+    useX = X[indices, :]
+    useY = y[indices]
+    olsreg = ols(useX, useY)
+    betas = coef(olsreg)
+    XX = inv(useX'useX)
+    w = (y[k] - X[k,:]' * betas) / sqrt(1 + X[k,:]' * XX * X[k,:])
+    return w
+end
 
 
 """
@@ -47,6 +49,7 @@ adaptively-ordered observations, to identify outliers in linear regression."
 Biometrics (1989): 571-585.
 """
 function ks89(setting::RegressionSetting; alpha=0.05)
+    #= 
     stdres = studentizedResiduals(setting)
     orderingindices = sortperm(abs.(stdres))
     X = designMatrix(setting)
@@ -59,6 +62,31 @@ function ks89(setting::RegressionSetting; alpha=0.05)
         index = orderingindices[i]
         w[index] = ks89RecursiveResidual(setting, basisindices, index)
         s[index] = jacknifedS(setting, index)
+        ws[index] = w[index] / s[index]
+        basisindices = orderingindices[1:i]
+    end
+    td = TDist(n - p - 1)
+    q = quantile(td, alpha)
+    result = filter(i -> abs.(ws[i]) > abs(q), 1:n)
+    return result =#
+    X = designMatrix(setting)
+    y = responseVector(setting)
+    return ks89(X, y, alpha=alpha)
+end
+
+
+function ks89(X::Array{Float64,2}, y::Array{Float64,1}; alpha=0.05)
+    stdres = studentizedResiduals(X, y)
+    orderingindices = sortperm(abs.(stdres))
+    n, p = size(X)
+    basisindices = orderingindices[1:p]
+    w = zeros(Float64, n)
+    s = zeros(Float64, n)
+    ws = zeros(Float64, n)
+    for i in (p + 1):n
+        index = orderingindices[i]
+        w[index] = ks89RecursiveResidual(X, y, basisindices, index)
+        s[index] = jacknifedS(X, y, index)
         ws[index] = w[index] / s[index]
         basisindices = orderingindices[1:i]
     end

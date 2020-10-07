@@ -20,29 +20,34 @@ regression based on concentration steps." Data Analysis.
 Springer, Berlin, Heidelberg, 2000. 335-346.
 """
 function iterateCSteps(setting::RegressionSetting, subsetindices::Array{Int,1}, h::Int)
-    Xall = designMatrix(setting)
-    Yall = responseVector(setting)
+    X = designMatrix(setting)
+    y = responseVector(setting)
+    return iterateCSteps(X, y, subsetindices, h)
+end
+
+
+function iterateCSteps(X::Array{Float64,2}, y::Array{Float64,1}, subsetindices::Array{Int,1}, h::Int)
     starterset = copy(subsetindices)
     oldobjective = Inf
     objective = Inf
     iter = 0
     maxiter = 10000
-    n, p = size(Xall)
+    n, p = size(X)
     while iter < maxiter
         try
-        X = Xall[subsetindices, :]
-        Y = Yall[subsetindices, :]
-        ols = lm(setting.formula, setting.data[subsetindices, :])
-        betas = coef(ols)
-        res = [Yall[i] - sum(Xall[i,:] .* betas) for i in 1:n]
-        sortedresindices = sortperm(abs.(res))
-        subsetindices = sortedresindices[1:h]
-        objective = sum(sort(res.^2.0)[1:h])
-        if oldobjective == objective 
-            break
-        end
-        oldobjective = objective
-        iter += 1
+            Xsub = X[subsetindices, :]
+            ysub = y[subsetindices]
+            olsreg = ols(Xsub, ysub)
+            betas = coef(olsreg)
+            res = [y[i] - sum(X[i,:] .* betas) for i in 1:n]
+            sortedresindices = sortperm(abs.(res))
+            subsetindices = sortedresindices[1:h]
+            objective = sum(sort(res.^2.0)[1:h])
+            if oldobjective == objective 
+                break
+            end
+            oldobjective = objective
+            iter += 1
         catch er
             @warn er
             return (objective, subsetindices)
@@ -56,14 +61,19 @@ end
 
 
 function iterateCSteps(setting::RegressionSetting, initialBetas::Array{Float64,1}, h::Int)
-    Xall = designMatrix(setting)
-    Yall = responseVector(setting)
-    n, p = size(Xall)
-    res = [Yall[i] - sum(Xall[i,:] .* initialBetas) for i in 1:n]
+    X = designMatrix(setting)
+    y = responseVector(setting)
+    return iterateCSteps(X, y, initialBetas, h)  
+end
+
+function iterateCSteps(X::Array{Float64,2}, y::Array{Float64,1}, initialBetas::Array{Float64,1}, h::Int)
+    n, p = size(X)
+    res = [y[i] - sum(X[i,:] .* initialBetas) for i in 1:n]
     sortedresindices = sortperm(abs.(res))
     subsetindices = sortedresindices[1:p]
-    return iterateCSteps(setting, subsetindices, h)    
+    return iterateCSteps(X, y, subsetindices, h)    
 end
+
 
 
 """
@@ -98,7 +108,11 @@ Springer, Berlin, Heidelberg, 2000. 335-346.
 """
 function lts(setting::RegressionSetting; iters=nothing, crit=2.5)
     X = designMatrix(setting)
-    Y = responseVector(setting)
+    y = responseVector(setting)
+    return lts(X, y, iters=iters, crit=crit)
+end
+
+function lts(X::Array{Float64,2}, y::Array{Float64,1}; iters=nothing, crit=2.5)
     n, p = size(X)
     h = Int(floor((n + p + 1.0) / 2.0))
     if iters === nothing
@@ -109,15 +123,15 @@ function lts(setting::RegressionSetting; iters=nothing, crit=2.5)
     besthsubset = []
     for iter in 1:iters
         subsetindices = sample(allindices, p, replace=false)
-        objective, hsubsetindices = iterateCSteps(setting, subsetindices, h)
+        objective, hsubsetindices = iterateCSteps(X, y, subsetindices, h)
         if objective < bestobjective
             bestobjective = objective 
             besthsubset = hsubsetindices
         end
     end
-    ltsreg = lm(setting.formula, setting.data[besthsubset, :])
+    ltsreg = ols(X[besthsubset, :], y[besthsubset])
     ltsbetas = coef(ltsreg)
-    ltsres = [Y[i] - sum(X[i,:] .* ltsbetas) for i in 1:n]
+    ltsres = [y[i] - sum(X[i,:] .* ltsbetas) for i in 1:n]
     ltsS = sqrt(sum((ltsres.^2.0)[1:h]) / (h - p))
     ltsresmean = mean(ltsres[besthsubset])
     ltsScaledRes = (ltsres .- ltsresmean) / ltsS
