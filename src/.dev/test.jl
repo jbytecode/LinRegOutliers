@@ -443,9 +443,9 @@ end
         x=Float64[1,2,3,4,5,6,7,8,9,10],
         y=Float64[2,4,6,8,10,12,14,16,18,1000]
     )
-    n = length(df2["x"])
-    X = hcat(ones(Float64, n), df2["x"])
-    y = df2["y"]
+    n = length(df2[!, "x"])
+    X = hcat(ones(Float64, n), df2[!, "x"])
+    y = df2[!, "y"]
     result2 = lad(X, y)
     betas2 = result2["betas"]
     @test abs(betas2[1] - 0) < eps

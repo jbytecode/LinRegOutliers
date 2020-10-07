@@ -137,7 +137,7 @@ export lad
 export lta
 export hadi1992
 export dataimage
-export gwcga, galts, ga, RealChromosome
+export gwcga, galts, ga, cga, RealChromosome
 export detectOutliers
 export ransac
 
