@@ -121,6 +121,9 @@ export jacknifedS
 export cooks
 export mahalabonisSquaredMatrix
 
+# Ordinary least squares
+export OLS, ols, wls, residuals, predict
+
 # Algorithms
 export hs93, hs93initialset, hs93basicsubset
 export ks89
