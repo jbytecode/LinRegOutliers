@@ -22,7 +22,12 @@ International Journal of statistics and Probability 2.3 (2013): 101.
 """
 function satman2013(setting::RegressionSetting)
     X = designMatrix(setting)
-    Y = responseVector(setting)
+    y = responseVector(setting)
+    return satman2013(X, y)
+end
+
+
+function satman2013(X::Array{Float64,2}, y::Array{Float64,1})
     n, p = size(X)
     h = Int(floor((n + p + 1.0) / 2.0))
 
@@ -59,13 +64,11 @@ function satman2013(setting::RegressionSetting)
     sorted_indices = sortperm(md)
     best_h_indices = sorted_indices[1:h]
 
-    crit, bestset = iterateCSteps(setting, best_h_indices, h)
+    crit, bestset = iterateCSteps(X, y, best_h_indices, h)
     
-    regy = Y[bestset]
-    regx = X[bestset,:]
-    ols = lm(setting.formula, setting.data[bestset, :])
-    betas = coef(ols)
-    resids = Y .- (X * betas)
+    olsreg = ols(X[bestset, :], y[bestset])
+    betas = coef(olsreg)
+    resids = y .- (X * betas)
     med_res = median(resids)
     standardized_resids = (resids .- med_res) / median(abs.(resids .- med_res))
 
