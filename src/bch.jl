@@ -58,8 +58,14 @@ Billor, Nedret, Samprit Chatterjee, and Ali S. Hadi. "A re-weighted least square
 for robust regression estimation." American journal of mathematical and management sciences 26.3-4 (2006): 229-252.
 """
 function bch(setting::RegressionSetting; alpha=0.05, maxiter=1000, epsilon=0.000001)
-    Xdesign = designMatrix(setting)
-    Y = responseVector(setting)
+    X = designMatrix(setting)
+    y = responseVector(setting)
+    return bch(X, y, alpha=alpha, maxiter=maxiter, epsilon=epsilon)
+end
+
+
+
+function bch(Xdesign::Array{Float64,2}, y::Array{Float64,1}; alpha=0.05, maxiter=1000, epsilon=0.000001)
     n, p = size(Xdesign)
     h = Int(floor((n + p + 1.0) / 2))
     X = Xdesign
@@ -128,9 +134,7 @@ function bch(setting::RegressionSetting; alpha=0.05, maxiter=1000, epsilon=0.000
     squared_normalized_resids = []
     resids = []
     for i in 1:maxiter
-        Yw = Y .* weights
-        Xw = Xdesign .* weights
-        wols = lm(setting.formula, setting.data, wts=weights)
+        wols = wls(Xdesign, y, weights)
         betas = coef(wols)
         resids = residuals(wols)
         squared_normalized_resids = (resids.^2.0) / (sum(resids.^2.0))
@@ -161,7 +165,6 @@ end
 
 
 
-
 """
 
     bchplot(setting::RegressionSetting; alpha=0.05, maxiter=1000, epsilon=0.00001)
@@ -181,7 +184,13 @@ Billor, Nedret, Samprit Chatterjee, and Ali S. Hadi. "A re-weighted least square
 for robust regression estimation." American journal of mathematical and management sciences 26.3-4 (2006): 229-252.
 """
 function bchplot(setting::RegressionSetting; alpha=0.05, maxiter=1000, epsilon=0.00001)
-    result = bch(setting, alpha=alpha, maxiter=maxiter, epsilon=epsilon)
+    X = designMatrix(setting)
+    y = responseVector(setting)
+    return bchplot(X, y, alpha=alpha, maxiter=maxiter, epsilon=epsilon)
+end
+
+function bchplot(Xdesign::Array{Float64,2}, y::Array{Float64,1}; alpha=0.05, maxiter=1000, epsilon=0.00001)
+    result = bch(Xdesign, y, alpha=alpha, maxiter=maxiter, epsilon=epsilon)
     squared_normalized_residuals = result["squared.normalized.residuals"]
     squared_normalized_robust_distances = result["squared.normalized.robust.distances"]
     n = length(squared_normalized_robust_distances)
