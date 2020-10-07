@@ -29,6 +29,10 @@ include("data.jl")
 # Regression diagnostics
 include("diagnostics.jl")
 
+# Ordinary least squares type and functions
+# for fast regression tasks in outlier detection algorithms
+include("ols.jl")
+
 # Hadi & Simonoff (1993) algorithm
 include("hs93.jl")
 
