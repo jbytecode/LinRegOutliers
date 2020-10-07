@@ -49,26 +49,6 @@ adaptively-ordered observations, to identify outliers in linear regression."
 Biometrics (1989): 571-585.
 """
 function ks89(setting::RegressionSetting; alpha=0.05)
-    #= 
-    stdres = studentizedResiduals(setting)
-    orderingindices = sortperm(abs.(stdres))
-    X = designMatrix(setting)
-    n, p = size(X)
-    basisindices = orderingindices[1:p]
-    w = zeros(Float64, n)
-    s = zeros(Float64, n)
-    ws = zeros(Float64, n)
-    for i in (p + 1):n
-        index = orderingindices[i]
-        w[index] = ks89RecursiveResidual(setting, basisindices, index)
-        s[index] = jacknifedS(setting, index)
-        ws[index] = w[index] / s[index]
-        basisindices = orderingindices[1:i]
-    end
-    td = TDist(n - p - 1)
-    q = quantile(td, alpha)
-    result = filter(i -> abs.(ws[i]) > abs(q), 1:n)
-    return result =#
     X = designMatrix(setting)
     y = responseVector(setting)
     return ks89(X, y, alpha=alpha)
