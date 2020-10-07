@@ -14,6 +14,21 @@ include("outlier.jl")
     @test applyColumns(mean, mat) == [1.0, 0.0]
 end
 
+@testset "Ordinary Least Squares" begin
+    tol = 0.0001
+    #  The model is exatly y = 5 + 5x
+    var1 = Float64[1, 2, 3, 4, 5]
+    X = hcat(ones(5), var1)
+    betas = [5.0, 5.0]
+    y = X * betas
+
+    # OLS 
+    olsreg = ols(X, y)
+    @test isapprox(coef(olsreg), betas, atol=tol)
+    @test isapprox(residuals(olsreg), zeros(Float64, 5), atol=tol)
+    @test isapprox(predict(olsreg), y, atol=tol) 
+end
+
 @testset "Basis - createRegressionSetting, designMatrix, responseVector" begin
     dataset = DataFrame(
         x=[1.0, 2, 3, 4, 5],
