@@ -9,25 +9,29 @@ Satman, M. Hakan. "A genetic algorithm based modification on the lts algorithm f
 
 function gwcga(setting::RegressionSetting)
     X = designMatrix(setting)
-    Y = responseVector(setting)
+    y = responseVector(setting)
+    return gwcga(X, y)
+end
+
+function gwcga(X::Array{Float64,2}, y::Array{Float64,1})
     n, p = size(X)
     h = Int(floor((n + p + 1.0) / 2.0))
     minp =  p + 1
     all_indices = collect(1:n)
 
-    full_reg = lm(setting.formula, setting.data)
+    full_reg = ols(X, y)
     full_reg_residuals = residuals(full_reg)
     sumres1 = sum(full_reg_residuals .* full_reg_residuals)
 
-    function costfunction(bitstring::Array{Bool, 1})::Float64
+    function costfunction(bitstring::Array{Bool,1})::Float64
         number_of_ones = sum(bitstring)
         if number_of_ones < minp
             return Inf64
         end
         
         indices = filter(i -> bitstring[i] == 1, all_indices)
-        objective, clean_subset = iterateCSteps(setting, indices, h)
-        ltsreg = lm(setting.formula, setting.data[clean_subset, :])
+        objective, clean_subset = iterateCSteps(X, y, indices, h)
+        ltsreg = ols(X[clean_subset, :], y[clean_subset])
         res2 = residuals(ltsreg)
         sumres2 = sum(res2 .* res2)
         
@@ -37,13 +41,13 @@ function gwcga(setting::RegressionSetting)
         return cost
     end
 
-    result_cga = cga(chsize = n, costfunction = costfunction, popsize = 10)
+    result_cga = cga(chsize=n, costfunction=costfunction, popsize=10)
     initial_indices = filter(i -> result_cga[i] == 1, all_indices)
     # @info "Initial subset: " result_cga initial_indices
 
-    objective, clean_subset = iterateCSteps(setting, initial_indices, h)
+    objective, clean_subset = iterateCSteps(X, y, initial_indices, h)
     
-    ltsreg = lm(setting.formula, setting.data[clean_subset, :])
+    ltsreg = ols(X[clean_subset, :], y[clean_subset])
     betas = coef(ltsreg)
 
     result = Dict()
@@ -52,6 +56,8 @@ function gwcga(setting::RegressionSetting)
     result["clean.subset"] = sort(clean_subset)
     return result
 end
+
+
 
 
 """
@@ -79,12 +85,16 @@ Satman, M. Hakan. "A genetic algorithm based modification on the lts algorithm f
 """
 function galts(setting::RegressionSetting)
     X = designMatrix(setting)
-    Y = responseVector(setting)
+    y = responseVector(setting)
+    return galts(X, y) 
+end
+
+function galts(X::Array{Float64,2}, y::Array{Float64,1})
     n, p = size(X)
     h = Int(floor((n + p + 1.0) / 2.0))
     
-    function fcost(genes::Array{Float64, 1})
-        objective, indices = iterateCSteps(setting, genes, h)
+    function fcost(genes::Array{Float64,1})
+        objective, indices = iterateCSteps(X, y, genes, h)
         return objective         
     end
     
@@ -95,9 +105,9 @@ function galts(setting::RegressionSetting)
     garesult = ga(popsize, p, fcost, mins, maxs, 0.90, 0.05, 1, 100)
     best = garesult[1]
 
-    objective, subsetindices = iterateCSteps(setting, best.genes, h)
+    objective, subsetindices = iterateCSteps(X, y, best.genes, h)
 
-    ltsreg = lm(setting.formula, setting.data[subsetindices, :])
+    ltsreg = ols(X[subsetindices, :], y[subsetindices])
     betas = coef(ltsreg)
 
     result = Dict()
@@ -106,3 +116,5 @@ function galts(setting::RegressionSetting)
     result["objective"] = objective
     return result 
 end
+
+
