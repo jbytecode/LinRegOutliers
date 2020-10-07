@@ -75,9 +75,9 @@ identifying multiple outliers in linear regression." Computational statistics & 
 """
 
 function smr98(X::Array{Float64,2}, y::Array{Float64,1})
-    ols = OLS(X, y)
-    stdres = standardize(ZScoreTransform, residuals(ols), dims=1)
-    stdfit = standardize(ZScoreTransform, predict(ols), dims=1)
+    olsreg = ols(X, y)
+    stdres = standardize(ZScoreTransform, residuals(olsreg), dims=1)
+    stdfit = standardize(ZScoreTransform, predict(olsreg), dims=1)
     n, p = size(X)
     d = distances(stdres, stdfit)
     h = floor((n + p - 1) / 2)

@@ -4,7 +4,7 @@ struct OLS
     betas::Array{Float64,1}
 end
 
-OLS(X::Array{Float64,2}, y::Array{Float64,1}) = OLS(X, y, inv(X' * X) * X' * y)
+ols(X::Array{Float64,2}, y::Array{Float64,1})::OLS = OLS(X, y, inv(X' * X) * X' * y)
 
 function WLS(X::Array{Float64,2}, y::Array{Float64,1}, wts::Array{Float64,1}) 
     n = length(y)
@@ -12,7 +12,8 @@ function WLS(X::Array{Float64,2}, y::Array{Float64,1}, wts::Array{Float64,1})
     for i in 1:n
         W[i, i] = wts[i]
     end
-    return OLS(X, y, inv(X' * W * X) * X' * W * y)
+    betas = inv(X' * W * X) * X' * W * y
+    return OLS(X, y, betas)
 end 
 
 residuals(ols::OLS) = ols.y .- ols.X * ols.betas

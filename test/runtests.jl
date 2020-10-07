@@ -73,46 +73,53 @@ end
     @test hats_real == hats_calculated
 end
 
-# This test is passed in MacOS and problematic in Linux AMD
-# The problem is not resolved.
-# TODO: Try in a local Linux machine again.
-#= 
 @testset "studentized residuals" begin
     dataset = DataFrame(
-        x=[1.0, 2, 3, 4, 50],
-        y=[2.0, 4, 6, 8, 100]
+        x=Float64[1.0, 2.0, 3.0, 4.0, 5.0, 6.0],
+        y=Float64[2.1, 3.9, 6.2, 7.8, 11.0, 18.0]
     )
     setting = createRegressionSetting(@formula(y ~ x), dataset)
     resi = studentizedResiduals(setting)
-    @test abs(resi[1]) < 2.5
-    @test abs(resi[2]) < 2.5
-    @test abs(resi[3]) < 2.5
-    @test abs(resi[4]) < 2.5
-    @test abs(resi[5]) > 2.5
-end =#
+    @test abs(resi[1]) < 1.5
+    @test abs(resi[2]) < 1.5
+    @test abs(resi[3]) < 1.5
+    @test abs(resi[4]) < 1.5
+    @test abs(resi[5]) < 1.5
+    @test abs(resi[6]) > 1.5
+end
+
 
 @testset "adjusted residuals" begin
+    eps = 0.0001
     dataset = DataFrame(
         x=[1.0, 2, 3, 4, 5],
         y=[2.0, 4, 6, 8, 10]
     )
     setting = createRegressionSetting(@formula(y ~ x), dataset)
     resi = adjustedResiduals(setting)
-    @test resi == zeros(Float64, 5)
+    for element in resi
+        @test abs(element) < eps 
+    end
 end
 
-@testset "Cook's distance" begin
-    dataset = DataFrame(
-        x=[1.0, 2, 3, 4, 5.0],
-        y=[2.0, 4, 6, 8, 10.0]
-    )
-    setting = createRegressionSetting(@formula(y ~ x), dataset)
+@testset "Cook's distance - Phone data" begin
+    eps = 0.00001
+    setting = createRegressionSetting(@formula(calls ~ year), phones)
+    knowncooks = [0.005344774190779771, 0.0017088194691033181, 0.00016624914057961155, 
+                    3.16444525831206e-5, 0.0005395058666404081, 0.0014375008774859539, 
+                    0.0024828140956511258, 0.0036279720445167277, 0.004357605989540906, 
+                    0.005288503758364767, 0.006313578057565415, 0.0076561205696857254, 
+                    0.009568574875389256, 0.009970039008782357, 0.02610396373381051, 
+                    0.029272523880917646, 0.05091236198400663, 0.08176555044049343, 
+                    0.14380266904640235, 0.26721539425047447, 0.051205153558783356, 
+                    0.13401084683481085, 0.16860324592350226, 0.2172819114905912]
     cookdists = cooks(setting)
-    @test map(x -> isnan(x), cookdists) == trues(5)
+    @test map((x, y) -> abs(x - y) < eps, cookdists, knowncooks) == trues(24)
 end
 
 
 @testset "Jacknifed standard error of regression" begin
+    eps = 0.00001
     dataset = DataFrame(
         x=[1.0, 2, 3, 4, 5000],
         y=[2.0, 4, 6, 8, 1000]
@@ -122,7 +129,7 @@ end
     @test jacknifedS(setting, 2) != 0
     @test jacknifedS(setting, 3) != 0
     @test jacknifedS(setting, 4) != 0
-    @test jacknifedS(setting, 5) == 0
+    @test jacknifedS(setting, 5) < eps
 end
 
 @testset "Mahalanobis squared distances" begin
@@ -203,7 +210,6 @@ end
     @test 2 in outset["outliers"]
     @test 3 in outset["outliers"]
 end
-
 
 @testset "Kianifard & Swallow 1989 - Algorithm" begin
     df = phones
@@ -438,14 +444,15 @@ end
         x=Float64[1,2,3,4,5,6,7,8,9,10],
         y=Float64[2,4,6,8,10,12,14,16,18,1000]
     )
-    n = length(df2[!, "x"])
-    X = hcat(ones(Float64, n), df2[!, "x"])
-    y = df2[!, "y"]
+    n = length(df2["x"])
+    X = hcat(ones(Float64, n), df2["x"])
+    y = df2["y"]
     result2 = lad(X, y)
     betas2 = result2["betas"]
     @test abs(betas2[1] - 0) < eps
     @test abs(betas2[2] - 2) < eps
 end
+
 
 @testset "LTA - Algorithm - Phone data" begin
     eps = 0.0001
@@ -484,20 +491,18 @@ end
     for i in 15:20
         @test !(i in clean_indices)
     end
-
 end
 
 @testset "Compact Genetic Algorithm" begin
     Random.seed!(12345)
     function fcost(bits)
-        return sum(bits) 
+        return sum(bits)
     end
-    result = LinRegOutliers.cga(chsize=10, costfunction=fcost, popsize=100)
+    result = cga(chsize=10, costfunction=fcost, popsize=100)
     for element in result
         @test element == 0
     end
 end
-
 
 @testset "Floating-point Genetic Algorithm" begin
     Random.seed!(12345)
@@ -517,7 +522,7 @@ end
 
 @testset "Satman(2012) (Csteps and GA based LTS) Algorithm - Phones data" begin
     Random.seed!(12345)
-    epsilon = 10.0^(-2.0)
+    epsilon = 10.0^(-3.0)
     df = phones
     reg = createRegressionSetting(@formula(calls ~ year), df)
     result = galts(reg)

@@ -32,11 +32,19 @@ Belsley, David A., Edwin Kuh, and Roy E. Welsch. Regression diagnostics:
 Identifying influential data and sources of collinearity. Vol. 571. John Wiley & Sons, 2005.
 """
 function dffit(setting::RegressionSetting, i::Int)::Float64
-    n, _ = size(setting.data)
+    X = designMatrix(setting)
+    y = responseVector(setting)
+    return dffit(X, y, i)
+end
+
+function dffit(X::Array{Float64,2}, y::Array{Float64,1}, i::Int)::Float64
+    n, _ = size(X)
     indices = [j for j in 1:n if i != j]
-    olsfull = lm(setting.formula, setting.data) 
-    olsjacknife = lm(setting.formula, setting.data[indices,:])
-    return predict(olsfull, designMatrix(setting))[i] - predict(olsjacknife, designMatrix(setting))[i]
+    olsfull = ols(X, y)
+    Xsub = X[indices,:]
+    ysub = y[indices]
+    olsjacknife = ols(Xsub, ysub)
+    return predict(olsfull, X)[i] - predict(olsjacknife, X)[i]
 end
 
 
@@ -91,6 +99,11 @@ function dffit(setting::RegressionSetting)::Array{Float64,1}
     return result    
 end
 
+function dffit(X::Array{Float64,2}, y::Array{Float64,1})::Array{Float64,1}
+    n, _ = size(X)
+    result = [dffit(X, y, i) for i in 1:n]
+    return result    
+end
 
 """
     hatmatrix(setting)
@@ -109,9 +122,12 @@ julia> size(hatmatrix(reg))
 """
 function hatmatrix(setting::RegressionSetting)::Array{Float64,2}
     X = designMatrix(setting)
-    return X * inv(X'X) * X'
+    return hatmatrix(X)
 end
 
+function hatmatrix(X::Array{Float64,2})::Array{Float64,2}
+    return X * inv(X'X) * X'
+end
 
 """
     studentizedResiduals(setting)
@@ -154,14 +170,21 @@ julia> studentizedResiduals(reg)
 ```
 """
 function studentizedResiduals(setting::RegressionSetting)::Array{Float64,1}
-    ols = lm(setting.formula, setting.data)
-    n, p = size(designMatrix(setting))
-    e = residuals(ols)
+    X = designMatrix(setting)
+    y = responseVector(setting)
+    return studentizedResiduals(X, y)
+end
+
+function studentizedResiduals(X::Array{Float64,2}, y::Array{Float64,1})::Array{Float64,1}
+    olsreg = ols(X, y)
+    n, p = size(X)
+    e = residuals(olsreg)
     s = sqrt(sum(e.^2.0) / (n - p))
-    hat = hatmatrix(setting)
+    hat = hatmatrix(X)
     stde = [e[i] / (s * sqrt(1.0 - hat[i, i])) for i in 1:n]
     return stde
 end
+
 
 
 """
@@ -204,10 +227,17 @@ julia> adjustedResiduals(reg)
 ```
 """
 function adjustedResiduals(setting::RegressionSetting)::Array{Float64,1}
-    ols = lm(setting.formula, setting.data)
-    n, p = size(designMatrix(setting))
-    e = residuals(ols)
-    hat = hatmatrix(setting)
+    X = designMatrix(setting)
+    y = responseVector(setting)
+    return adjustedResiduals(X, y)
+end
+
+
+function adjustedResiduals(X::Array{Float64,2}, y::Array{Float64,1})::Array{Float64,1}
+    olsreg = ols(X, y)
+    n, p = size(X)
+    e = residuals(olsreg)
+    hat = hatmatrix(X)
     stde = [e[i] / (sqrt(1 - hat[i, i])) for i in 1:n]
     return stde
 end
@@ -234,14 +264,21 @@ julia> jacknifedS(reg, 15)
 ```
 """
 function jacknifedS(setting::RegressionSetting, k::Int)::Float64
-    n, p = size(designMatrix(setting))
+    X = designMatrix(setting)
+    y = responseVector(setting)
+    return jacknifedS(X, y, k)
+end
+
+function jacknifedS(X::Array{Float64,2}, y::Array{Float64,1}, k::Int)::Float64
+    n, p = size(X)
     indices = [i for i in 1:n if i != k]
-    ols = lm(setting.formula, setting.data[indices,:])
-    e = residuals(ols)
+    Xsub = X[indices,:]
+    ysub = y[indices]
+    olsreg = ols(Xsub, ysub)
+    e = residuals(olsreg)
     s = sqrt(sum(e.^2.0) / (n - p - 1))
     return s
 end
-
 
 
 """
@@ -292,10 +329,14 @@ Technometrics 19.1 (1977): 15-18.
 function cooks(setting::RegressionSetting)::Array{Float64,1}
     X = designMatrix(setting)
     Y = responseVector(setting)
+    return cooks(X, y)
+end
+
+function cooks(X::Array{Float64,2}, y::Array{Float64,1})::Array{Float64,1}
     n, p = size(X)
-    ols = lm(setting.formula, setting.data)
-    res = residuals(ols)
-    hat = hatmatrix(setting)
+    olsreg = ols(X, y)
+    res = residuals(olsreg)
+    hat = hatmatrix(X)
     s2 = sum(res .* res) / (n - p)
     d = zeros(Float64, n)
     for i in 1:n
