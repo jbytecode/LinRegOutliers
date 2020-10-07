@@ -11,6 +11,15 @@ function makeColorColumn(indices::Array{Int,1}, n::Int)::Array{String,1}
 end
 
 function detectOutliers(setting::RegressionSetting; methods=[])
+    
+    X = designMatrix(setting)
+    y = responseVector(setting)
+    return detectOutliers(X, y, methods=methods)
+    
+end
+
+
+function detectOutliers(X::Array{Float64,2}, y::Array{Float64,1}; methods=[])
     if length(methods) == 0
         methods = [
             "hs93",
@@ -25,7 +34,6 @@ function detectOutliers(setting::RegressionSetting; methods=[])
             ]
     end
 
-    X = designMatrix(setting)
     n, p = size(X)
     num_algs = length(methods)
 
@@ -34,39 +42,39 @@ function detectOutliers(setting::RegressionSetting; methods=[])
     for method in methods
         if method == "hs93"
             try
-                result = hs93(setting)["outliers"]
+                result = hs93(X, y)["outliers"]
             catch
                 result = Int[]
             end
         elseif method == "ks89"
             try
-                result = ks89(setting)
+                result = ks89(X, y)
             catch
                 result = Int[]
             end
         elseif method == "py95"
-            result = py95(setting)["outliers"]
+            result = py95(X, y)["outliers"]
         elseif method == "smr98"
-            result = smr98(setting)
+            result = smr98(X, y)
         elseif method == "lts"
             try
-                result = lts(setting)["outliers"]
+                result = lts(X, y)["outliers"]
             catch
                 result = Int[]
             end
         elseif method == "sat13"
-            result = satman2013(setting)["outliers"]
+            result = satman2013(X, y)["outliers"]
         elseif method == "sat15"
-            result = satman2015(setting)["outliers"]
+            result = satman2015(X, y)["outliers"]
         elseif method == "asm20"
             try
-                result = asm2000(setting)["outliers"]
+                result = asm2000(X, y)["outliers"]
             catch
                 result = Int[]
             end
         elseif method == "bch"
             try
-                result = bch(setting)["outliers"]
+                result = bch(X, y)["outliers"]
             catch
                 result = Int[]
             end

@@ -142,16 +142,21 @@ linear regression: Robust fit and clustering approach." (2000).
 """
 function asm2000(setting::RegressionSetting)
     X = designMatrix(setting)
-    Y = responseVector(setting)
+    y = responseVector(setting)
+    return asm2000(X, y)
+end
+
+
+function asm2000(X::Array{Float64,2}, y::Array{Float64,1})
     n, p = size(X)
     h = floor((n + p - 1) / 2)
-    ltsreg = lts(setting)
+    ltsreg = lts(X, y)
     
     betas = ltsreg["betas"]
     hsubset = ltsreg["hsubset"]
 
     predicteds = [sum(X[i,:] .* betas) for i in 1:n]
-    resids = Y .- predicteds
+    resids = y .- predicteds
     stdres = standardize(ZScoreTransform, resids, dims=1)
     stdfit = standardize(ZScoreTransform, predicteds, dims=1)
     pairs = hcat(stdfit, stdres)
