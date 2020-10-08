@@ -1,6 +1,6 @@
 module LinRegOutliers
 
-# using GLM
+# using StatsModels
 # using DataFrames
 # using Distributions
 # using Clustering
@@ -10,7 +10,7 @@ module LinRegOutliers
 # using Optim
 
 # import functions from corresponding packages
-import GLM: @formula, lm, FormulaTerm, ModelFrame, ModelMatrix, predict, coef, residuals
+import StatsModels: @formula, FormulaTerm, ModelFrame, ModelMatrix
 import DataFrames: DataFrame
 import Distributions: TDist, Chisq, Normal, std, cov, median
 import Clustering: Hclust, hclust, cutree
@@ -122,7 +122,7 @@ export cooks
 export mahalanobisSquaredMatrix
 
 # Ordinary least squares
-export OLS, ols, wls, residuals, predict
+export OLS, ols, wls, residuals, predict, coef
 
 # Algorithms
 export hs93, hs93initialset, hs93basicsubset

@@ -1,6 +1,6 @@
-@info "Loading GLM"
-# using GLM
-import GLM: @formula, lm, FormulaTerm, ModelFrame, ModelMatrix, predict, coef, residuals
+@info "Loading StatsModels"
+# using StatsModels
+import StatsModels: @formula, FormulaTerm, ModelFrame, ModelMatrix
 
 @info "Loading DataFrames"
 # using DataFrames
