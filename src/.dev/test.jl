@@ -153,7 +153,7 @@ end
     y[1] = y[1] * 10.0
     x[1] = x[1] * 10.0
     datamat = DataFrame(x=x, y=y)
-    dmat = mahalabonisSquaredMatrix(datamat)
+    dmat = mahalanobisSquaredMatrix(datamat)
     d = diag(dmat)
     @test abs(d[1] - 3.2) < myeps
     @test abs(d[2] - 2.0) < myeps

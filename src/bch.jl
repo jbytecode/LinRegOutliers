@@ -87,14 +87,14 @@ function bch(Xdesign::Array{Float64,2}, y::Array{Float64,1}; alpha=0.05, maxiter
     # Algorithm 2 - Step 0.a
     coordmeds = coordinatwisemedians(X)
     A = ((X .- coordmeds')' * (X .- coordmeds')) / (n - 1)
-    dsquared = diag(mahalabonisSquaredMatrix(DataFrame(X), meanvector=coordmeds, covmatrix=A))
+    dsquared = diag(mahalanobisSquaredMatrix(DataFrame(X), meanvector=coordmeds, covmatrix=A))
     d = sqrt.(dsquared)
 
     # Algorithm 2 - Step 0.b
     bestindicesofd = sortperm(d)[1:h]
     colmeansofh = map(i -> mean(X[bestindicesofd, i]), 1:p)
     covmatofh = cov(X[bestindicesofd,:])
-    newdsquared = diag(mahalabonisSquaredMatrix(DataFrame(X), meanvector=colmeansofh, covmatrix=covmatofh))
+    newdsquared = diag(mahalanobisSquaredMatrix(DataFrame(X), meanvector=colmeansofh, covmatrix=covmatofh))
     newd = sqrt.(newdsquared)
 
     # Algorithm 2 - Steps 1, 2, 3
@@ -102,7 +102,7 @@ function bch(Xdesign::Array{Float64,2}, y::Array{Float64,1}; alpha=0.05, maxiter
     while length(basicsubsetindices) < h
         colmeanofbasicsubset = map(i -> mean(X[basicsubsetindices, i]), 1:p)
         covmatofbasicsubset = cov(X[basicsubsetindices,:]) 
-        newdsquared = diag(mahalabonisSquaredMatrix(DataFrame(X), meanvector=colmeanofbasicsubset, covmatrix=covmatofbasicsubset))
+        newdsquared = diag(mahalanobisSquaredMatrix(DataFrame(X), meanvector=colmeanofbasicsubset, covmatrix=covmatofbasicsubset))
         newd = sqrt.(newdsquared)
         basicsubsetindices = sortperm(newd)[1:(length(basicsubsetindices) + 1)]
     end
@@ -112,7 +112,7 @@ function bch(Xdesign::Array{Float64,2}, y::Array{Float64,1}; alpha=0.05, maxiter
         r = length(basicsubsetindices)
         colmeanofbasicsubset = map(i -> mean(X[basicsubsetindices, i]), 1:p)
         covmatofbasicsubset = cov(X[basicsubsetindices,:]) 
-        newdsquared = diag(mahalabonisSquaredMatrix(DataFrame(X), meanvector=colmeanofbasicsubset, covmatrix=covmatofbasicsubset))
+        newdsquared = diag(mahalanobisSquaredMatrix(DataFrame(X), meanvector=colmeanofbasicsubset, covmatrix=covmatofbasicsubset))
         newd = sqrt.(newdsquared)
         sortednewdsquared = sort(newdsquared)
         if sortednewdsquared[r + 1] >= crit 
