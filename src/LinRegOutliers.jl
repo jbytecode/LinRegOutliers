@@ -119,7 +119,7 @@ export studentizedResiduals
 export adjustedResiduals
 export jacknifedS
 export cooks
-export mahalabonisSquaredMatrix
+export mahalanobisSquaredMatrix
 
 # Ordinary least squares
 export OLS, ols, wls, residuals, predict

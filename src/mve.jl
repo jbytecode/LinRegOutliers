@@ -5,7 +5,7 @@ function enlargesubset(initialsubset, data::DataFrame, dataMatrix::Matrix, h::In
     while length(basicsubset) < h
         meanvector = applyColumns(mean, data[basicsubset,:])
         covmatrix = cov(dataMatrix[basicsubset, :])
-        md2mat = mahalabonisSquaredMatrix(data, meanvector=meanvector, covmatrix=covmatrix)
+        md2mat = mahalanobisSquaredMatrix(data, meanvector=meanvector, covmatrix=covmatrix)
         md2 = diag(md2mat)
         md2sortedindex = sortperm(md2)
         basicsubset = md2sortedindex[1:(length(basicsubset) + 1)]
@@ -37,7 +37,7 @@ function robcov(data::DataFrame; alpha=0.01, estimator=:mve)
             covmatrix = cov(dataMatrix[hsubset, :])
             if estimator == :mve
                 meanvector = applyColumns(mean, data[hsubset, :])
-                md2mat = mahalabonisSquaredMatrix(data, meanvector=meanvector, covmatrix=covmatrix)
+                md2mat = mahalanobisSquaredMatrix(data, meanvector=meanvector, covmatrix=covmatrix)
                 DJ = sqrt(sort(diag(md2mat))[h])
                 goal =  (DJ / c)^p * det(covmatrix)
             else
@@ -54,7 +54,7 @@ function robcov(data::DataFrame; alpha=0.01, estimator=:mve)
     end
     meanvector = applyColumns(mean, data[besthsubset, :])
     covariancematrix = cov(dataMatrix[besthsubset, :])
-    md2 = diag(mahalabonisSquaredMatrix(data, meanvector=meanvector, covmatrix=covariancematrix))
+    md2 = diag(mahalanobisSquaredMatrix(data, meanvector=meanvector, covmatrix=covariancematrix))
     outlierset = filter(x -> md2[x] > chisqcrit, 1:n)
     result = Dict()
     result["goal"] = mingoal

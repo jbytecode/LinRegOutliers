@@ -53,7 +53,7 @@ function satman2013(X::Array{Float64,2}, y::Array{Float64,1})
     end
 
     medians = applyColumns(median, X0)
-    mhs = mahalabonisSquaredMatrix(X0, meanvector=medians, covmatrix=covmat)
+    mhs = mahalanobisSquaredMatrix(X0, meanvector=medians, covmatrix=covmat)
     if mhs isa Nothing
         md2 = zeros(Float64, n)
     else
