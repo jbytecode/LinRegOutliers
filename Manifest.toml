@@ -196,12 +196,6 @@ version = "1.0.5+5"
 deps = ["Random"]
 uuid = "9fa8497b-333b-5362-9e8d-4d0656e87820"
 
-[[GLM]]
-deps = ["Distributions", "LinearAlgebra", "Printf", "Random", "Reexport", "SparseArrays", "SpecialFunctions", "Statistics", "StatsBase", "StatsFuns", "StatsModels"]
-git-tree-sha1 = "11d47ad2699a26d5557e265a2acf3e5c3799e83d"
-uuid = "38e38edf-8417-5370-95a0-9cbb8c7f171a"
-version = "1.3.10"
-
 [[GR]]
 deps = ["Base64", "DelimitedFiles", "HTTP", "JSON", "LinearAlgebra", "Printf", "Random", "Serialization", "Sockets", "Test", "UUIDs"]
 git-tree-sha1 = "cd0f34bd097d4d5eb6bbe01778cf8a7ed35f29d9"

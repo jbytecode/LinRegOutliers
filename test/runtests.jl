@@ -1,7 +1,6 @@
 using Test
 using DataFrames
 using Random
-using GLM
 using LinearAlgebra
 
 using LinRegOutliers
