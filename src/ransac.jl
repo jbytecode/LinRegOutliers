@@ -55,18 +55,14 @@ function ransac(X::Array{Float64,2}, y::Array{Float64, 1}; t::Float64, w::Float6
 
     for iteration in 1:k
         inliers_count = 0
-        try
-            sampled_indices = sample(1:n, m, replace=false)
-            ols_sampled_points = ols(X[sampled_indices, :], y[sampled_indices])
-            betas = coef(ols_sampled_points)
+        sampled_indices = sample(1:n, m, replace=false)
+        ols_sampled_points = ols(X[sampled_indices, :], y[sampled_indices])
+        betas = coef(ols_sampled_points)
 
-            e = abs.(y - X * betas) ./ norm([1; betas[2:end]], 2)
+        e = abs.(y - X * betas) ./ norm([1; betas[2:end]], 2)
 
-            iteration_inlier_indices = filter(i -> e[i] < t, 1:n)
-            inliers_count = length(iteration_inlier_indices)
-        catch e
-            # singularity encountered, skipping this sample indices
-        end
+        iteration_inlier_indices = filter(i -> e[i] < t, 1:n)
+        inliers_count = length(iteration_inlier_indices)
 
         if inliers_count >= d
             ols_inliers = ols(X[iteration_inlier_indices, :], y[iteration_inlier_indices])
