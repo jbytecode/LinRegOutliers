@@ -4,7 +4,7 @@ struct OLS
     betas::Array{Float64,1}
 end
 
-ols(X::Array{Float64,2}, y::Array{Float64,1})::OLS = OLS(X, y, inv(X' * X) * X' * y)
+ols(X::Array{Float64,2}, y::Array{Float64,1})::OLS = OLS(X, y, pinv(X) * y)
 
 function wls(X::Array{Float64,2}, y::Array{Float64,1}, wts::Array{Float64,1}) 
     n = length(y)
