@@ -27,11 +27,14 @@ Martin A. Fischler & Robert C. Bolles (June 1981). "Random Sample Consensus: A P
 Comm. ACM. 24 (6): 381–395.
 """
 function ransac(setting::RegressionSetting; t::Float64, w::Float64=0.5, m::Int=0, k::Int=0, d::Int=0, confidence::Float64=0.99)
-
     X = designMatrix(setting)
-    Y = responseVector(setting)
-    n, p = size(X)
+    y = responseVector(setting)
+    return ransac(X, y, t=t, w=w, m=m, k=k, d=d, confidence=confidence)
+end
 
+function ransac(X::Array{Float64,2}, y::Array{Float64, 1}; t::Float64, w::Float64=0.5, m::Int=0, k::Int=0, d::Int=0, confidence::Float64=0.99)
+
+    n, p = size(X)
     if d == 0
         d = Int(floor(n * w))
     end
@@ -51,20 +54,23 @@ function ransac(setting::RegressionSetting; t::Float64, w::Float64=0.5, m::Int=0
     minimum_error = Inf
 
     for iteration in 1:k
+        inliers_count = 0
+        try
+            sampled_indices = sample(1:n, m, replace=false)
+            ols_sampled_points = ols(X[sampled_indices, :], y[sampled_indices])
+            betas = coef(ols_sampled_points)
 
-        sampled_indices = sample(1:n, m, replace=false)
+            e = abs.(y - X * betas) ./ norm([1; betas[2:end]], 2)
 
-        ols = lm(setting.formula, setting.data[sampled_indices, :])
-        betas = coef(ols)
-
-        e = abs.(Y - X * betas) ./ norm([1; betas[2:end]], 2)
-
-        iteration_inlier_indices = filter(i -> e[i] < t, 1:n)
-        inliers_count = length(iteration_inlier_indices)
+            iteration_inlier_indices = filter(i -> e[i] < t, 1:n)
+            inliers_count = length(iteration_inlier_indices)
+        catch e
+            # singularity encountered, skipping this sample indices
+        end
 
         if inliers_count >= d
-            ols = lm(setting.formula, setting.data[iteration_inlier_indices, :])
-            error_vector = residuals(ols)
+            ols_inliers = ols(X[iteration_inlier_indices, :], y[iteration_inlier_indices])
+            error_vector = residuals(ols_inliers)
             iteration_error = norm(error_vector, 2) / length(error_vector)
 
             if iteration_error < minimum_error
