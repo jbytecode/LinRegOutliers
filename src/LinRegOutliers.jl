@@ -42,6 +42,9 @@ include("ks89.jl")
 # Sebert et. al. (1998) algorithm
 include("smr98.jl")
 
+# asm (2000) algorithm
+include("asm2000.jl")
+
 # Rousseeuw's Least Median of Squares estimator
 include("lms.jl")
 
