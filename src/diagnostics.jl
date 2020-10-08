@@ -347,7 +347,7 @@ end
 
 
 """
-    mahalabonisSquaredMatrix(data::DataFrame; meanvector=nothing, covmatrix=nothing)
+    mahalanobisSquaredMatrix(data::DataFrame; meanvector=nothing, covmatrix=nothing)
 
 Calculate Mahalanobis distances.
 
@@ -360,13 +360,13 @@ Calculate Mahalanobis distances.
 Mahalanobis, Prasanta Chandra. "On the generalized distance in statistics." 
 National Institute of Science of India, 1936.
 """
-function mahalabonisSquaredMatrix(data::DataFrame; meanvector=nothing, covmatrix=nothing)::Union{Nothing,Array{Float64,2}}
+function mahalanobisSquaredMatrix(data::DataFrame; meanvector=nothing, covmatrix=nothing)::Union{Nothing,Array{Float64,2}}
     datamat = convert(Matrix, data)
-    return mahalabonisSquaredMatrix(datamat, meanvector=meanvector, covmatrix=covmatrix)
+    return mahalanobisSquaredMatrix(datamat, meanvector=meanvector, covmatrix=covmatrix)
 end
 
 
-function mahalabonisSquaredMatrix(datamat::Matrix; meanvector=nothing, covmatrix=nothing)::Union{Nothing,Array{Float64,2}}
+function mahalanobisSquaredMatrix(datamat::Matrix; meanvector=nothing, covmatrix=nothing)::Union{Nothing,Array{Float64,2}}
     if meanvector === nothing
         meanvector = applyColumns(mean, datamat)
     end

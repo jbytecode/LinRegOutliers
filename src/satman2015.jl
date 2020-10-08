@@ -238,7 +238,7 @@ function satman2015(X::Array{Float64, 2}, y::Array{Float64, 1})
 
     meanvector = applyColumns(mean, X[basic_subset_indices,:])
     covmat = cov(X[basic_subset_indices,:])
-    mhs = mahalabonisSquaredMatrix(X, meanvector = meanvector, covmatrix = covmat)
+    mhs = mahalanobisSquaredMatrix(X, meanvector = meanvector, covmatrix = covmat)
     if mhs isa Nothing
         md2 = zeros(Float64, n)
     else
