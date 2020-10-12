@@ -252,3 +252,32 @@ julia> find_minimum_nonzero([0.0, 0.0, 5.0, 1.0])
 function find_minimum_nonzero(arr::Array{Float64,1})
     return minimum(filter(x -> x > 0, arr))
 end
+
+
+
+function covratio(setting::RegressionSetting, omittedIndex::Int)
+    X = designMatrix(setting)
+    y = responseVector(setting)
+    return covratio(X, y, omittedIndex)
+end
+
+function covratio(X::Array{Float64, 2}, y::Array{Float64, 1}, omittedIndex::Int)
+    n, p = size(X)
+    reg = ols(X, y)
+    r = residuals(reg)
+    s2 = sum(r .^ 2.0) / Float64(n - p)
+    xxinv = inv(X'X)
+
+    indices = filter(x -> x != omittedIndex, 1:n)
+    
+    Xomitted = X[indices,:]
+    yomitted = y[indices]
+    xxinvomitted = inv(Xomitted' * Xomitted)
+    regomitted = ols(Xomitted, yomitted)
+    resomitted = residuals(regomitted)
+    s2omitted = sum(resomitted .^ 2.0) / Float64(n - p - 1)
+
+    covrat = det(s2omitted * xxinvomitted) / det(s2 * xxinv)
+
+    return covrat 
+end
