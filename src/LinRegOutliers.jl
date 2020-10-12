@@ -123,6 +123,7 @@ export adjustedResiduals
 export jacknifedS
 export cooks
 export mahalanobisSquaredMatrix
+export covratio
 
 # Ordinary least squares
 export OLS, ols, wls, residuals, predict, coef
