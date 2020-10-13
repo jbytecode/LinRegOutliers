@@ -15,7 +15,7 @@ import DataFrames: DataFrame
 import Distributions: TDist, Chisq, Normal, std, cov, median
 import Clustering: Hclust, hclust, cutree
 import StatsBase: quantile, standardize, ZScoreTransform, mean, sample
-import LinearAlgebra: inv, pinv, det, diag, eigen, norm
+import LinearAlgebra: inv, pinv, det, diag, eigen, norm, qr
 import Plots: scatter, title!, xlabel!, ylabel!, hline!, vline!, RGB, plot, font, text
 import Optim: optimize, NelderMead
 import Combinatorics: combinations
@@ -147,6 +147,6 @@ export dataimage
 export gwcga, galts, ga, cga, RealChromosome
 export detectOutliers
 export ransac
-
+export ccf
 
 end # module
