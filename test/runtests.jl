@@ -432,6 +432,16 @@ end
     end
 end
 
+@testset "ccf - Algorithm - Phone data" begin
+    df = phones
+    reg = createRegressionSetting(@formula(calls ~ year), df)
+    result = ccf(reg)
+    outliers = result["outliers"]
+    for i in 15:20
+        @test i in outliers
+    end
+end
+
 @testset "LAD - Algorithm" begin
     eps = 0.0001
     df = phones
