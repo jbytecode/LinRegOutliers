@@ -296,3 +296,37 @@ function covratio(X::Array{Float64, 2}, y::Array{Float64, 1}, omittedIndex::Int)
 
     return covrat 
 end
+
+
+
+"""
+    dfbeta(setting, omittedIndex)
+
+Apply DFBETA diagnostic for a given regression setting and observation index.
+
+# Arguments
+- `setting::RegressionSetting`: A regression setting object.
+- `omittedIndex::Int`: Index of the omitted observation.
+
+# Example
+```julia-repl
+julia> setting = createRegressionSetting(@formula(calls ~ year), phones);
+julia> dfbeta(setting, 1)
+2-element Array{Float64,1}:
+  9.643915678524024
+ -0.14686166007904422
+```
+"""
+function dfbeta(setting::RegressionSetting, omittedIndex::Int)::Array{Float64,1}
+    X = designMatrix(setting)
+    y = responseVector(setting)
+    return dfbeta(X, y, omittedIndex)
+end
+
+function dfbeta(X::Array{Float64,2}, y::Array{Float64,1}, omittedIndex::Int)::Array{Float64,1}
+    n = length(y)
+    omittedindices = filter(x -> x != omittedIndex, 1:n)
+    regfull = ols(X, y)
+    regomitted = ols(X[omittedindices, :], y[omittedindices])
+    return coef(regfull) .- coef(regomitted)
+end
