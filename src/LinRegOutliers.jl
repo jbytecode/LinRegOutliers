@@ -116,7 +116,7 @@ export find_minimum_nonzero
 export phones, hbk, stackloss, weightloss, hs93randomdata, woodgravity
 
 # Diagnostics
-export dffit
+export dffit, dfbeta
 export hatmatrix
 export studentizedResiduals
 export adjustedResiduals
