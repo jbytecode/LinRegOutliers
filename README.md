@@ -148,7 +148,7 @@ You are probably the right contributor
 - If you have statistics background
 - If you like Julia
 
-However, the second condition is more important because an outlier detection algorithm is just an algorithm. Reading the implemented methods is enough to implement new ones. Please follow the issues. [Here is the first shot introductions for new comers](https://github.com/jbytecode/LinRegOutliers/issues/3). Welcome and thank you in advance!
+However, the second condition is more important because an outlier detection algorithm is just an algorithm. Reading the implemented methods is enough to implement new ones. Please follow the issues. [Here is the a bunch of first shot introductions for new comers](https://github.com/jbytecode/LinRegOutliers/issues/3). Welcome and thank you in advance!
 
 
 ## Contact & Communication
