@@ -29,6 +29,25 @@ end
     @test isapprox(predict(olsreg), y, atol=tol) 
 end
 
+@testset "Weighted Least Squares" begin
+    tol = 0.0001
+    n = 7
+    #  The model is exatly y = 5 + 5x
+    var1 = Float64[1, 2, 3, 4, 5, 6, 7]
+    X = hcat(ones(n), var1)
+    betas = [5.0, 5.0]
+    y = X * betas
+    y[n - 1] = 5000.0
+    y[n] = 5000.0
+    wts = [1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0]
+
+    # WLS 
+    olsreg = wls(X, y, wts)
+    @test isapprox(coef(olsreg), betas, atol=tol)
+    @test isapprox(residuals(olsreg)[1:(n - 2)], zeros(Float64, n - 2), atol=tol)
+    @test isapprox(predict(olsreg)[1:(n - 2)], y[1:(n - 2)], atol=tol)
+end
+
 @testset "Basis - createRegressionSetting, designMatrix, responseVector" begin
     dataset = DataFrame(
         x=[1.0, 2, 3, 4, 5],
@@ -588,7 +607,6 @@ end
                     -32.9443226  0.60863505; -49.0851269  0.89065754;
                     22.9820710 -0.41140246; 39.1639294 -0.69370540;
                     45.7655562 -0.80379984; 53.6862082 -0.93638735;]
-    lenres = length(result)
     for i in 1:n
         for j in 1:p
             dfbetaresult = dfbeta(reg, i)
