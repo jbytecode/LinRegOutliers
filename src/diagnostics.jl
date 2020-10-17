@@ -385,3 +385,86 @@ function mahalanobisSquaredMatrix(datamat::Matrix; meanvector=nothing, covmatrix
     end
 end
 
+
+
+
+"""
+    dfbeta(setting, omittedIndex)
+
+Apply DFBETA diagnostic for a given regression setting and observation index.
+
+# Arguments
+- `setting::RegressionSetting`: A regression setting object.
+- `omittedIndex::Int`: Index of the omitted observation.
+
+# Example
+```julia-repl
+julia> setting = createRegressionSetting(@formula(calls ~ year), phones);
+julia> dfbeta(setting, 1)
+2-element Array{Float64,1}:
+  9.643915678524024
+ -0.14686166007904422
+```
+"""
+function dfbeta(setting::RegressionSetting, omittedIndex::Int)::Array{Float64,1}
+    X = designMatrix(setting)
+    y = responseVector(setting)
+    return dfbeta(X, y, omittedIndex)
+end
+
+function dfbeta(X::Array{Float64,2}, y::Array{Float64,1}, omittedIndex::Int)::Array{Float64,1}
+    n = length(y)
+    omittedindices = filter(x -> x != omittedIndex, 1:n)
+    regfull = ols(X, y)
+    regomitted = ols(X[omittedindices, :], y[omittedindices])
+    return coef(regfull) .- coef(regomitted)
+end
+
+
+
+
+"""
+    covratio(setting, omittedIndex)
+
+Apply covariance ratio diagnostic for a given regression setting and observation index.
+
+# Arguments
+- `setting::RegressionSetting`: A regression setting object.
+- `omittedIndex::Int`: Index of the omitted observation.
+
+# Example
+```julia-repl
+julia> setting = createRegressionSetting(@formula(calls ~ year), phones);
+julia> covratio(setting, 1)
+1.2945913799871505
+```
+"""
+function covratio(setting::RegressionSetting, omittedIndex::Int)
+    X = designMatrix(setting)
+    y = responseVector(setting)
+    return covratio(X, y, omittedIndex)
+end
+
+function covratio(X::Array{Float64,2}, y::Array{Float64,1}, omittedIndex::Int)
+    n, p = size(X)
+    reg = ols(X, y)
+    r = residuals(reg)
+    s2 = sum(r.^2.0) / Float64(n - p)
+    xxinv = inv(X'X)
+    
+    indices = filter(x -> x != omittedIndex, 1:n)
+    
+    Xomitted = X[indices,:]
+    yomitted = y[indices]
+    xxinvomitted = inv(Xomitted' * Xomitted)
+    regomitted = ols(Xomitted, yomitted)
+    resomitted = residuals(regomitted)
+    s2omitted = sum(resomitted.^2.0) / Float64(n - p - 1)
+    
+    covrat = det(s2omitted * xxinvomitted) / det(s2 * xxinv)
+    
+    return covrat 
+end
+
+
+
