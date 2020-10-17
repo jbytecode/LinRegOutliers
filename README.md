@@ -5,11 +5,11 @@
 A Julia package for outlier detection in linear regression.
 
 ## Implemented Methods
-- Basic diagnostics
+- Ordinary Least Squares, Weighted Least Squares, Basic diagnostics
 - Hadi & Simonoff (1993)
 - Kianifard & Swallow (1989)
 - Sebert & Montgomery & Rollier (1998)
-- Least Median of Squares
+- Least Median of Squares 
 - Least Trimmed Squares 
 - Minimum Volume Ellipsoid (MVE)
 - MVE & LTS Plot 
@@ -23,7 +23,7 @@ A Julia package for outlier detection in linear regression.
 - Hadi (1992)
 - Marchette & Solka (2003) Data Images
 - Satman's GA based LTS estimation (2012)
-- Fischler & Bolles(1981) RANSAC Algorithm
+- Fischler & Bolles (1981) RANSAC Algorithm
 - Minimum Covariance Determinant Estimator
 - Summary
 

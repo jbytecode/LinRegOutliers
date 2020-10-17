@@ -97,6 +97,9 @@ include("gwlts.jl")
 # RANSAC Algorithm
 include("ransac.jl")
 
+# Atkinson94 Algorithm
+include("atkinson94.jl")
+
 # All-in-one
 include("summary.jl")
 
@@ -149,6 +152,7 @@ export dataimage
 export gwcga, galts, ga, cga, RealChromosome
 export detectOutliers
 export ransac
+export atkinson94
 
 
 end # module
