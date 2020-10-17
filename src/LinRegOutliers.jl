@@ -113,7 +113,9 @@ export applyColumns
 export find_minimum_nonzero
 
 # Data
-export phones, hbk, stackloss, weightloss, hs93randomdata, woodgravity
+export phones, hbk, stackloss
+export weightloss, hs93randomdata, woodgravity
+export hills
 
 # Diagnostics
 export dffit, dfbeta
