@@ -468,3 +468,25 @@ end
 
 
 
+function hadimeasure(setting::RegressionSetting; c::Float64=2.0)
+    X = designMatrix(setting)
+    y = responseVector(setting)
+    hadimeasure(X, y, c=c)
+end
+
+function hadimeasure(X::Array{Float64,2}, y::Array{Float64,1}; c::Float64=2.0)
+    n, p = size(X)
+    reg = ols(X, y)
+    res = residuals(reg)
+    res2 = res.^2.0
+    sumres = sum(res2)
+    hat = hatmatrix(X)
+    H = zeros(Float64, n)
+    for i in 1:n
+        H[i] = (p * res2[i]) / ((1 - hat[i, i]) * (sumres - res2[i])) + (hat[i, i] / (1 - hat[i, i])) 
+    end
+    crit1 = mean(H) + c * std(H)
+    potentials = filter(i -> abs(H[i]) > crit1, 1:n)
+    return Dict("measure" => H, "crit1" => crit1, "potentials" => potentials)
+end
+
