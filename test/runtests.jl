@@ -625,3 +625,16 @@ end
     @test result["outliers"] == [1, 3, 4, 21]
 end
 
+
+
+@testset "Hadi Measure" begin
+    eps = 0.0001
+    setting = createRegressionSetting(@formula(calls ~ year), phones)
+    knowncooks = [0.19101337, 0.16141894, 0.13677220, 0.11673486, 0.10058688, 0.08815274, 0.07913586,
+                 0.07353075, 0.06965672, 0.06906446, 0.07108612, 0.07605141, 0.08428584, 0.08612449,
+                0.15005170, 0.15622736, 0.22082452, 0.29817740, 0.44310105, 0.72642163, 0.19942889,
+                0.33018728, 0.36907744, 0.41937743 ]
+    hm = hadimeasure(setting)["measure"]
+    @test map((x, y) -> abs(x - y) < eps, hm, knowncooks) == trues(24) 
+end
+
