@@ -4,10 +4,7 @@ struct OLS
     betas::Array{Float64,1}
 end
 
-function ols(X::Array{Float64,2}, y::Array{Float64,1})::OLS
-    @show X
-    return OLS(X, y, qr(X) \ y)
-end
+ols(X::Array{Float64,2}, y::Array{Float64,1})::OLS = OLS(X, y, qr(X) \ y)
 
 function wls(X::Array{Float64,2}, y::Array{Float64,1}, wts::Array{Float64,1})
     W = Diagonal(sqrt.(wts))

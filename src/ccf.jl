@@ -18,10 +18,10 @@ Perform signed gradient descent for clipped convex functions for a given regress
 julia> reg0001 = createRegressionSetting(@formula(calls ~ year), phones);
 julia> ccf(reg0001)
 Dict{Any,Any} with 4 entries:
-  "betas"     => [-260.059, 5.04148]
-  "outliers"  => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10  …  15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
-  "lambdas"   => [2.77556e-17, 2.77556e-17, 2.77556e-17, 2.77556e-17, 2.77556e-17, 2.77556e-17, 2.…
-  "residuals" => [-12.3853, -7.64386, -2.60238, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0  …  -56.4046, -5…
+  "betas"     => [-63.4816, 1.30406]
+  "outliers"  => [15, 16, 17, 18, 19, 20]
+  "lambdas"   => [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0  …  2.77556e-17, 2.77556e-17, 0…
+  "residuals" => [-2.67878, -1.67473, -0.37067, -0.266613, 0.337444, 0.941501, 1.44556, 2.04962, 1…
 
 ```
 
