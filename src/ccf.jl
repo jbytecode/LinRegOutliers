@@ -17,17 +17,19 @@ Perform signed gradient descent for clipped convex functions for a given regress
 ```julia-repl
 julia> reg0001 = createRegressionSetting(@formula(calls ~ year), phones);
 julia> ccf(reg0001)
-Dict{Any,Any} with 2 entries:
-  "betas"     => [-57.3269, 1.19155]
-  "residuals" => [2.14958, 1.25803, 0.0664872, 0.0749413, -0.416605, -0.90815, -1.2997, -1.79124,…
+Dict{Any,Any} with 4 entries:
+  "betas"     => [-260.059, 5.04148]
+  "outliers"  => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10  …  15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
+  "lambdas"   => [2.77556e-17, 2.77556e-17, 2.77556e-17, 2.77556e-17, 2.77556e-17, 2.77556e-17, 2.…
+  "residuals" => [-12.3853, -7.64386, -2.60238, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0  …  -56.4046, -5…
 
 ```
 
 """
-function ccf(setting::RegressionSetting; starting_lambdas=nothing, alpha=1.0, max_iter=100, beta=.1, tol=1e-4)
+function ccf(setting::RegressionSetting; starting_lambdas=nothing, alpha=nothing, p=3, max_iter=100, gamma=.1, tol=1e-4)
     X = designMatrix(setting)
     y = responseVector(setting)
-    return ccf(X, y, starting_lambdas=starting_lambdas, alpha=alpha, max_iter=max_iter, beta=beta, tol=tol)
+    return ccf(X, y, starting_lambdas=starting_lambdas, alpha=alpha, p=p, max_iter=max_iter, gamma=gamma, tol=tol)
 end
 
 
@@ -41,38 +43,37 @@ Perform signed gradient descent for clipped convex functions for a given regress
 - `X::Array{Float64, 2}`: Design matrix of the linear model.
 - `y::Array{Float64, 1}`: Response vector of the linear model.
 - `starting_lambdas::Array{Float64,1}`: Starting values of weighting parameters used by signed gradient descent.
-- `alpha::Float64`: Loss at which a point is labeled as an outlier (points with loss ≥ alpha will be called outliers).
+- `alpha::Float64`: Loss at which a point is labeled as an outlier. If unspecified, will be chosen as p*mean(residuals.^2), where residuals are OLS residuals.
+- `p::Float64`: Points that have squared OLS residual greater than p times the mean squared OLS residual are considered outliers.
 - `max_iter::Int64`: Maximum number of iterations to run signed gradient descent.
 - `beta::Float64`: Step size parameter.
 - `tol::Float64`: Tolerance below which convergence is declared.
 
 """
-function ccf(X::Array{Float64,2}, y::Array{Float64,1}; starting_lambdas=nothing, alpha=1.0, max_iter=100, beta=.1, tol=1e-4)
+function ccf(X::Array{Float64,2}, y::Array{Float64,1}; starting_lambdas=nothing, alpha=nothing, p=3, max_iter=100, gamma=.1, tol=1e-4)
     n, p = size(X)
 
-    if starting_lambdas isa Nothing
-        starting_lambdas = ones(Float64, p)/2
-    end
-
-    # Solves the weighted least squares problem: minimize ∑_i λ_i(X_i'β - y_i)^2
-    function solve_weighted_regression(λ)
-        diag_weights = Diagonal(sqrt.(λ))
-
-        Q, R = qr(diag_weights*X)
-
-        return Q' * (UpperTriangular(R) \ (diag_weights*y))
+    if isnothing(starting_lambdas)
+        starting_lambdas = ones(Float64, n)/2
     end
 
     curr_lambdas = copy(starting_lambdas)
     old_lambdas = copy(starting_lambdas)
+    curr_betas = nothing
+    residuals = nothing
 
     for iter=1:max_iter
-        curr_betas = solve_weighted_regression(curr_lambdas)
+        curr_betas = wls(X, y, curr_lambdas).betas
         residuals = X * curr_betas - y
 
-        curr_lambdas .-= beta*sign.(residuals.^2 .- alpha)
+        if isnothing(alpha)
+            alpha = p*mean(residuals.^2)
+        end
 
-        if norm(new_lambdas - old_lambdas, Inf) <= tol
+        @. curr_lambdas -= gamma*sign(residuals^2 - alpha)
+        clamp!(curr_lambdas, 0., 1.)
+
+        if norm(curr_lambdas - old_lambdas, Inf) <= tol
             break
         end
 
@@ -83,7 +84,7 @@ function ccf(X::Array{Float64,2}, y::Array{Float64,1}; starting_lambdas=nothing,
     result["betas"] = curr_betas
     result["lambdas"] = old_lambdas
     result["residuals"] = residuals
-    result["outliers"] = findall(residuals.^2 .> alpha)
+    result["outliers"] = findall(residuals .^ 2 .> alpha)
 
     return result
 end

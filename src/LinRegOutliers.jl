@@ -15,7 +15,7 @@ import DataFrames: DataFrame
 import Distributions: TDist, Chisq, Normal, std, cov, median
 import Clustering: Hclust, hclust, cutree
 import StatsBase: quantile, standardize, ZScoreTransform, mean, sample
-import LinearAlgebra: inv, pinv, det, diag, eigen, norm, qr
+import LinearAlgebra: inv, pinv, det, diag, eigen, norm, qr, Diagonal, UpperTriangular
 import Plots: scatter, title!, xlabel!, ylabel!, hline!, vline!, RGB, plot, font, text
 import Optim: optimize, NelderMead
 import Combinatorics: combinations
@@ -96,6 +96,9 @@ include("gwlts.jl")
 
 # RANSAC Algorithm
 include("ransac.jl")
+
+# CCF formulation and heuristic; Barratt, Angeris, and Boyd (2020)
+include("ccf.jl")
 
 # All-in-one
 include("summary.jl")
