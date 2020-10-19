@@ -25,6 +25,9 @@ Dict{Any,Any} with 4 entries:
 
 ```
 
+# References 
+Barratt, S., Angeris, G. & Boyd, S. Minimizing a sum of clipped convex functions. Optim Lett 14, 2443–2459 (2020). https://doi.org/10.1007/s11590-020-01565-4
+
 """
 function ccf(setting::RegressionSetting; starting_lambdas=nothing, alpha=nothing, p=3, max_iter=100, gamma=.1, tol=1e-4)
     X = designMatrix(setting)
@@ -48,6 +51,9 @@ Perform signed gradient descent for clipped convex functions for a given regress
 - `max_iter::Int64`: Maximum number of iterations to run signed gradient descent.
 - `beta::Float64`: Step size parameter.
 - `tol::Float64`: Tolerance below which convergence is declared.
+
+# References
+Barratt, S., Angeris, G. & Boyd, S. Minimizing a sum of clipped convex functions. Optim Lett 14, 2443–2459 (2020). https://doi.org/10.1007/s11590-020-01565-4
 
 """
 function ccf(X::Array{Float64,2}, y::Array{Float64,1}; starting_lambdas=nothing, alpha=nothing, p=3, max_iter=100, gamma=.1, tol=1e-4)
