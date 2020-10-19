@@ -385,3 +385,126 @@ function mahalanobisSquaredMatrix(datamat::Matrix; meanvector=nothing, covmatrix
     end
 end
 
+
+
+
+"""
+    dfbeta(setting, omittedIndex)
+
+Apply DFBETA diagnostic for a given regression setting and observation index.
+
+# Arguments
+- `setting::RegressionSetting`: A regression setting object.
+- `omittedIndex::Int`: Index of the omitted observation.
+
+# Example
+```julia-repl
+julia> setting = createRegressionSetting(@formula(calls ~ year), phones);
+julia> dfbeta(setting, 1)
+2-element Array{Float64,1}:
+  9.643915678524024
+ -0.14686166007904422
+```
+"""
+function dfbeta(setting::RegressionSetting, omittedIndex::Int)::Array{Float64,1}
+    X = designMatrix(setting)
+    y = responseVector(setting)
+    return dfbeta(X, y, omittedIndex)
+end
+
+function dfbeta(X::Array{Float64,2}, y::Array{Float64,1}, omittedIndex::Int)::Array{Float64,1}
+    n = length(y)
+    omittedindices = filter(x -> x != omittedIndex, 1:n)
+    regfull = ols(X, y)
+    regomitted = ols(X[omittedindices, :], y[omittedindices])
+    return coef(regfull) .- coef(regomitted)
+end
+
+
+
+
+"""
+    covratio(setting, omittedIndex)
+
+Apply covariance ratio diagnostic for a given regression setting and observation index.
+
+# Arguments
+- `setting::RegressionSetting`: A regression setting object.
+- `omittedIndex::Int`: Index of the omitted observation.
+
+# Example
+```julia-repl
+julia> setting = createRegressionSetting(@formula(calls ~ year), phones);
+julia> covratio(setting, 1)
+1.2945913799871505
+```
+"""
+function covratio(setting::RegressionSetting, omittedIndex::Int)
+    X = designMatrix(setting)
+    y = responseVector(setting)
+    return covratio(X, y, omittedIndex)
+end
+
+function covratio(X::Array{Float64,2}, y::Array{Float64,1}, omittedIndex::Int)
+    n, p = size(X)
+    reg = ols(X, y)
+    r = residuals(reg)
+    s2 = sum(r.^2.0) / Float64(n - p)
+    xxinv = inv(X'X)
+    
+    indices = filter(x -> x != omittedIndex, 1:n)
+    
+    Xomitted = X[indices,:]
+    yomitted = y[indices]
+    xxinvomitted = inv(Xomitted' * Xomitted)
+    regomitted = ols(Xomitted, yomitted)
+    resomitted = residuals(regomitted)
+    s2omitted = sum(resomitted.^2.0) / Float64(n - p - 1)
+    
+    covrat = det(s2omitted * xxinvomitted) / det(s2 * xxinv)
+    
+    return covrat 
+end
+
+
+"""
+    hadimeasure(setting; c = 2.0)
+
+Apply Hadi's regression diagnostic for a given regression setting
+
+# Arguments
+- `setting::RegressionSetting`: A regression setting object.
+- `c::Float64`: Critical value selected between 2.0 - 3.0. The default is 2.0.
+
+# Example
+```julia-repl
+julia> setting = createRegressionSetting(@formula(calls ~ year), phones);
+julia> hadimeasure(setting)
+```
+
+# References
+Chatterjee, Samprit and Hadi, Ali. Regression Analysis by Example.
+     5th ed. N.p.: John Wiley & Sons, 2012.
+"""
+function hadimeasure(setting::RegressionSetting; c::Float64=2.0)
+    X = designMatrix(setting)
+    y = responseVector(setting)
+    hadimeasure(X, y, c=c)
+end
+
+function hadimeasure(X::Array{Float64,2}, y::Array{Float64,1}; c::Float64=2.0)
+    n, p = size(X)
+    reg = ols(X, y)
+    res = residuals(reg)
+    res2 = res.^2.0
+    sumres = sum(res2)
+    hat = hatmatrix(X)
+    H = zeros(Float64, n)
+    for i in 1:n
+        H[i] = (p * res2[i]) / ((1 - hat[i, i]) * (sumres - res2[i])) + (hat[i, i] / (1 - hat[i, i])) 
+    end
+    crit1 = mean(H) + c * std(H)
+    potentials = filter(i -> abs(H[i]) > crit1, 1:n)
+    return Dict("measure" => H, "crit1" => crit1, "potentials" => potentials)
+end
+
