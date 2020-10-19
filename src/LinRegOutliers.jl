@@ -97,8 +97,15 @@ include("gwlts.jl")
 # RANSAC Algorithm
 include("ransac.jl")
 
+
 # CCF formulation and heuristic; Barratt, Angeris, and Boyd (2020)
 include("ccf.jl")
+
+# Atkinson94 Algorithm
+include("atkinson94.jl")
+
+# Imon 2005 Algorithm
+include("imon2005.jl")
 
 # All-in-one
 include("summary.jl")
@@ -116,10 +123,12 @@ export applyColumns
 export find_minimum_nonzero
 
 # Data
-export phones, hbk, stackloss, weightloss, hs93randomdata, woodgravity
+export phones, hbk, stackloss
+export weightloss, hs93randomdata, woodgravity
+export hills
 
 # Diagnostics
-export dffit
+export dffit, dfbeta
 export hatmatrix
 export studentizedResiduals
 export adjustedResiduals
@@ -127,6 +136,7 @@ export jacknifedS
 export cooks
 export mahalanobisSquaredMatrix
 export covratio
+export hadimeasure
 
 # Ordinary least squares
 export OLS, ols, wls, residuals, predict, coef
@@ -151,5 +161,7 @@ export gwcga, galts, ga, cga, RealChromosome
 export detectOutliers
 export ransac
 export ccf
+export atkinson94
+export imon2005
 
 end # module

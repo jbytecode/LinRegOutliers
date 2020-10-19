@@ -29,6 +29,25 @@ end
     @test isapprox(predict(olsreg), y, atol=tol) 
 end
 
+@testset "Weighted Least Squares" begin
+    tol = 0.0001
+    n = 7
+    #  The model is exatly y = 5 + 5x
+    var1 = Float64[1, 2, 3, 4, 5, 6, 7]
+    X = hcat(ones(n), var1)
+    betas = [5.0, 5.0]
+    y = X * betas
+    y[n - 1] = 5000.0
+    y[n] = 5000.0
+    wts = [1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0]
+
+    # WLS 
+    olsreg = wls(X, y, wts)
+    @test isapprox(coef(olsreg), betas, atol=tol)
+    @test isapprox(residuals(olsreg)[1:(n - 2)], zeros(Float64, n - 2), atol=tol)
+    @test isapprox(predict(olsreg)[1:(n - 2)], y[1:(n - 2)], atol=tol)
+end
+
 @testset "Basis - createRegressionSetting, designMatrix, responseVector" begin
     dataset = DataFrame(
         x=[1.0, 2, 3, 4, 5],
@@ -570,4 +589,55 @@ end
         calculated = covratio(setting, i)
         @test abs(knownvals[i] - calculated) < eps
     end
+end
+
+@testset "dfbeta - phone data" begin
+    eps = 0.00001
+    reg = createRegressionSetting(@formula(calls ~ year), phones)
+    n, p = size(phones)
+    knownvalues = [9.6439157 -0.14686166; 5.3459460 -0.08092134;
+                    1.6258961 -0.02443345; -0.6866294  0.01022725;
+                    -2.7169197  0.04002009; -4.1910124  0.06085238;
+                    -5.1029254  0.07267870; -5.5535000  0.07697356;
+                    -5.2512176  0.06983887; -4.6721589  0.05791933;
+                    -3.6868718  0.03945523; -2.3254391  0.01478033;
+                    -0.5673087 -0.01652355; 1.4653937 -0.04958099;
+                    -5.4474441  0.12867978; -8.6540162  0.18101030;
+                    -14.6631749  0.28835085; -22.0168113  0.41708081;
+                    -32.9443226  0.60863505; -49.0851269  0.89065754;
+                    22.9820710 -0.41140246; 39.1639294 -0.69370540;
+                    45.7655562 -0.80379984; 53.6862082 -0.93638735;]
+    for i in 1:n
+        for j in 1:p
+            dfbetaresult = dfbeta(reg, i)
+            @test abs(dfbetaresult[j] - knownvalues[i,j]) < eps
+        end 
+    end
+end
+
+@testset "Atkinson 1994 - Algorithm" begin
+    df = stackloss
+    reg = createRegressionSetting(@formula(stackloss ~ airflow + watertemp + acidcond), stackloss)
+    result = atkinson94(reg)
+    @test result["outliers"] == [1, 3, 4, 21]
+end
+
+
+
+@testset "Hadi Measure" begin
+    eps = 0.0001
+    setting = createRegressionSetting(@formula(calls ~ year), phones)
+    knowncooks = [0.19101337, 0.16141894, 0.13677220, 0.11673486, 0.10058688, 0.08815274, 0.07913586,
+                 0.07353075, 0.06965672, 0.06906446, 0.07108612, 0.07605141, 0.08428584, 0.08612449,
+                0.15005170, 0.15622736, 0.22082452, 0.29817740, 0.44310105, 0.72642163, 0.19942889,
+                0.33018728, 0.36907744, 0.41937743 ]
+    hm = hadimeasure(setting)["measure"]
+    @test map((x, y) -> abs(x - y) < eps, hm, knowncooks) == trues(24) 
+end
+
+@testset "Imon 2005 - Algorithm" begin
+    Random.seed!(12345)
+    reg = createRegressionSetting(@formula(y ~ x1 + x2 + x3), hbk)
+    result = imon2005(reg)
+    @test result["outliers"] == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 end
