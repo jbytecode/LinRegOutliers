@@ -1,8 +1,25 @@
+"""
+    imon2005(setting)
+
+Perform the Imon 2005 algorithm for a given regression setting.
+
+# Arguments 
+- `setting::RegressionSetting`: A regression setting.
+
+# Notes
+The implementation uses LTS rather than LMS as suggested in the paper. 
+
+# Reference
+A. H. M. Rahmatullah Imon (2005) Identifying multiple influential observations in linear regression, 
+Journal of Applied Statistics, 32:9, 929-946, DOI: 10.1080/02664760500163599
+ """
 function imon2005(setting::RegressionSetting)
     X = designMatrix(setting)
     y = responseVector(setting)
     return imon2005(X, y)
 end
+
+
 
 function imon2005(X::Array{Float64,2}, y::Array{Float64,1})
 
