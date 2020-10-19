@@ -26,7 +26,7 @@ A Julia package for outlier detection in linear regression.
 - Fischler & Bolles (1981) RANSAC Algorithm
 - Minimum Covariance Determinant Estimator
 - Imon (2005) Algorithm
-- Barratt & Angeris & Boyd (2020) Clipped Convex Function algorithm
+- Barratt & Angeris & Boyd (2020) CCF algorithm
 - Summary
 
 
