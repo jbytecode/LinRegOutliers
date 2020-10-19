@@ -25,6 +25,8 @@ A Julia package for outlier detection in linear regression.
 - Satman's GA based LTS estimation (2012)
 - Fischler & Bolles (1981) RANSAC Algorithm
 - Minimum Covariance Determinant Estimator
+- Imon (2005) Algorithm
+- Barratt & Angreps & Boyd (2020) Clipped Convex Function algorithm
 - Summary
 
 
