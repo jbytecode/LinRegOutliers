@@ -103,6 +103,7 @@ include("ccf.jl")
 
 # Atkinson94 Algorithm
 include("atkinson94.jl")
+include("atkinsonstalactiteplot.jl")
 
 # Imon 2005 Algorithm
 include("imon2005.jl")
@@ -161,7 +162,7 @@ export gwcga, galts, ga, cga, RealChromosome
 export detectOutliers
 export ransac
 export ccf
-export atkinson94
 export imon2005
+export atkinson94, atkinsonstalactiteplot, generate_stalactite_plot
 
 end # module
