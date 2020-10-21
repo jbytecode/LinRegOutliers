@@ -8,7 +8,7 @@ import DataFrames: DataFrame
 
 @info "Loading Distributions"
 # using Distributions
-import Distributions: TDist, Chisq, Normal, std, cov, median
+import Distributions: TDist, Chisq, std, cov, median
 
 @info "Loading Clustering"
 # using Clustering
@@ -61,6 +61,7 @@ include("../summary.jl")
 include("../ransac.jl")
 include("../atkinson94.jl")
 include("../imon2005.jl")
+include("../ccf.jl")
 
 println("ready")
 
