@@ -12,7 +12,7 @@ module LinRegOutliers
 # import functions from corresponding packages
 import StatsModels: @formula, FormulaTerm, ModelFrame, ModelMatrix
 import DataFrames: DataFrame
-import Distributions: TDist, Chisq, Normal, std, cov, median
+import Distributions: TDist, Chisq, std, cov, median
 import Clustering: Hclust, hclust, cutree
 import StatsBase: quantile, standardize, ZScoreTransform, mean, sample
 import LinearAlgebra: inv, pinv, det, diag, eigen, norm, qr, Diagonal, UpperTriangular
