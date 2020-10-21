@@ -20,7 +20,7 @@ import StatsBase: quantile, standardize, ZScoreTransform, mean, sample
 
 @info "Loading LinearAlgebra"
 # using LinearAlgebra
-import LinearAlgebra: inv, pinv, det, diag, eigen, norm, Diagonal
+import LinearAlgebra: inv, pinv, det, diag, eigen, norm, Diagonal, qr
 
 @info "Loading Plots"
 # using Plots
