@@ -15,7 +15,7 @@ import DataFrames: DataFrame
 import Distributions: TDist, Chisq, std, cov, median
 import Clustering: Hclust, hclust, cutree
 import StatsBase: quantile, standardize, ZScoreTransform, mean, sample
-import LinearAlgebra: inv, pinv, det, diag, eigen, norm, qr, Diagonal, UpperTriangular
+import LinearAlgebra: inv, pinv, det, diag, eigen, norm, rank, qr, Diagonal, UpperTriangular
 import Plots: scatter, title!, xlabel!, ylabel!, hline!, vline!, RGB, plot, font, text
 import Optim: optimize, NelderMead
 import Combinatorics: combinations
@@ -105,6 +105,9 @@ include("ccf.jl")
 include("atkinson94.jl")
 include("atkinsonstalactiteplot.jl")
 
+# BACON 2000 Algorithm
+include("bacon.jl")
+
 # Imon 2005 Algorithm
 include("imon2005.jl")
 
@@ -164,5 +167,6 @@ export ransac
 export ccf
 export imon2005
 export atkinson94, atkinsonstalactiteplot, generate_stalactite_plot
+export bacon
 
 end # module

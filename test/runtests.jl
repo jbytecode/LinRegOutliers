@@ -648,7 +648,7 @@ end
                 0.15005170, 0.15622736, 0.22082452, 0.29817740, 0.44310105, 0.72642163, 0.19942889,
                 0.33018728, 0.36907744, 0.41937743 ]
     hm = hadimeasure(setting)["measure"]
-    @test map((x, y) -> abs(x - y) < eps, hm, knowncooks) == trues(24) 
+    @test map((x, y) -> abs(x - y) < eps, hm, knowncooks) == trues(24)
 end
 
 @testset "Imon 2005 - Algorithm" begin
@@ -656,5 +656,12 @@ end
     reg = createRegressionSetting(@formula(y ~ x1 + x2 + x3), hbk)
     result = imon2005(reg)
     @test result["outliers"] == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+end
+
+@testset "BACON 2000 - Algorithm" begin
+    df = stackloss
+    reg = createRegressionSetting(@formula(stackloss ~ airflow + watertemp + acidcond), stackloss)
+    result = bacon(reg, m=12)
+    @test result == [1, 3, 4, 21]
 end
 
