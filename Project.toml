@@ -1,9 +1,6 @@
-authors = [
-        "Mehmet Hakan Satman <mhsatman@gmail.com>",
-        "Shreesh Adiga <16567adigashreesh@gmail.com>"
-]
 name = "LinRegOutliers"
 uuid = "6d4de0fb-32d9-4c65-aac1-cc9ed8b94b1a"
+authors = ["Mehmet Hakan Satman <mhsatman@gmail.com>", "Shreesh Adiga <16567adigashreesh@gmail.com>"]
 version = "0.6.0"
 
 [deps]
