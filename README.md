@@ -145,6 +145,12 @@ julia> dataimage(data)
 
 ![detectOutliersImage](https://github.com/jbytecode/jbytecode/blob/master/images/dataimages.png)
 
+ 
+# News
+- We implemented algorithm(X, y) style calls for all of the algorithms where X is the design matrix and y is the response vector. 
+- We implemented ~25 outlier detection algorithms which covers a high percentage of the literature.
+
+
 ## Want to have contributions?
 You are probably the right contributor
 
@@ -155,5 +161,5 @@ However, the second condition is more important because an outlier detection alg
 
 
 ## Contact & Communication
-- Please use issues for a new future request or bug reports
+- Please use issues for a new feature request or bug reports
 - We are in #linregoutliers channel on [Julia Slack](http://julialang.slack.com/) for any discussion requires online chatting. 
