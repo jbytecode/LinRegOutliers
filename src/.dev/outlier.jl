@@ -20,7 +20,7 @@ import StatsBase: quantile, standardize, ZScoreTransform, mean, sample
 
 @info "Loading LinearAlgebra"
 # using LinearAlgebra
-import LinearAlgebra: inv, pinv, det, diag, eigen, norm, Diagonal, qr
+import LinearAlgebra: inv, pinv, det, diag, eigen, norm, Diagonal, qr, rank
 
 @info "Loading Plots"
 # using Plots
@@ -62,6 +62,7 @@ include("../ransac.jl")
 include("../atkinson94.jl")
 include("../imon2005.jl")
 include("../ccf.jl")
+include("../bacon.jl")
 
 println("ready")
 
