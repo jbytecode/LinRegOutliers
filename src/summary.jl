@@ -31,7 +31,8 @@ function detectOutliers(X::Array{Float64,2}, y::Array{Float64,1}; methods=[])
             "sat15",
             "asm20",
             "bch",
-            "bacon"
+            "bacon",
+            "imon2005"
             ]
     end
 
@@ -83,6 +84,12 @@ function detectOutliers(X::Array{Float64,2}, y::Array{Float64,1}; methods=[])
             try            
                 _, p = size(X)
                 result = bacon(X, y, m=p + 1)
+            catch
+                result = Int[]
+            end
+        elseif method == "imon2005"
+            try            
+                result = imon2005(X, y)["outliers"]
             catch
                 result = Int[]
             end
