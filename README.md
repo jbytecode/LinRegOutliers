@@ -28,11 +28,11 @@ A Julia package for outlier detection in linear regression.
 - Imon (2005) Algorithm
 - Barratt & Angeris & Boyd (2020) CCF algorithm
 - Atkinson (1994) Forward Search Algorithm
+- BACON Algorithm (Billor & Hadi & Velleman (2000))
 - Summary
 
 
 ## Unimplemented Methods
-- BACON Algorithm (Billor & Hadi & Velleman (2000))
 - Hadi (1994) Algorithm
 - Depth based estimators (Regression depth, deepest regression, etc.)
 - Theil & Sen estimator for mutliple regression
