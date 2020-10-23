@@ -102,9 +102,9 @@ function hs93basicsubset(X::Array{Float64,2}, y::Array{Float64,1}, initialindice
         for j in 1:n
             xxxx = X[j,:]' * inv(XM'XM) * X[j,:]
             if j in indices
-                d[j] = abs.(y[j] - sum(X[j,:] .* betas)) / sqrt(1 - xxxx)
+                @inbounds d[j] = abs.(y[j] - sum(X[j,:] .* betas)) / sqrt(1 - xxxx)
             else
-                d[j] = abs.(y[j] - sum(X[j,:] .* betas)) / sqrt(1 + xxxx)
+                @inbounds d[j] = abs.(y[j] - sum(X[j,:] .* betas)) / sqrt(1 + xxxx)
             end
         end
         orderingd = sortperm(abs.(d))
@@ -112,6 +112,8 @@ function hs93basicsubset(X::Array{Float64,2}, y::Array{Float64,1}, initialindice
     end
     return indices
 end
+
+
 """
 
     hs93(setting; alpha = 0.05, basicsubsetindices = nothing)
@@ -159,14 +161,14 @@ function hs93(X::Array{Float64,2}, y::Array{Float64,1}; alpha=0.05, basicsubseti
         resids = residuals(olsreg)
         sigma = sqrt(sum(resids.^2.0) / (length(resids) - p))
         d = zeros(Float64, n)
-        XM = X[indices,:]
+        XM = @inbounds X[indices,:]
         iXmXm = inv(XM'XM)
         for j in 1:n
-            xMMx = X[j,:]' * iXmXm * X[j,:]
+            @inbounds xMMx = X[j,:]' * iXmXm * X[j,:]
             if j in indices
-                d[j] = (y[j] - sum(X[j,:] .* betas)) / (sigma * sqrt(1.0 - xMMx))
+                @inbounds d[j] = (y[j] - sum(X[j,:] .* betas)) / (sigma * sqrt(1.0 - xMMx))
             else
-                d[j] = (y[j] - sum(X[j,:] .* betas)) / (sigma * sqrt(1.0 + xMMx))
+                @inbounds d[j] = (y[j] - sum(X[j,:] .* betas)) / (sigma * sqrt(1.0 + xMMx))
             end
         end
         orderingd = sortperm(abs.(d))

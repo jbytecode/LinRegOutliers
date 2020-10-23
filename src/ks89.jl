@@ -63,7 +63,7 @@ function ks89(X::Array{Float64,2}, y::Array{Float64,1}; alpha=0.05)
     w = zeros(Float64, n)
     s = zeros(Float64, n)
     ws = zeros(Float64, n)
-    for i in (p + 1):n
+    @inbounds for i in (p + 1):n
         index = orderingindices[i]
         w[index] = ks89RecursiveResidual(X, y, basisindices, index)
         s[index] = jacknifedS(X, y, index)
