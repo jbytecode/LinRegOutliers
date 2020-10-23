@@ -66,3 +66,8 @@ include("../bacon.jl")
 
 println("ready")
 
+using BenchmarkTools
+
+reg = createRegressionSetting(@formula(y ~ x1 + x2 + x3), hbk)
+
+@btime ks89(reg)
