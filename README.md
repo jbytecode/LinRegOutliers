@@ -145,6 +145,40 @@ julia> dataimage(data)
 
 ![detectOutliersImage](https://github.com/jbytecode/jbytecode/blob/master/images/dataimages.png)
 
+
+```julia
+julia> using LinRegOutliers
+julia> reg = createRegressionSetting(@formula(calls ~ year), phones);
+julia> atkinsonstalactiteplot(reg)
+m           1         2
+   123456789012345678901234
+ 2              ********   
+ 3              ********   
+ 4 +            ********   
+ 5 +            ********   
+ 6 +            ********   
+ 7 +            ********   
+ 8 +            ********   
+ 9 +            ********+  
+10 +            ********+  
+11 +            ********   
+12              ********   
+13 +            ********   
+14              ********   
+15              ********   
+16              ********   
+17              ********   
+18               *******+  
+19               ****** +++
+20               ****** +++
+21               ****** +++
+22               ****** +++
+23               +++*** +++
+24                  ++* +++
+   123456789012345678901234
+            1         2
+
+```
  
 # News
 - We implemented algorithm(X, y) style calls for all of the algorithms where X is the design matrix and y is the response vector. 
