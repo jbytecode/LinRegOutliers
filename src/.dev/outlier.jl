@@ -60,6 +60,7 @@ include("../gwlts.jl")
 include("../summary.jl")
 include("../ransac.jl")
 include("../atkinson94.jl")
+include("../atkinsonstalactiteplot.jl")
 include("../imon2005.jl")
 include("../ccf.jl")
 include("../bacon.jl")
@@ -69,5 +70,3 @@ println("ready")
 using BenchmarkTools
 
 reg = createRegressionSetting(@formula(y ~ x1 + x2 + x3), hbk)
-
-@btime ks89(reg)
