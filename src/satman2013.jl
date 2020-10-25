@@ -45,9 +45,9 @@ function satman2013(X::Array{Float64,2}, y::Array{Float64,1})
     for i in 1:p0
         for j in 1:p0
             if i == j 
-                covmat[i, j] = median(abs.(X0[:, i] .- median(X0[:, i])))
+                @inbounds covmat[i, j] = median(abs.(X0[:, i] .- median(X0[:, i])))
             else
-                covmat[i, j] = median((X0[:, i] .- median(X0[:, i])) .* (X0[:, j] .- median(X0[:, j])))
+                @inbounds covmat[i, j] = median((X0[:, i] .- median(X0[:, i])) .* (X0[:, j] .- median(X0[:, j])))
             end
         end
     end
