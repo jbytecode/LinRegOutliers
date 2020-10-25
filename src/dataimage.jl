@@ -20,8 +20,8 @@ function euclideanDistances(dataMatrix::Array{Float64,2})::Array{Float64,2}
     for i in 1:n
         for j in i:n
             if i != j 
-                d[i, j] = sqrt(sum((dataMatrix[i,:] .- dataMatrix[j,:]).^2.0))
-                d[j, i] = d[i, j]
+                @inbounds d[i, j] = sqrt(sum((dataMatrix[i,:] .- dataMatrix[j,:]).^2.0))
+                @inbounds d[j, i] = d[i, j]
             end
         end
     end
@@ -58,8 +58,8 @@ function mahalanobisBetweenPairs(dataMatrix::Array{Float64,2})::Array{Float64,2}
     for i in 1:n
         for j in i:n
             if i != j 
-                d[i, j] = sqrt((dataMatrix[i,:] .- dataMatrix[j,:]) * covinv * (dataMatrix[i,:] .- dataMatrix[j,:])')
-                d[j, i] = d[i, j]
+                @inbounds d[i, j] = sqrt((dataMatrix[i,:] .- dataMatrix[j,:]) * covinv * (dataMatrix[i,:] .- dataMatrix[j,:])')
+                @inbounds d[j, i] = d[i, j]
             end
         end
     end
@@ -115,7 +115,7 @@ function dataimage(dataMatrix::Array{Float64,2}; distance=:mahalanobis)
     colormatrix = Array{RGB{Float64}}(undef, n, n)
     for i in 1:n
         for j in 1:n
-            colormatrix[i, j] = RGB(colours[i, j])
+            @inbounds colormatrix[i, j] = RGB(colours[i, j])
         end
     end
     plot(colormatrix)
