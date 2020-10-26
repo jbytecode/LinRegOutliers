@@ -1,7 +1,7 @@
 function distances(resids::Array{Float64,1}, fitteds::Array{Float64})::Array{Float64,2}
     n = length(resids)
     d = zeros(Float64, n, n)
-    for i in 1:n
+    @inbounds for i in 1:n
         for j in i:n
             if i != j 
                 p1 = [resids[i], fitteds[i]]

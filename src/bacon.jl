@@ -10,7 +10,7 @@ Two methods V1 and V2 are defined in the paper which use Mahalanobis distance or
 """
 function initial_basic_subset_multivariate_data(X::Array{Float64,2}, m::Int; method::String="mahalanobis")
     n, p = size(X)
-    if method=="mahalanobis"
+    if method == "mahalanobis"
         distances = sqrt.(diag(mahalanobisSquaredMatrix(X)))
     elseif method == "median"
         median_vector = applyColumns(median, X)
@@ -32,7 +32,7 @@ It also guarantees that at least m indices are returned and that the selected in
  - `m`: The minimum number of points to include in the subset indices.
  - `distances`: The distances vector used for selecting minumum distance indices.
 """
-function select_subset(X::Array{Float64, 2}, m::Int, distances::Array{Float64})
+function select_subset(X::Array{Float64,2}, m::Int, distances::Array{Float64})
     rank_x = rank(X)
     sorted_distances = sortperm(distances)
     subset = sorted_distances[1:m]
@@ -61,13 +61,13 @@ This function performs the outlier detection for multivariate data according to 
  - `method`: The distance method to use for selecting the points for initial subset
  - `alpha`: The quantile used for cutoff
 """
-function bacon_multivariate_outlier_detection(X::Array{Float64, 2}, m::Int; method::String="mahalanobis", alpha::Float64=0.025)
+function bacon_multivariate_outlier_detection(X::Array{Float64,2}, m::Int; method::String="mahalanobis", alpha::Float64=0.025)
     n, p = size(X)
     chisquared = Chisq(p)
-    chisqcrit = quantile(chisquared, 1.0 - (alpha/n))
+    chisqcrit = quantile(chisquared, 1.0 - (alpha / n))
     chi = sqrt(chisqcrit)
-    h = Int(floor((n + p + 1)/2))
-    c_np = 1 + (p + 1)/(n - p) + 1/(n - h - p)
+    h = Int(floor((n + p + 1) / 2))
+    c_np = 1 + (p + 1) / (n - p) + 1 / (n - h - p)
     initial_basic_subset = initial_basic_subset_multivariate_data(X, m, method=method)
     r_prev = 0
     r = length(initial_basic_subset)
@@ -79,11 +79,11 @@ function bacon_multivariate_outlier_detection(X::Array{Float64, 2}, m::Int; meth
         mean_basic_subset = mean(X[subset], dims=1)
         cov_basic_subset = X[subset]'X[subset]
         distances = sqrt.(diag(mahalanobisSquaredMatrix(X, meanvector=mean_basic_subset, covmatrix=cov_basic_subset)))
-        c_hr = (h - r)/(h + r)
+        c_hr = (h - r) / (h + r)
         c_hr = c_hr < 0 ? 0 : c_hr
         c_npr = c_hr + c_np
         cutoff = c_npr * chi
-        subset = filter(x->distances[x] < cutoff, 1:n)
+        subset = filter(x -> distances[x] < cutoff, 1:n)
 
         # update r
         r_prev = r
@@ -104,21 +104,21 @@ This function computes the t distance for each point and returns the distance ve
  - `y`: The output vector
  - `subset`: The vector which denotes the points inside the subset, used to scale the residuals accordingly.
 """
-function compute_t_distance(X::Array{Float64, 2}, y::Array{Float64}, subset::Array{Int64})
+function compute_t_distance(X::Array{Float64,2}, y::Array{Float64}, subset::Array{Int64})
     n, p = size(X)
     t = zeros(Float64, n)
     least_squares_fit = ols(X[subset, :], y[subset])
     betas = coef(least_squares_fit)
     err = residuals(least_squares_fit)
-    sigma = sqrt((err'err)/(n - p))
+    sigma = sqrt((err'err) / (n - p))
     covmatrix_inv = inv(X[subset, :]'X[subset, :])
     for i in 1:n
         scale_factor = (X[i, :]') * (covmatrix_inv * X[i, :])
         residual = (y[i] - X[i, :]' * betas)
         if i in subset
-            t[i] = residual / (sigma * sqrt(1 - scale_factor))
+            @inbounds t[i] = residual / (sigma * sqrt(1 - scale_factor))
         else
-            t[i] = residual / (sigma * sqrt(1 + scale_factor))
+            @inbounds t[i] = residual / (sigma * sqrt(1 + scale_factor))
         end
     end
     return abs.(t)
@@ -136,7 +136,7 @@ This function computes the initial subset having at least m elements which are l
  - `alpha`: The quantile used for cutoff
 """
 function bacon_regression_initial_subset(
-        X::Array{Float64, 2},
+        X::Array{Float64,2},
         y::Array{Float64},
         m::Int;
         method::String="mahalanobis",
@@ -162,7 +162,7 @@ function bacon_regression_initial_subset(
 end
 
 function bacon(
-        X::Array{Float64, 2},
+        X::Array{Float64,2},
         y::Array{Float64};
         m::Int,
         method::String="mahalanobis",

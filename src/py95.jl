@@ -21,10 +21,10 @@ function py95ProcessEigenVector(v::Array{Float64,1})
     ordered_coordinates = sortperm(v)
     a = zeros(Float64, n)
     b = zeros(Float64, n)
-    for i in n:(-1):(n - c1)
+    @inbounds for i in n:(-1):(n - c1)
         a[i] = v[i] / v[i - 1]
     end
-    for i in 1:c2
+    @inbounds for i in 1:c2
         b[i] = v[i] / v[i + 1] 
     end
     set_of_a = filter(i -> abs(a[i]) > k, ordered_coordinates)
@@ -77,7 +77,7 @@ function py95SuspectedObservations(X::Array{Float64,2}, y::Array{Float64,1})
     s2 = sum(resids.^2.0) / (n - p)
     D = zeros(Float64, (n, n))
     E = zeros(Float64, (n, n))
-    for i in 1:n
+    @inbounds for i in 1:n
         D[i, i] = 1 / (1 - H[i, i])
         E[i, i] = resids[i]
     end
