@@ -7,7 +7,7 @@ function mahalanobisSquaredBetweenPairs(pairs::Matrix; covmatrix=nothing)
     try
         invm = inv(covmatrix)
         for i in 1:n
-            for j in i:n
+            @inbounds for j in i:n
                 newmat[i, j] = ((pairs[i,:] .- pairs[j,:])' * invm * (pairs[i,:] .- pairs[j,:]))
                 newmat[j, i] = newmat[i,j]
             end

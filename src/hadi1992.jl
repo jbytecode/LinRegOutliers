@@ -18,7 +18,7 @@ function hadi1992_handle_singularity(S::Array{Float64,2})::Array{Float64,2}
     lambda_s = find_minimum_nonzero(values)
     W = zeros(Float64, p, p)
     for i in 1:p
-        W[i, i] = 1 / max(values[i], lambda_s) 
+        @inbounds W[i, i] = 1 / max(values[i], lambda_s) 
     end
     newS = vectors * W * vectors
     return newS

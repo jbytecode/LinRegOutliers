@@ -34,7 +34,7 @@ function cgasample(probvector::Array{Float64,1})::Array{Bool}
     len = length(probvector)
     ch = Array{Bool}(undef, len)
     rands = rand(Float64, len)
-    for i in eachindex(ch)
+    @inbounds for i in eachindex(ch)
         ch[i] = rands[i] < probvector[i]
     end
     return ch
@@ -65,7 +65,7 @@ julia> cga(chsize = 10, costfunction = f, popsize = 100)
  0
 ```
 """
-function cga(;chsize::Int, costfunction::Function, popsize::Int)::Array{Bool, 1}
+function cga(;chsize::Int, costfunction::Function, popsize::Int)::Array{Bool,1}
     probvector = ones(Float64, chsize) * 0.5
     mutation = 1.0 / convert(Float64, popsize)
     while !(all(x -> (x <= mutation) || (x >= 1.0 - mutation), probvector))
@@ -83,7 +83,7 @@ function cga(;chsize::Int, costfunction::Function, popsize::Int)::Array{Bool, 1}
 		if winner[i] != loser[i]
 			if winner[i]
 				probvector[i] += mutation
-			else
+        			else
 				probvector[i] -= mutation
                 	end
 		end

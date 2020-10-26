@@ -44,7 +44,7 @@ function imon2005(X::Array{Float64,2}, y::Array{Float64,1})
     invXRXR = inv(XRXR)
     wiiR = [X[i,:]' * invXRXR * X[i,:] for i in allindex]
     wiiRAsterix = zeros(Float64, n)
-    for i in allindex
+    @inbounds for i in allindex
         if i in R
             wiiRAsterix[i] = wiiR[i] / (1.0 - wiiR[i])
         else
@@ -56,7 +56,7 @@ function imon2005(X::Array{Float64,2}, y::Array{Float64,1})
     resR = y - X * BetaHatR
     sigmaR = sum(resR.^2.0) / (n - p)
     tAsterix = zeros(Float64, n)
-    for i in allindex
+    @inbounds for i in allindex
         if i in R
             tAsterix[i] = resR[i] / (SigmaWithoutIndex(X, y, R, i) * sqrt(1.0 - wiiR[i]))
         else
@@ -65,7 +65,7 @@ function imon2005(X::Array{Float64,2}, y::Array{Float64,1})
     end
 
     GDFFITS = zeros(Float64, n)
-    for i in allindex
+    @inbounds for i in allindex
         GDFFITS[i] = sqrt(wiiRAsterix[i]) * tAsterix[i]
     end
     crit = 3.0 * sqrt(p / length(R))

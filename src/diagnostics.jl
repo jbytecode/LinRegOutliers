@@ -340,7 +340,7 @@ function cooks(X::Array{Float64,2}, y::Array{Float64,1})::Array{Float64,1}
     s2 = sum(res .* res) / (n - p)
     d = zeros(Float64, n)
     for i in 1:n
-        d[i] = ((res[i]^2.0) / (p * s2)) * (hat[i, i] / (1 - hat[i, i])^2.0)
+        @inbounds d[i] = ((res[i]^2.0) / (p * s2)) * (hat[i, i] / (1 - hat[i, i])^2.0)
     end
     return d
 end
@@ -501,7 +501,7 @@ function hadimeasure(X::Array{Float64,2}, y::Array{Float64,1}; c::Float64=2.0)
     hat = hatmatrix(X)
     H = zeros(Float64, n)
     for i in 1:n
-        H[i] = (p * res2[i]) / ((1 - hat[i, i]) * (sumres - res2[i])) + (hat[i, i] / (1 - hat[i, i])) 
+        @inbounds H[i] = (p * res2[i]) / ((1 - hat[i, i]) * (sumres - res2[i])) + (hat[i, i] / (1 - hat[i, i])) 
     end
     crit1 = mean(H) + c * std(H)
     potentials = filter(i -> abs(H[i]) > crit1, 1:n)

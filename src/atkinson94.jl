@@ -60,18 +60,18 @@ function atkinson94(X::Array{Float64,2}, y::Array{Float64,1}; iters=nothing, cri
         studentized_residuals = zeros(Float64, n, n)
         copy_parameters = false
 
-        for m = p:n
+        @inbounds for m = p:n
             olsreg = ols(X[m_subset_indices,:], y[m_subset_indices])
             betas = coef(olsreg)
             e = (y .- X * betas)
-            r = e .^ 2
+            r = e.^2
 
             # sigma is the median of the residuals
             sigma_tilde[m] = sqrt(sort(r)[h])
             XXinv = pinv(X[m_subset_indices, :]'X[m_subset_indices, :])
 
             # scale the residual according to whether it belongs to m_subset_indices or not
-            for index in 1:n
+            @inbounds for index in 1:n
                 if index in m_subset_indices
                     h_i = X[index, :]' * XXinv * X[index, :]
                     studentized_residuals[m, index] = abs(e[index]) / (sigma_tilde[m] * sqrt(abs(1 - h_i)))
@@ -85,7 +85,7 @@ function atkinson94(X::Array{Float64,2}, y::Array{Float64,1}; iters=nothing, cri
             # increase the size of subset by 1
             ordered_residue_indices = sortperm(r)
             if m != n
-                m_subset_indices = ordered_residue_indices[1:m+1]
+                m_subset_indices = ordered_residue_indices[1:m + 1]
             end
 
             # if sigma was lowest, record the parameters

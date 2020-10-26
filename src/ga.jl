@@ -73,7 +73,7 @@ function createPopulation(popsize::Int,
     pop = Array{RealChromosome,1}(undef, popsize)
     for i in 1:popsize
         c = RealChromosome(mins .+ rand(chsize) .* (maxs - mins), Inf64)
-        pop[i] = c
+        @inbounds pop[i] = c
     end
     return pop
 end
