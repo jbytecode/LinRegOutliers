@@ -34,7 +34,7 @@ A Julia package for outlier detection in linear regression.
 
 
 ## Unimplemented Methods
-- Chatterjee, Samprit, and Martin Mächler (1997)
+- Chatterjee & Mächler (1997)
 - Depth based estimators (Regression depth, deepest regression, etc.)
 - Theil & Sen estimator for mutliple regression
 
