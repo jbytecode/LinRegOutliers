@@ -47,7 +47,6 @@ function hadi1994(multivariateData::Array{Float64,2}; alpha=0.05)
     sorted_mah1 = []
     Cb = []
     Sb = []
-    cnpr = 0
     cfactor = 0
     isFullRank = false
 
@@ -56,7 +55,6 @@ function hadi1994(multivariateData::Array{Float64,2}; alpha=0.05)
         isFullRank = false
 
         while !isFullRank
-            #cnpr = 1 + (r / (n - p))^2.0
             basic_subset_indices = ordering_indices_mah1[1:r]
             basic_subset = multivariateData[basic_subset_indices, :]
             Cb = applyColumns(mean, basic_subset)
