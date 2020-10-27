@@ -82,6 +82,9 @@ include("lta.jl")
 # outliers in X-space
 include("hadi1992.jl")
 
+# Hadi (1994) algorithm
+include("hadi1994.jl")
+
 # Gray-scale images of distance matrices
 include("dataimage.jl")
 
@@ -160,6 +163,7 @@ export satman2015, dominates
 export lad
 export lta
 export hadi1992
+export hadi1994
 export dataimage
 export gwcga, galts, ga, cga, RealChromosome
 export detectOutliers
