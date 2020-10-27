@@ -13,7 +13,7 @@ julia> multidata = hcat(hbk.x1, hbk.x2, hbk.x3);
 julia> hadi1994(multidata)
 Dict{Any,Any} with 3 entries:
   "outliers"              => [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-  "criticial.chi.squared" => 7.81473
+  "critical.chi.squared" => 7.81473
   "rth.robust.distance"   => 5.04541
 ```
 
@@ -84,7 +84,7 @@ function hadi1994(multivariateData::Array{Float64,2}; alpha=0.05)
 
     result = Dict()
     result["outliers"] = sort(outlierset)
-    result["criticial.chi.squared"] = critical_quantile
+    result["critical.chi.squared"] = critical_quantile
     result["rth.robust.distance"] = sorted_mah1[r - 1]
     return result
 end
