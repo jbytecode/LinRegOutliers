@@ -30,11 +30,11 @@ A Julia package for outlier detection in linear regression.
 - Atkinson (1994) Forward Search Algorithm
 - BACON Algorithm (Billor & Hadi & Velleman (2000))
 - Hadi (1994) Algorithm
+- Chatterjee & Mächler (1997)
 - Summary
 
 
 ## Unimplemented Methods
-- Chatterjee & Mächler (1997)
 - Depth based estimators (Regression depth, deepest regression, etc.)
 - Theil & Sen estimator for mutliple regression
 
