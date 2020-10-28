@@ -65,9 +65,8 @@ include("../atkinsonstalactiteplot.jl")
 include("../imon2005.jl")
 include("../ccf.jl")
 include("../bacon.jl")
+include("../cm97.jl")
+
 
 println("ready")
 
-using BenchmarkTools
-
-reg = createRegressionSetting(@formula(y ~ x1 + x2 + x3), hbk)

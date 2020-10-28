@@ -114,6 +114,9 @@ include("bacon.jl")
 # Imon 2005 Algorithm
 include("imon2005.jl")
 
+#  Chatterjee & Mächler (1997) Algorithm
+include("cm97.jl")
+
 # All-in-one
 include("summary.jl")
 
@@ -132,7 +135,7 @@ export find_minimum_nonzero
 # Data
 export phones, hbk, stackloss
 export weightloss, hs93randomdata, woodgravity
-export hills
+export hills, softdrinkdelivery
 
 # Diagnostics
 export dffit, dfbeta
@@ -172,5 +175,6 @@ export ccf
 export imon2005
 export atkinson94, atkinsonstalactiteplot, generate_stalactite_plot
 export bacon
+export cm97
 
 end # module
