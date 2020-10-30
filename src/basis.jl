@@ -202,6 +202,12 @@ return convert(Array{Float64,1}, setting.data[:,mf.f.lhs.sym])
 end
 
 
+macro extractRegressionSetting(setting)
+    return esc(:(designMatrix($setting), responseVector($setting)))
+end
+
+
+
 """
 
     applyColumns(f, data)
