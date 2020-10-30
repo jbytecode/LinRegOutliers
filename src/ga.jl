@@ -39,7 +39,7 @@ end
 
 function Mutate(c::RealChromosome, prob::Float64)::RealChromosome
     genes = copy(c.genes)
-    for i in 1:length(genes)
+    @inbounds for i in 1:length(genes)
         if rand(1)[1] < prob
             genes[i] += randn(1)[1] 
         end
@@ -71,22 +71,20 @@ function createPopulation(popsize::Int,
         mins::Array{Float64,1}, 
         maxs::Array{Float64,1})::Array{RealChromosome,1}
     pop = Array{RealChromosome,1}(undef, popsize)
-    for i in 1:popsize
+    @inbounds for i in 1:popsize
         c = RealChromosome(mins .+ rand(chsize) .* (maxs - mins), Inf64)
-        @inbounds pop[i] = c
+        pop[i] = c
     end
     return pop
 end
 
+# Change the number of threads before starting Julia 
+# for using multi-core fitness evaluation.
+# Example:
+# $ export JULIA_NUM_THREADS=4
 function Evaluate(pop::Array{RealChromosome,1}, fcost::Function)::Array{RealChromosome,1}
-    tasks = []
-    for i in eachindex(pop)
-        t = Task(() -> pop[i].cost = fcost(pop[i].genes))
-        push!(tasks, t)
-        schedule(t) 
-    end
-    for i in eachindex(tasks)
-        wait(tasks[i]) 
+    Base.Threads.@threads for i in eachindex(pop)
+        @inbounds pop[i].cost = fcost(pop[i].genes)
     end
     return pop
 end
@@ -99,10 +97,10 @@ function Generation(pop::Array{RealChromosome,1},
     popsize = length(pop)
     newpop = []
     pop = sort(Evaluate(pop, fcost))
-    for i in 1:elitism
+    @inbounds for i in 1:elitism
         push!(newpop, pop[i])
     end
-    while length(newpop) != popsize 
+    @inbounds while length(newpop) != popsize 
         parent1, parent2 = TournamentSelection(pop)
         winner1 = nothing
         winner2 = nothing
