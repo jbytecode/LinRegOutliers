@@ -51,8 +51,7 @@ identifying multiple outliers in linear regression." Computational statistics & 
 27.4 (1998): 461-484.
 """
 function smr98(setting::RegressionSetting)
-    X = designMatrix(setting)
-    y = responseVector(setting)
+    X, y = @extractRegressionSetting setting
     return smr98(X, y)
 end
 

@@ -23,8 +23,7 @@ Communications in Statistics-Theory and Methods 26.6 (1997): 1381-1394.
 """
 function cm97(setting::RegressionSetting; maxiter::Int=1000)
     
-    X = designMatrix(setting)
-    y = responseVector(setting)
+    X, y = @extractRegressionSetting setting
     return cm97(X, y)
 
 end

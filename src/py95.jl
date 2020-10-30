@@ -61,8 +61,7 @@ regression by using an influence matrix." Journal of the Royal Statistical Socie
 Series B (Methodological) 57.1 (1995): 145-156.
 """
 function py95SuspectedObservations(setting::RegressionSetting)
-    X = designMatrix(setting)
-    y = responseVector(setting)
+    X, y = @extractRegressionSetting setting
     return py95SuspectedObservations(X, y)
 end
 

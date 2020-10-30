@@ -29,8 +29,7 @@ Hawkins, Douglas M., and David Olive. "Applications and algorithms for least tri
 absolute deviations regression." Computational Statistics & Data Analysis 32.2 (1999): 119-134.
 """
 function lta(setting::RegressionSetting; exact=false)
-    X = designMatrix(setting)
-    y = responseVector(setting)
+    X, y = @extractRegressionSetting setting
     return lta(X, y, exact=exact)
 end
 

@@ -30,8 +30,7 @@ Barratt, S., Angeris, G. & Boyd, S. Minimizing a sum of clipped convex functions
 
 """
 function ccf(setting::RegressionSetting; starting_lambdas=nothing, alpha=nothing, p=3, max_iter=100, gamma=.1, tol=1e-4)
-    X = designMatrix(setting)
-    y = responseVector(setting)
+    X, y = @extractRegressionSetting setting
     return ccf(X, y, starting_lambdas=starting_lambdas, alpha=alpha, p=p, max_iter=max_iter, gamma=gamma, tol=tol)
 end
 
@@ -60,7 +59,7 @@ function ccf(X::Array{Float64,2}, y::Array{Float64,1}; starting_lambdas=nothing,
     n, p = size(X)
 
     if isnothing(starting_lambdas)
-        starting_lambdas = ones(Float64, n)/2
+        starting_lambdas = ones(Float64, n) / 2
     end
 
     curr_lambdas = copy(starting_lambdas)
@@ -68,15 +67,15 @@ function ccf(X::Array{Float64,2}, y::Array{Float64,1}; starting_lambdas=nothing,
     curr_betas = nothing
     residuals = nothing
 
-    for iter=1:max_iter
+    for iter = 1:max_iter
         curr_betas = wls(X, y, curr_lambdas).betas
         residuals = X * curr_betas - y
 
         if isnothing(alpha)
-            alpha = p*mean(residuals.^2)
+            alpha = p * mean(residuals.^2)
         end
 
-        @. curr_lambdas -= gamma*sign(residuals^2 - alpha)
+        @. curr_lambdas -= gamma * sign(residuals^2 - alpha)
         clamp!(curr_lambdas, 0., 1.)
 
         if norm(curr_lambdas - old_lambdas, Inf) <= tol
@@ -90,7 +89,7 @@ function ccf(X::Array{Float64,2}, y::Array{Float64,1}; starting_lambdas=nothing,
     result["betas"] = curr_betas
     result["lambdas"] = old_lambdas
     result["residuals"] = residuals
-    result["outliers"] = findall(residuals .^ 2 .> alpha)
+    result["outliers"] = findall(residuals.^2 .> alpha)
 
     return result
 end

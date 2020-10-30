@@ -27,8 +27,7 @@ Rousseeuw, Peter J. "Least median of squares regression." Journal of the America
 statistical association 79.388 (1984): 871-880.
 """
 function lms(setting::RegressionSetting; iters=nothing, crit=2.5)
-    X = designMatrix(setting)
-    y = responseVector(setting)
+    X, y = @extractRegressionSetting setting
     return lms(X, y, iters=iters, crit=crit)
 end
 

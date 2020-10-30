@@ -25,8 +25,7 @@ multiple outliers in linear models." Journal of the American Statistical
 Association 88.424 (1993): 1264-1272.
 """
 function hs93initialset(setting::RegressionSetting)::Array{Int,1}
-    X = designMatrix(setting)
-    y = responseVector(setting)
+    X, y = @extractRegressionSetting setting
     return hs93initialset(X, y)
 end
 

@@ -32,8 +32,7 @@ Belsley, David A., Edwin Kuh, and Roy E. Welsch. Regression diagnostics:
 Identifying influential data and sources of collinearity. Vol. 571. John Wiley & Sons, 2005.
 """
 function dffit(setting::RegressionSetting, i::Int)::Float64
-    X = designMatrix(setting)
-    y = responseVector(setting)
+    X, y = @extractRegressionSetting setting
     return dffit(X, y, i)
 end
 
@@ -170,8 +169,7 @@ julia> studentizedResiduals(reg)
 ```
 """
 function studentizedResiduals(setting::RegressionSetting)::Array{Float64,1}
-    X = designMatrix(setting)
-    y = responseVector(setting)
+    X, y = @extractRegressionSetting setting
     return studentizedResiduals(X, y)
 end
 
@@ -227,8 +225,7 @@ julia> adjustedResiduals(reg)
 ```
 """
 function adjustedResiduals(setting::RegressionSetting)::Array{Float64,1}
-    X = designMatrix(setting)
-    y = responseVector(setting)
+    X, y = @extractRegressionSetting setting
     return adjustedResiduals(X, y)
 end
 
@@ -264,8 +261,7 @@ julia> jacknifedS(reg, 15)
 ```
 """
 function jacknifedS(setting::RegressionSetting, k::Int)::Float64
-    X = designMatrix(setting)
-    y = responseVector(setting)
+    X, y = @extractRegressionSetting setting
     return jacknifedS(X, y, k)
 end
 
@@ -327,8 +323,7 @@ Cook, R. Dennis. "Detection of influential observation in linear regression."
 Technometrics 19.1 (1977): 15-18.
 """
 function cooks(setting::RegressionSetting)::Array{Float64,1}
-    X = designMatrix(setting)
-    y = responseVector(setting)
+    X, y = @extractRegressionSetting setting
     return cooks(X, y)
 end
 
@@ -407,8 +402,7 @@ julia> dfbeta(setting, 1)
 ```
 """
 function dfbeta(setting::RegressionSetting, omittedIndex::Int)::Array{Float64,1}
-    X = designMatrix(setting)
-    y = responseVector(setting)
+    X, y = @extractRegressionSetting setting
     return dfbeta(X, y, omittedIndex)
 end
 
@@ -440,8 +434,7 @@ julia> covratio(setting, 1)
 ```
 """
 function covratio(setting::RegressionSetting, omittedIndex::Int)
-    X = designMatrix(setting)
-    y = responseVector(setting)
+    X, y = @extractRegressionSetting setting
     return covratio(X, y, omittedIndex)
 end
 
@@ -487,8 +480,7 @@ Chatterjee, Samprit and Hadi, Ali. Regression Analysis by Example.
      5th ed. N.p.: John Wiley & Sons, 2012.
 """
 function hadimeasure(setting::RegressionSetting; c::Float64=2.0)
-    X = designMatrix(setting)
-    y = responseVector(setting)
+    X, y = @extractRegressionSetting setting
     hadimeasure(X, y, c=c)
 end
 

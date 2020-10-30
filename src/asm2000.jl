@@ -45,8 +45,7 @@ Setan, Halim, and Mohd Nor Mohamad. "Identifying multiple outliers in
 linear regression: Robust fit and clustering approach." (2000).
 """
 function asm2000(setting::RegressionSetting)
-    X = designMatrix(setting)
-    y = responseVector(setting)
+    X, y = @extractRegressionSetting setting
     return asm2000(X, y)
 end
 

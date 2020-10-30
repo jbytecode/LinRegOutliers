@@ -14,8 +14,7 @@ A. H. M. Rahmatullah Imon (2005) Identifying multiple influential observations i
 Journal of Applied Statistics, 32:9, 929-946, DOI: 10.1080/02664760500163599
  """
 function imon2005(setting::RegressionSetting)
-    X = designMatrix(setting)
-    y = responseVector(setting)
+    X, y = @extractRegressionSetting setting
     return imon2005(X, y)
 end
 

@@ -21,8 +21,7 @@ Dict{Any,Any} with 2 entries:
 
 """
 function lad(setting::RegressionSetting; starting_betas=nothing)
-    X = designMatrix(setting)
-    y = responseVector(setting)
+    X, y = @extractRegressionSetting setting
     return lad(X, y, starting_betas=starting_betas)
 end
 

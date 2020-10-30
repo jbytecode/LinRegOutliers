@@ -13,8 +13,7 @@ adaptively-ordered observations, to identify outliers in linear regression."
 Biometrics (1989): 571-585.
 """
 function ks89RecursiveResidual(setting::RegressionSetting, indices::Array{Int,1}, k::Int)
-    X = designMatrix(setting)
-    y = responseVector(setting)
+    X, y = @extractRegressionSetting setting
     return ks89RecursiveResidual(X, y, indices, k)
 end
 

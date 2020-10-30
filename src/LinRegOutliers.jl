@@ -131,6 +131,7 @@ export designMatrix
 export responseVector
 export applyColumns
 export find_minimum_nonzero
+export @extractRegressionSetting
 
 # Data
 export phones, hbk, stackloss

@@ -27,12 +27,11 @@ Martin A. Fischler & Robert C. Bolles (June 1981). "Random Sample Consensus: A P
 Comm. ACM. 24 (6): 381–395.
 """
 function ransac(setting::RegressionSetting; t::Float64, w::Float64=0.5, m::Int=0, k::Int=0, d::Int=0, confidence::Float64=0.99)
-    X = designMatrix(setting)
-    y = responseVector(setting)
+    X, y = @extractRegressionSetting setting
     return ransac(X, y, t=t, w=w, m=m, k=k, d=d, confidence=confidence)
 end
 
-function ransac(X::Array{Float64,2}, y::Array{Float64, 1}; t::Float64, w::Float64=0.5, m::Int=0, k::Int=0, d::Int=0, confidence::Float64=0.99)
+function ransac(X::Array{Float64,2}, y::Array{Float64,1}; t::Float64, w::Float64=0.5, m::Int=0, k::Int=0, d::Int=0, confidence::Float64=0.99)
 
     n, p = size(X)
     if d == 0

@@ -209,7 +209,6 @@ Billor, Nedret, Ali S. Hadi, and Paul F. Velleman. "BACON: blocked adaptive comp
 Computational statistics & data analysis 34.3 (2000): 279-298.
 """
 function bacon(setting::RegressionSetting; m::Int, method::String="mahalanobis", alpha=0.025)
-    X = designMatrix(setting)
-    y = responseVector(setting)
+    X, y = @extractRegressionSetting setting
     return bacon(X, y, m=m, method=method, alpha=alpha)
 end

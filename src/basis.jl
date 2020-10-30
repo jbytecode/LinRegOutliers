@@ -202,6 +202,51 @@ return convert(Array{Float64,1}, setting.data[:,mf.f.lhs.sym])
 end
 
 
+
+"""
+
+    @extractRegressionSetting setting
+
+    Return a tuple of design matrix and response vector for a given regression setting. 
+
+# Arguments
+- `setting::RegressionSetting`: A regression setting object.
+
+
+# Examples
+```julia-repl
+julia> setting = createRegressionSetting(@formula(calls ~ year), phones);
+julia> X, y = @extractRegressionSetting setting;
+julia> size(X)
+ (24,2)
+julia> y
+24-element Array{Float64,1}:
+   4.4
+   4.7
+   4.7
+   5.9
+   6.6
+   7.3
+   8.1
+   8.8
+  10.6
+  12.0
+  13.5
+  14.9
+  16.1
+  21.2
+ 119.0
+ 124.0
+ 142.0
+ 159.0
+ 182.0
+ 212.0
+  43.0
+  24.0
+  27.0
+  29.0
+```
+"""
 macro extractRegressionSetting(setting)
     return esc(:(designMatrix($setting), responseVector($setting)))
 end

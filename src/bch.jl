@@ -58,8 +58,7 @@ Billor, Nedret, Samprit Chatterjee, and Ali S. Hadi. "A re-weighted least square
 for robust regression estimation." American journal of mathematical and management sciences 26.3-4 (2006): 229-252.
 """
 function bch(setting::RegressionSetting; alpha=0.05, maxiter=1000, epsilon=0.000001)
-    X = designMatrix(setting)
-    y = responseVector(setting)
+    X, y = @extractRegressionSetting setting
     return bch(X, y, alpha=alpha, maxiter=maxiter, epsilon=epsilon)
 end
 

@@ -20,8 +20,7 @@ regression based on concentration steps." Data Analysis.
 Springer, Berlin, Heidelberg, 2000. 335-346.
 """
 function iterateCSteps(setting::RegressionSetting, subsetindices::Array{Int,1}, h::Int)
-    X = designMatrix(setting)
-    y = responseVector(setting)
+    X, y = @extractRegressionSetting setting
     return iterateCSteps(X, y, subsetindices, h)
 end
 

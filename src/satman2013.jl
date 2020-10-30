@@ -21,8 +21,7 @@ Satman, Mehmet Hakan. "A new algorithm for detecting outliers in linear regressi
 International Journal of statistics and Probability 2.3 (2013): 101.
 """
 function satman2013(setting::RegressionSetting)
-    X = designMatrix(setting)
-    y = responseVector(setting)
+    X, y = @extractRegressionSetting setting
     return satman2013(X, y)
 end
 

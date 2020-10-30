@@ -8,8 +8,7 @@ Satman, M. Hakan. "A genetic algorithm based modification on the lts algorithm f
 """
 
 function gwcga(setting::RegressionSetting)
-    X = designMatrix(setting)
-    y = responseVector(setting)
+    X, y = @extractRegressionSetting setting
     return gwcga(X, y)
 end
 
