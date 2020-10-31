@@ -133,7 +133,9 @@ Dict{Any,Any} with 6 entries:
   "objective"        => 3.43133
 ```  
 
-![detectOutliersImage](https://github.com/jbytecode/jbytecode/blob/master/images/detectoutliers.png)
+
+
+<img src="https://github.com/jbytecode/jbytecode/blob/master/images/detectoutliers.png" alt="alt text" width="500"/>
 
 
 
@@ -144,8 +146,8 @@ julia> data = hcat(hbk.x1, hbk.x2, hbk.x3);
 julia> dataimage(data)
 ``` 
 
-![detectOutliersImage](https://github.com/jbytecode/jbytecode/blob/master/images/dataimages.png)
 
+<img src="https://github.com/jbytecode/jbytecode/blob/master/images/dataimages.png" alt="alt text" width="500"/>
 
 ```julia
 julia> using LinRegOutliers
