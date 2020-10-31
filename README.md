@@ -107,17 +107,7 @@ julia> py95(reg)["outliers"]
 ```
 
 
-```julia
-julia> reg = createRegressionSetting(@formula(calls ~ year), phones);
-julia> lms(reg)
-Dict{Any,Any} with 6 entries:
-  "stdres"    => [2.42593, 1.62705, 0.550525, 0.584612, 0.155943, -0.272726, -0.608843, -1.03751, -0.448118, -0.228929  …  93.4182, 96.9692, 112.552, 127.209, 147.419, 174.108…
-  "S"         => 1.08048
-  "outliers"  => [14, 15, 16, 17, 18, 19, 20, 21]
-  "objective" => 0.43276
-  "coef"      => [-56.3796, 1.16317]
-  "crit"      => 2.5 
-```
+
 
 
 ```julia
