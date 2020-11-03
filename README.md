@@ -64,7 +64,7 @@ to make all the stuff be ready!
 ## Examples
 We provide some examples [here](https://github.com/jbytecode/LinRegOutliers/blob/master/examples.md).
  
-# News
+## News
 - We implemented algorithm(X, y) style calls for all of the algorithms where X is the design matrix and y is the response vector. 
 - We implemented ~25 outlier detection algorithms which covers a high percentage of the literature.
 
