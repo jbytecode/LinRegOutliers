@@ -45,12 +45,12 @@ LinRegOutliers.bch
 LinRegOutliers.py95
 ```
 
-## Satman (2013)
+## Satman (2013)
 ```@docs
 LinRegOutliers.satman2013
 ```
 
-## Satman (2015)
+## Satman (2015)
 ```@docs
 LinRegOutliers.satman2015
 ```
@@ -60,7 +60,7 @@ LinRegOutliers.satman2015
 LinRegOutliers.asm2000
 ```
 
-## Least Absolute Deviations (LAD)
+## Least Absolute Deviations (LAD)
 ```@docs
 LinRegOutliers.lad
 ```
@@ -85,17 +85,17 @@ LinRegOutliers.dataimage
 LinRegOutliers.galts
 ```
 
-## Fischler & Bolles (1981) RANSAC Algorithm
+## Fischler & Bolles (1981) RANSAC Algorithm
 ```@docs
 LinRegOutliers.ransac
 ```
 
-## Minimum Covariance Determinant Estimator (MCD)
+## Minimum Covariance Determinant Estimator (MCD)
 ```@docs
 LinRegOutliers.mcd
 ```
 
-## Imon (2005) Algorithm
+## Imon (2005) Algorithm
 ```@docs
 LinRegOutliers.imon2005
 ```
