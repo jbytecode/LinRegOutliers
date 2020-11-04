@@ -110,17 +110,17 @@ LinRegOutliers.ccf
 LinRegOutliers.atkinson94
 ```
 
-## BACON Algorithm (Billor & Hadi & Velleman (2000))
+## BACON Algorithm (Billor & Hadi & Velleman (2000))
 ```@docs
 LinRegOutliers.bacon
 ```
 
-## Hadi (1994) Algorithm
+## Hadi (1994) Algorithm
 ```@docs
 LinRegOutliers.hadi1994
 ```
 
-## Chatterjee & Mächler (1997)
+## Chatterjee & Mächler (1997)
 ```@docs
 LinRegOutliers.cm97
 ```
