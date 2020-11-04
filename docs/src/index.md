@@ -1,6 +1,11 @@
-# LinRegOutliers.jl Documentation
 
-```@autodocs
-Modules = [LinRegOutliers]
-Order   = [:type, :function]
+# Contents 
+```@contents
+Pages = ["index.md", "datasets.md", "types.md", "diagnostics.md", "algorithms.md"]
+Depth = 3
 ```
+
+
+
+
+
