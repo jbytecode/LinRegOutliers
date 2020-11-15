@@ -1,5 +1,16 @@
 # Diagnostics
 
+## ols 
+```@docs
+LinRegOutliers.ols
+```
+
+## wls
+```@docs
+LinRegOutliers.wls
+```
+
+
 ## dffit
 ```@docs
 LinRegOutliers.dffit

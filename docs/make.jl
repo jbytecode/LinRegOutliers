@@ -1,11 +1,13 @@
 using Documenter
-using LinRegOutliers
 
+using Pkg
+Pkg.activate("../")
+using LinRegOutliers
 
 push!(LOAD_PATH,"../src/")
 makedocs(
-	sitename = "LinRegOutliers",
-	pages = [
+	sitename="LinRegOutliers",
+	pages=[
 		"datasets.md",
 		"types.md",
 		"diagnostics.md",

@@ -6,6 +6,6 @@ LinRegOutliers.RegressionSetting
 ```
 
 ## OLS
-##```@docs
-##LinRegOutliers.OLS
-##```
+```@docs
+LinRegOutliers.OLS
+```
