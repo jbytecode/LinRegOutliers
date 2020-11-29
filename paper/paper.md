@@ -53,7 +53,9 @@ Although outlier detection in multivariate data is another topic, robust covaria
     
 # Statement of need 
 
-Julia is a high performance programming language designed primarily for scientific computing. *LinRegOutliers* is a Julia package that covers the literature on this topic well. The package implements *ks89* [@ks89], *hadi1992* [@hadi1992], *hs93* [@hs93], *atkinson94* [@atkinson94], *cm97* [@cm97], *asm2000* [@asm2000], *bacon* [@bacon], *dataimage* [@dataimage], *bch* [@bch], *ccf* [@ccf]
+Julia is a high performance programming language designed primarily for scientific computing. *LinRegOutliers* is a Julia package that covers the literature on this topic well. The package implements *ransac* [@ransac], *ks89* [@ks89], *hadi1992* [@hadi1992], *hs93* [@hs93], *atkinson94* [@atkinson94], *hadi1994* [@hadi1994], *py95* [@py95], *cm97* [@cm97], *smr98* [@smr98], *asm2000* [@asm2000], *bacon* [@bacon], *dataimage* [@dataimage], *imon2005* [@imon2005], *bch* [@bch], *ccf* [@ccf], *lad* [@lad], *lta* [@lta], 
+*lsm* [@lms], *lts* [@lts], *mve* [@mve], *mcd* [@mcd], *satman2013* [@satman2013], 
+*satman2015* [@satman2015]
 
 
 
