@@ -10,13 +10,13 @@ authors:
     orcid: 0000-0002-9402-1982
     affiliation: 1
   - name: Shreesh Adiga
-    orcid: -
+    orcid: 0000-0000-0000-0000
     affiliation: 2
   - name: Guillermo Angeris
-    orcid: - 
+    orcid: 0000-0000-0000-0000 
     affiliation: 3
   - name: Emre Akadal
-    orcid: - 
+    orcid: 0000-0000-0000-0000 
     affiliation: 4
 affiliations:
  - name: Department of Econometrics, Istanbul University, Istanbul, Turkey
