@@ -53,11 +53,65 @@ Although outlier detection in multivariate data is another topic, robust covaria
     
 # Statement of need 
 
-Julia is a high performance programming language designed primarily for scientific computing. *LinRegOutliers* is a Julia package that covers the literature on this topic well. The package implements *ransac* [@ransac], *ks89* [@ks89], *hadi1992* [@hadi1992], *hs93* [@hs93], *atkinson94* [@atkinson94], *hadi1994* [@hadi1994], *py95* [@py95], *cm97* [@cm97], *smr98* [@smr98], *asm2000* [@asm2000], *bacon* [@bacon], *dataimage* [@dataimage], *imon2005* [@imon2005], *bch* [@bch], *ccf* [@ccf], *lad* [@lad], *lta* [@lta], 
-*lsm* [@lms], *lts* [@lts], *mve* [@mve], *mcd* [@mcd], *satman2013* [@satman2013], 
-*satman2015* [@satman2015]
+Julia is a high performance programming language designed primarily for scientific computing. *LinRegOutliers* is the unique Julia package that covers the literature on the topic of detecting outliers in linear regression, well. The package implements 
+*hadimeasure* [@hadimeasure], *covratio*, *dfbeta*, *dffit* [@diagnostics], *cooks* [@cooks]  for regression diagnostics,
+*ransac* [@ransac], *ks89* [@ks89], *hs93* [@hs93], *atkinson94* [@atkinson94],  *py95* [@py95], *cm97* [@cm97], *smr98* [@smr98], *asm2000* [@asm2000], *bacon* [@bacon],  *imon2005* [@imon2005], *bch* [@bch], *ccf* [@ccf], *lad* [@lad], *lta* [@lta], 
+*lms* [@lms], *lts* [@lts], *satman2013* [@satman2013], *satman2015* [@satman2015] for regression data, *hadi1992* [@hadi1992], *hadi1994* [@hadi1994], *mve* [@mve], *mcd* [@mcd], *dataimage* [@dataimage] for multivariate data. 
 
 
+# Installation and basic usage
+
+*LinRegOutliers* can be downloaded and installed using the Julia package manager by typing
+
+```julia
+julia> using Pkg
+julia> Pkg.add("LinRegOutliers")
+```
+
+in Julia console. The regression methods follow a uniform call convention. For instance one can type
+
+```julia
+julia> smr98(@formula(calls ~ year), phones)
+```
+
+or
+
+```julia
+julia> X = hcat(ones(24), phones[:, "year"]);
+julia> y = phones[:, "calls"];
+julia> smr98(X, y)
+10-element Array{Int64,1}:
+ 15
+ 16
+ 17
+ 18
+ 19
+ 20
+ 21
+ 22
+ 23
+ 24
+
+```
+
+to apply *smr98* [@smr98] on Telephone data, where $X$ is design matrix with ones in its first column. Observations 15th to 24th are reported as outliers by the method. Some methods return not only the indices of outliers but some extra details covered by a ```Dict``` object. For example the *ccf* function returns a ```Dict``` containing *betas*, *outliers*, *lambdas*, and *residuals as seen in the example below.
+
+```julia
+julia> ccf(X, y)
+Dict{Any,Any} with 4 entries:
+  "betas"     => [-63.4816, 1.30406]
+  "outliers"  => [15, 16, 17, 18, 19, 20]
+  "lambdas"   => [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0  …  2.77556…
+  "residuals" => [-2.67878, -1.67473, -0.37067, -0.266613, 0.337444, 0.941501, …
+```
+
+Indices of outliers can be accessed using standard ```Dict``` operations like
+
+```julia
+julia> result = ccf(X, y)
+julia> result["outliers"]
+```
+ 
 
 
 
