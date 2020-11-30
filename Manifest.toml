@@ -8,9 +8,9 @@ version = "2.3.0"
 
 [[ArrayInterface]]
 deps = ["LinearAlgebra", "Requires", "SparseArrays"]
-git-tree-sha1 = "5d684f433c2b7cc6c595aca553a0825383f26e85"
+git-tree-sha1 = "c121e78a689da38e4199cf964962385a4810d827"
 uuid = "4fba245c-0d91-5ea0-9b3e-6abc04ee57a9"
-version = "2.14.0"
+version = "2.14.2"
 
 [[Artifacts]]
 deps = ["Pkg"]
@@ -182,9 +182,9 @@ version = "0.9.7"
 
 [[FiniteDiff]]
 deps = ["ArrayInterface", "LinearAlgebra", "Requires", "SparseArrays", "StaticArrays"]
-git-tree-sha1 = "04e18906acf9c7f5b934a7ec3adc82280fb1953b"
+git-tree-sha1 = "7f7216e0eb46c20ee8ddab5c8f9a262ed72587b6"
 uuid = "6a86dc24-6348-571c-b903-95158fe2bd41"
-version = "2.7.1"
+version = "2.7.2"
 
 [[FixedPointNumbers]]
 deps = ["Statistics"]
@@ -206,9 +206,9 @@ version = "0.4.1"
 
 [[ForwardDiff]]
 deps = ["CommonSubexpressions", "DiffResults", "DiffRules", "NaNMath", "Random", "SpecialFunctions", "StaticArrays"]
-git-tree-sha1 = "1d090099fb82223abc48f7ce176d3f7696ede36d"
+git-tree-sha1 = "8de2519a83c6c1c2442c2f481dd9a8364855daf4"
 uuid = "f6369f11-7733-5829-9624-2563aa707210"
-version = "0.10.12"
+version = "0.10.14"
 
 [[FreeType2_jll]]
 deps = ["Artifacts", "Bzip2_jll", "JLLWrappers", "Libdl", "Pkg", "Zlib_jll"]
@@ -527,9 +527,9 @@ version = "1.0.12"
 
 [[Pixman_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "392d85fe2fd2c613442f9694dd566c0d5641d58c"
+git-tree-sha1 = "6a20a83c1ae86416f0a5de605eaea08a552844a3"
 uuid = "30392449-352a-5448-841d-b1acce4e97dc"
-version = "0.38.4+5"
+version = "0.40.0+0"
 
 [[Pkg]]
 deps = ["Dates", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "REPL", "Random", "SHA", "UUIDs"]
