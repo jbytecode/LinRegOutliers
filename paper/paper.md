@@ -94,7 +94,7 @@ julia> smr98(X, y)
 
 ```
 
-to apply *smr98* [@smr98] on Telephone data, where $X$ is design matrix with ones in its first column. Observations 15th to 24th are reported as outliers by the method. Some methods return not only the indices of outliers but some extra details covered by a ```Dict``` object. For example the *ccf* function returns a ```Dict``` containing *betas*, *outliers*, *lambdas*, and *residuals as seen in the example below.
+to apply *smr98* [@smr98] on Telephone data [@lms], where $X$ is the design matrix with ones in its first column. Observations 15th to 24th are reported as outliers by the method. Some methods return not only the indices of outliers but some extra details covered by a ```Dict``` object. For example the *ccf* function returns a ```Dict``` containing *betas*, *outliers*, *lambdas*, and *residuals as seen in the example below.
 
 ```julia
 julia> ccf(X, y)
