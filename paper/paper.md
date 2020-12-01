@@ -71,7 +71,8 @@ julia> Pkg.add("LinRegOutliers")
 in Julia console. The regression methods follow a uniform call convention. For instance one can type
 
 ```julia
-julia> smr98(@formula(calls ~ year), phones)
+julia> setting = createRegressionSetting(@formula(calls ~ year), phones);
+julia> smr98(setting)
 ```
 
 or
