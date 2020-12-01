@@ -10,22 +10,22 @@ authors:
     orcid: 0000-0002-9402-1982
     affiliation: 1
   - name: Shreesh Adiga
-    orcid: 0000-0000-0000-0000
+    orcid: 0000-0002-1818-6961
     affiliation: 2
   - name: Guillermo Angeris
     orcid: 0000-0002-4950-3990
     affiliation: 3
   - name: Emre Akadal
-    orcid: 0000-0000-0000-0000 
+    orcid: 0000-0001-6817-0127 
     affiliation: 4
 affiliations:
  - name: Department of Econometrics, Istanbul University, Istanbul, Turkey
    index: 1
- - name: AFFILIATION FOR SHREESH ADIGA
+ - name: Department of Electronics and Communication Engineering, RV College of Engineering, Bengaluru, India
    index: 2
  - name: Department of Electrical Engineering, Stanford University, Stanford, California, USA
    index: 3
- - name: AFFILIATION FOR EMRE AKADAL
+ - name: Department of Informatics, Istanbul University, Istanbul, Turkey
    index: 4
 
 date: 26 November 2020
