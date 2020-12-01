@@ -10,7 +10,7 @@ authors:
     orcid: 0000-0002-9402-1982
     affiliation: 1
   - name: Shreesh Adiga
-    orcid: 0000-0000-0000-0000
+    orcid: 0000-0002-1818-6961
     affiliation: 2
   - name: Guillermo Angeris
     orcid: 0000-0000-0000-0000 
@@ -21,7 +21,7 @@ authors:
 affiliations:
  - name: Department of Econometrics, Istanbul University, Istanbul, Turkey
    index: 1
- - name: AFFILIATION FOR SHREESH ADIGA
+ - name: Department of Electronics and Communication Engineering, RV College of Engineering, Bengaluru, India
    index: 2
  - name: AFFILIATION FOR GUILLERMO ANGERIS
    index: 3
