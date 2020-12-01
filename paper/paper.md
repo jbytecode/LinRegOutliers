@@ -34,9 +34,6 @@ bibliography: paper.bib
 
 # Summary
 
-<!-- *LinRegOutliers* is a *Julia* package that implements a number of outlier detection algorithms for linear regression. The algorithms implemented can be roughly placed in one or more of the five following categories: diagnostics, direct methods, robust methods, multivariate methods, and graphical methods. 
-Diagnostics are generally used in the initial stages of direct methods. 
-Since the design matrix of a regression model is multivariate data, the package also contains some robust covariance matrix estimators and outlier detection methods developed for multivariate data. Graphical methods are implemented for visualizing the regression residuals and the distances between observations using Euclidean or Mahalanobis distances generally calculated using a robust covariance matrix. The functions in the package have the same calling conventions. The package covers most of the literature on this topic and provides a good basis for those who want to implement novel methods. -->
 `LinRegOutliers` is a Julia package that implements a number of outlier detection algorithms for linear regression. The package also implements robust covariance matrix estimation and graphing functions which can be used to visualize the regression residuals and distances between observations, with many possible metrics (*e.g.*, the Euclidean or Mahalanobis distances with either given or estimated covariance matrices). Our package covers a significant portion of the literature on fitting with outliers and allows users to quickly try many different methods with reasonable default settings, while also providing a good starting framework for researchers who may want to extend the package with novel methods.
 
 
@@ -56,9 +53,6 @@ observation lies far from the regression hyperplane, OLS will often fail to find
 
 To solve this problem, a number of methods have been developed in the literature. These methods can be roughly placed in one or more of the four following categories: diagnostics, direct methods, robust methods, and multivariate methods. *Diagnostics* are methods which attempt to find points that significantly affect the fit of a model (often, such points can be labeled as outliers). Diagnostics can then be used to initialize *direct methods*, which fit a (usually non-robust) model to a subset of points suspected to be clear of outliers; remaining points which are not outliers with respect to this fit are continually added to this subset until all points not in the subset are deemed outliers. *Robust methods*, on the other hand, find a best-fit model by approximately minimizing a loss function that does not significantly penalize points with large residual.
 Some of the proposed methods are also *multivariate methods*, which can accommodate fitting models that depend on more than one parameter.
-
-<!-- There are many direct and robust methods for detecting outliers in linear regression in the literature. Robust methods are based on estimating robust regression parameters and observations with higher absolute residuals are labelled as outliers whereas direct methods are generally based on enlarging a clean subset of observations by iterations since a termination criterion is met. 
-Although outlier detection in multivariate data is another topic, robust covariance estimators and some multivarite outlier detection methods are used for detecting influential observations in design matrix of regression models. -->
     
 # Statement of need 
 
