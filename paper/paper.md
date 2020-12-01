@@ -16,7 +16,7 @@ authors:
     orcid: 0000-0000-0000-0000 
     affiliation: 3
   - name: Emre Akadal
-    orcid: 0000-0000-0000-0000 
+    orcid: 0000-0001-6817-0127 
     affiliation: 4
 affiliations:
  - name: Department of Econometrics, Istanbul University, Istanbul, Turkey
@@ -25,7 +25,7 @@ affiliations:
    index: 2
  - name: AFFILIATION FOR GUILLERMO ANGERIS
    index: 3
- - name: AFFILIATION FOR EMRE AKADAL
+ - name: Department of Informatics, Istanbul University, Istanbul, Turkey
    index: 4
 
 date: 26 November 2020
