@@ -13,7 +13,7 @@ authors:
     orcid: 0000-0000-0000-0000
     affiliation: 2
   - name: Guillermo Angeris
-    orcid: 0000-0000-0000-0000 
+    orcid: 0000-0002-4950-3990
     affiliation: 3
   - name: Emre Akadal
     orcid: 0000-0000-0000-0000 
@@ -23,7 +23,7 @@ affiliations:
    index: 1
  - name: AFFILIATION FOR SHREESH ADIGA
    index: 2
- - name: AFFILIATION FOR GUILLERMO ANGERIS
+ - name: Department of Electrical Engineering, Stanford University, Stanford, California, USA
    index: 3
  - name: AFFILIATION FOR EMRE AKADAL
    index: 4
@@ -94,7 +94,7 @@ julia> smr98(X, y)
 
 ```
 
-to apply *smr98* [@smr98] on Telephone data [@lms], where $X$ is the design matrix with ones in its first column. Observations 15th to 24th are reported as outliers by the method. Some methods return not only the indices of outliers but some extra details covered by a ```Dict``` object. For example the *ccf* function returns a ```Dict``` containing *betas*, *outliers*, *lambdas*, and *residuals as seen in the example below.
+to apply *smr98* [@smr98] on Telephone data [@lms], where $X$ is the design matrix with ones in its first column. Observations 15th to 24th are reported as outliers by the method. Some methods return not only the indices of outliers but some extra details covered by a ```Dict``` object. For example the *ccf* function returns a ```Dict``` containing *betas*, *outliers*, *lambdas*, and *residuals* as seen in the example below.
 
 ```julia
 julia> ccf(X, y)
