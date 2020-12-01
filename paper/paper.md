@@ -38,11 +38,11 @@ bibliography: paper.bib
 
 
 # State of the field
-In linear regression, we are given a number of data points (say, $n$) represented by vectors $x_i$ with $p$ entries, and observations (also called dependent variables) that correspond to each of these data points, which are represented by scalars $y_i$, for $i=1, \dots, n$. We then seek to find the linear model which best describes the data (up to some error term, $\epsilon_i$):
+In linear regression, we are given a number of data points (say, $n$) represented by vectors $x_i$, each with $p$ entries, and observations (also called dependent variables) that correspond to each of these data points, which are represented by scalars $y_i$, for $i=1, \dots, n$. We then seek to find the linear model which best describes the data (up to some error term, $\epsilon_i$):
 $$
 y_i = x_i^T\beta + \epsilon_i,
 $$
-for $i=1, \dots, n$, where $\beta$ is the vector of unknown parameters, with $p$ entries. We will assume that $\epsilon_i$ are independent and identically-distributed (i.i.d.) error terms with zero mean.
+for $i=1, \dots, n$, where $\beta$ is the vector of length $p$ of unknown parameters. We will assume that the $\epsilon_i$ are independent and identically-distributed (i.i.d.) error terms with zero mean.
 
 We can write this more conveniently by letting $X$ be the *design matrix* of size $n\times p$, whose rows are given by the vectors $x_i$, while $y$ is an $n$-vector of observations, whose entries are $y_i$, and similarly for $\epsilon$:
 $$
@@ -64,7 +64,7 @@ In practice, many of the proposed methods have reasonable performance and yield 
 
 # Installation and basic usage
 
-*LinRegOutliers* can be downloaded and installed using the Julia package manager by typing
+`LinRegOutliers` can be downloaded and installed using the Julia package manager by typing
 
 ```julia
 julia> using Pkg
