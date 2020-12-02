@@ -44,7 +44,7 @@ y_i = \beta_0 + \beta_1 x_{1i}+ \dots + \beta_{k} x_{ki} +  \epsilon_i,
 $$
 where $\beta_0$ and $\beta_j$ are the  unknown parameters. We will assume that the $\epsilon_i$ are independent and identically-distributed (i.i.d.) error terms with zero mean.
 
-We can write this more conveniently by letting $X$ be the *design matrix* of size $n\times p$, whose rows are given by the vectors $x_j$ (and, optionally a vector of ones if the model has an intercept), while $y$ is an $n$-vector of observations, whose entries are $y_i$, and similarly for $\epsilon$:
+We can write this more conveniently by letting $X$ be the *design matrix* of size $n\times p$, whose $i$th row is given by the vectors $x_j$ (and, optionally a vector of ones if the model has an intercept), while $y$ is an $n$-vector of observations, whose entries are $y_i$, and similarly for $\epsilon$:
 $$
 y = X\beta + \epsilon.
 $$
