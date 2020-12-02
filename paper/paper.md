@@ -38,7 +38,7 @@ bibliography: paper.bib
 
 
 # State of the field
-In linear regression, we are given a number of data points (say, $n$) where each data point is represented by a vector $x_i$, with $p$ entries, and observations (also called dependent variables) that correspond to each of these data points, which are represented by scalars $y_i$, for $i=1, 2, \dots, n$. We then seek to find the linear model which best describes the data (up to some error term, $\epsilon_i$):
+In linear regression, we are given a number of data points (say, $n$) where each data point is represented by a vector $x_i$, with $p$ entries, and a dependent variable that corresponds to each of these data points, represented by the scalar $y_i$, for $i=1, 2, \dots, n$. We then seek to find the linear model which best describes the data (up to some error term, $\epsilon_i$):
 $$
 y_i = \beta_1 (x_{i})_1+ \dots + \beta_{p} (x_i)_p +  \epsilon_i,
 $$
