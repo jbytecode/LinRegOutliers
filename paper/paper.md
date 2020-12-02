@@ -114,6 +114,13 @@ Indices of outliers can be accessed using standard ```Dict``` operations like
 ```julia
 julia> result = ccf(X, y)
 julia> result["outliers"]
+6-element Array{Int64,1}:
+ 15
+ 16
+ 17
+ 18
+ 19
+ 20
 ```
  
 
