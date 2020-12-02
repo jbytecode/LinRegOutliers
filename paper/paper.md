@@ -38,13 +38,13 @@ bibliography: paper.bib
 
 
 # State of the field
-In linear regression, we are given a number of data points (say, $n$) where each data point is represented by a vector $x_i$, with $p$ entries, and observations (also called dependent variables) that correspond to each of these data points, which are represented by scalars $y_i$, for $i=1, 2, \dots, n$. We then seek to find the linear model which best describes the data (up to some error term, $\epsilon_i$):
+In linear regression, we are given a number of data points (say, $n$) where each data point is represented by a vector $x_i$, with $p$ entries, and a dependent variable that corresponds to each of these data points, represented by the scalar $y_i$, for $i=1, 2, \dots, n$. We then seek to find the linear model which best describes the data (up to some error term, $\epsilon_i$):
 $$
 y_i = \beta_1 (x_{i})_1+ \dots + \beta_{p} (x_i)_p +  \epsilon_i,
 $$
-where $\beta_1, \dots, \beta_p$ are the $p$ unknown parameters. We will assume that the $\epsilon_i$ are independent and identically-distributed (i.i.d.) error terms with zero mean.
+where $\beta_1, \dots, \beta_p$ are the $p$ unknown parameters. We will assume that the $\epsilon_i$ are independent and identically-distributed (i.i.d.) error terms with zero mean. Note that, if $(x_i)_1 = 1$ for all $i=1, \dots, n$, this is equivalent to having an intercept term given by $\beta_1$.
 
-We can write this more conveniently by letting $X$ be the *design matrix* of size $n\times p$, whose $i$th row is given by the vectors $x_i$ (and, optionally a vector of ones if the model has an intercept), while $y$ is an $n$-vector of observations, whose entries are $y_i$, and similarly for $\epsilon$:
+We can write this more conveniently by letting $X$ be the *design matrix* of size $n\times p$, whose $i$th row is given by the vectors $x_i$ (where $(x_i)_1=1$ if the model has an intercept), while $y$ is an $n$-vector of observations, whose entries are $y_i$, and similarly for $\epsilon$:
 $$
 y = X\beta + \epsilon.
 $$
@@ -123,7 +123,7 @@ julia> result["outliers"]
  20
 ```
  
- # Acknowledgements
+# Acknowledgements
 
 Guillermo Angeris is supported by the National Science Foundation Graduate Research Fellowship under Grant No. DGE-1656518. 
 
