@@ -38,11 +38,11 @@ bibliography: paper.bib
 
 
 # State of the field
-In linear regression, we are given a number of data points (say, $n$) represented by vectors $x_j$, each with $k$ entries for $j = 1, 2, ..., k$, and observations (also called dependent variables) that correspond to each of these data points, which are represented by scalars $y_i$, for $i=1, \dots, n$. We then seek to find the linear model which best describes the data (up to some error term, $\epsilon_i$):
+In linear regression, we are given a number of data points (say, $n$) represented by vectors $x_j$, each with $k$ entries for $j = 1, 2, \dots, k$, and observations (also called dependent variables) that correspond to each of these data points, which are represented by scalars $y_i$, for $i=1, 2, \dots, n$. We then seek to find the linear model which best describes the data (up to some error term, $\epsilon_i$):
 $$
-y_i = \beta_0 + \beta_1 x_{1i}+ ... + \beta_{k} x_{ki} +  \epsilon_i,
+y_i = \beta_0 + \beta_1 x_{1i}+ \dots + \beta_{k} x_{ki} +  \epsilon_i,
 $$
-for $i=1, \dots, n$, where $\beta_0$ and $\beta_j$ are the  unknown parameters. We will assume that the $\epsilon_i$ are independent and identically-distributed (i.i.d.) error terms with zero mean.
+where $\beta_0$ and $\beta_j$ are the  unknown parameters. We will assume that the $\epsilon_i$ are independent and identically-distributed (i.i.d.) error terms with zero mean.
 
 We can write this more conveniently by letting $X$ be the *design matrix* of size $n\times p$, whose rows are given by the vectors $x_j$ (and, optionally a vector of ones if the model has an intercept), while $y$ is an $n$-vector of observations, whose entries are $y_i$, and similarly for $\epsilon$:
 $$
