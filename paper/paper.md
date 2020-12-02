@@ -123,7 +123,7 @@ julia> result["outliers"]
  20
 ```
  
- # Acknowledgements
+# Acknowledgements
 
 Guillermo Angeris is supported by the National Science Foundation Graduate Research Fellowship under Grant No. DGE-1656518. 
 
