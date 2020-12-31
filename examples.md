@@ -207,3 +207,18 @@ Dict{Any,Any} with 3 entries:
   "t"        => -3.59263
   "d"        => [2.04474, 1.14495, -0.0633255, 0.0632934, -0.354349, -0.766818, -1.06862, -1.47638, -0.710…
 ```
+
+__________________________
+## Multiple Methods in a single shot!
+
+We also provide ```detectOutliers``` method for data scientist for performing many methods and presenting the summarized results. 
+
+The method can be called using default arguments only by feeding a regression setting object:
+
+```julia
+julia> detectOutliers(aSettingObject)
+```
+
+The method generates a console output:
+
+<img src="https://github.com/jbytecode/jbytecode/blob/master/images/detectoutliers.png" alt="dataimages" width="500"/>
