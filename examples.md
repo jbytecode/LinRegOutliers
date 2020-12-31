@@ -85,7 +85,9 @@ Dict{Any,Any} with 6 entries:
   "objective"        => 3.43133
 ```  
 
-![lstandphonedata](https://github.com/jbytecode/jbytecode/blob/master/images/ltsandphonedata.png)
+
+
+<img src="https://github.com/jbytecode/jbytecode/blob/master/images/ltsandphonedata.png" alt="dataimages" width="500"/>
 
 Figure 1 - Phone Data and estimated LTS line
 
@@ -94,6 +96,19 @@ Figure 1 - Phone Data and estimated LTS line
 _________________
 
 ## Data Images
+
+The method ```dataimage``` implements the Data Image algorithm and serves a visual tool as an outlier detection algorithm for multivariate data only. The algorithm generates a color matrix with each single cell represents a proper distance between observations. Since 
+
+```dataimage(data, distance = :euclidean)```
+
+defines color using the Euclidean distance, whereas
+
+```dataimage(data, distance = :mahalabobis)```
+
+uses Mahalanobis distances for determining color values. The default distance metric is Euclidean distance. 
+
+In the example below, the distances between observations are calculated and drawn using corresponding colors. Since the method is for multivariate data, only the desing matrix is used. In other terms, the response vector is omitted. 
+
 ```julia
 julia> # Matrix of independent variables of Hawkins & Bradu & Kass data
 julia> data = hcat(hbk.x1, hbk.x2, hbk.x3);
@@ -102,6 +117,14 @@ julia> dataimage(data)
 
 
 <img src="https://github.com/jbytecode/jbytecode/blob/master/images/dataimages.png" alt="dataimages" width="500"/>
+
+Figure 2 - Data Image of Design Matrix of ```hbk``` Data
+
+
+_________________________
+## Atkinson's Stalactite Plot
+
+Atkinson's Stalactite Plot serves a visual method for detecting outliers in linear regression. Despite it shares the same calling convention with the other methods, the method ```atkinsonstalactiteplot``` generates a text based plot. The method performs a robust regression estimator many times and residuals higher than some threshold are labelled using ```+``` and ```*```. After many iterations, the observations with many labels are considered as suspected or outlying observations.  
 
 ```julia
 julia> using LinRegOutliers
@@ -137,7 +160,50 @@ m           1         2
 
 ```
 
+The output above can be considered as an evidence that the observations 14-21 are suspected. Observations 1, 22, 23, 24 are also labelled as ```+``` in some iterations. However, the frequency of labels of these observations are relatively small. 
 
 
+____________________
+## Other algorithms
+```LinRegOutliers``` implements more than 20 outlier detection methods in linear regression and covers a big proportion of the classical literature in this subject. The documentation of the package includes the referenced citations. Any researcher can follow the details of algorithms using these information. 
 
-<img src="https://github.com/jbytecode/jbytecode/blob/master/images/detectoutliers.png" alt="detectoutliers" width="500"/>
+_____________________
+## Other calling conventions
+The calling convention 
+
+```julia
+julia> setting = createRegressionSetting(@formula(...), data)
+julia> method(setting) 
+```
+
+is the preferred way of calling implemented methods in ```LinRegOutliers```, we multiple dispatch the methods using the syntax
+
+```julia
+julia> method(X, y) 
+```
+
+where *X* is the design matrix and *y* is the response vector. This calling convention may be more suitable for those who iteratively calls the methods possibly in a simulation study or other kinds of researching stuff. 
+
+For example, we can perform ```hs93``` on the Phones data using 
+
+```julia
+julia> hs93(reg)
+Dict{Any,Any} with 3 entries:
+  "outliers" => [14, 15, 16, 17, 18, 19, 20, 21]
+  "t"        => -3.59263
+  "d"        => [2.04474, 1.14495, -0.0633255, 0.0632934, -0.354349, -0.766818, -1.06862, -1.47638, -0.710…
+```
+
+as well as 
+
+```julia
+julia> X = hcat(ones(24), phones[:, "year"]);
+
+julia> y = phones[:, "calls"];
+
+julia> hs93(X, y)
+Dict{Any,Any} with 3 entries:
+  "outliers" => [14, 15, 16, 17, 18, 19, 20, 21]
+  "t"        => -3.59263
+  "d"        => [2.04474, 1.14495, -0.0633255, 0.0632934, -0.354349, -0.766818, -1.06862, -1.47638, -0.710…
+```
