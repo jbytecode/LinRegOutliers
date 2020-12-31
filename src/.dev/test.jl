@@ -247,7 +247,8 @@ end
 @testset "Kianifard & Swallow 1989 - Algorithm" begin
     df = phones
     reg = createRegressionSetting(@formula(calls ~ year), df)
-    outset = ks89(reg, alpha=0.1)
+    result = ks89(reg, alpha=0.1)
+    outset = result["outliers"]
     @test 15 in outset
     @test 16 in outset
     @test 17 in outset
@@ -257,7 +258,8 @@ end
 
     df2 = stackloss
     reg2 = createRegressionSetting(@formula(stackloss ~ airflow + watertemp + acidcond), stackloss)
-    outset2 = ks89(reg2)
+    result2 = ks89(reg2)
+    outset2 = result2["outliers"]
     @test 4 in outset2
     @test 21 in outset2
 end
@@ -275,7 +277,7 @@ end
     y[n - 2] = y[n - 2] * 2.0
     df = DataFrame(x=x, y=y)
     reg = createRegressionSetting(@formula(y ~ x), df)
-    outset = smr98(reg)
+    outset = smr98(reg)["outliers"]
     @test 49 in outset
     @test 50 in outset
 end
@@ -451,6 +453,19 @@ end
     end
 end
 
+@testset "ccf - Algorithm - Phone data" begin
+    eps = 0.0001
+    df = phones
+    reg = createRegressionSetting(@formula(calls ~ year), df)
+    result = ccf(reg)
+    outliers = result["outliers"]
+    for i in 15:20
+        @test i in outliers
+    end
+
+    @test all(isapprox.(result["betas"], [-63.4816, 1.30406], atol=eps, rtol=0.0))
+end
+
 @testset "LAD - Algorithm" begin
     eps = 0.0001
     df = phones
@@ -477,8 +492,8 @@ end
         x=Float64[1,2,3,4,5,6,7,8,9,10],
         y=Float64[2,4,6,8,10,12,14,16,18,1000]
     )
-    n = length(df2[!, "x"])
-    X = hcat(ones(Float64, n), df2[!, "x"])
+    n = length(df2[!,"x"])
+    X = hcat(ones(Float64, n), df2[!,"x"])
     y = df2[!, "y"]
     result2 = lad(X, y)
     betas2 = result2["betas"]
@@ -514,7 +529,6 @@ end
     end
 
 end
-
 
 @testset "Hadi 1994 - Algorithm - with several case" begin
     phones_matrix = hcat(phones[:, "calls"], phones[:, "year"])
@@ -587,9 +601,10 @@ end
     Random.seed!(12345)
     df = DataFrame(y=[0,1,2,3,3,4,10], x=[0,1,2,2,3,4,2])
     reg = createRegressionSetting(@formula(y ~ x), df)
-    result = ransac(reg, t=0.8, w=0.85)
+    result = ransac(reg, t=0.8, w=0.85)["outliers"]
     @test result == [7]
 end
+
 
 @testset "covratio - phone data" begin
     eps = 0.00001
@@ -609,6 +624,8 @@ end
         @test abs(knownvals[i] - calculated) < eps
     end
 end
+
+
 
 @testset "dfbeta - phone data" begin
     eps = 0.00001
@@ -664,10 +681,9 @@ end
 @testset "BACON 2000 - Algorithm" begin
     df = stackloss
     reg = createRegressionSetting(@formula(stackloss ~ airflow + watertemp + acidcond), stackloss)
-    result = bacon(reg, m=12)
+    result = bacon(reg, m=12)["outliers"]
     @test result == [1, 3, 4, 21]
 end
-
 
 @testset "Chatterjee & Mächler (1997) cm97 with stackloss" begin
     df2 = stackloss
@@ -677,3 +693,4 @@ end
     betas_in_article = [-37.00, 0.84, 0.63, -0.11]
     @test isapprox(betas, betas_in_article, atol=0.01)
 end
+

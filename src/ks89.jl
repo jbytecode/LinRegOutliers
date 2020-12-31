@@ -38,9 +38,8 @@ Perform the Kianifard & Swallow (1989) algorithm for the given regression settin
 ```julia-repl
 julia> reg0001 = createRegressionSetting(@formula(stackloss ~ airflow + watertemp + acidcond), stackloss)
 julia> ks89(reg0001)
-2-element Array{Int64,1}:
-  4
- 21
+Dict{String,Array{Int64,1}} with 1 entry:
+  "outliers" => [4, 21]
 ```
 # References
 Kianifard, Farid, and William H. Swallow. "Using recursive residuals, calculated on
@@ -72,5 +71,8 @@ function ks89(X::Array{Float64,2}, y::Array{Float64,1}; alpha=0.05)
     td = TDist(n - p - 1)
     q = quantile(td, alpha)
     result = filter(i -> abs.(ws[i]) > abs(q), 1:n)
+    result = Dict(
+        "outliers" => result
+    )
     return result
 end

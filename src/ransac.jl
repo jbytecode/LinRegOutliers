@@ -18,8 +18,8 @@ Run the RANSAC (1981) algorithm for the given regression setting
 julia> df = DataFrame(y=[0,1,2,3,3,4,10], x=[0,1,2,2,3,4,2])
 julia> reg = createRegressionSetting(@formula(y ~ x), df)
 julia> ransac(reg, t=0.8, w=0.85)
-1-element Array{Int64,1}:
- 7
+Dict{String,Array{Int64,1}} with 1 entry:
+  "outliers" => [7]
 ```
 
 # References
@@ -76,6 +76,9 @@ function ransac(X::Array{Float64,2}, y::Array{Float64,1}; t::Float64, w::Float64
         end
     end
 
-    return setdiff(1:n, maximum_inlier_indices)
+    result = Dict(
+        "outliers" => setdiff(1:n, maximum_inlier_indices)
+    )
+    return result
 end
 

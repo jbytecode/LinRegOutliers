@@ -32,17 +32,8 @@ Perform the Sebert, Monthomery and Rollier (1998) algorithm for the given regres
 ```julia-repl
 julia> reg0001 = createRegressionSetting(@formula(calls ~ year), phones);
 julia> smr98(reg0001)
-10-element Array{Int64,1}:
- 15
- 16
- 17
- 18
- 19
- 20
- 21
- 22
- 23
- 24
+Dict{String,Array{Int64,1}} with 1 entry:
+  "outliers" => [15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
 ```
 
 # References
@@ -87,9 +78,9 @@ function smr98(X::Array{Float64,2}, y::Array{Float64,1})
     for clustid in uniquemappings
         cnt = count(x -> x == clustid, clustermappings)
         if cnt >= h 
-            return filter(i -> clustermappings[i] != clustid, 1:n)
+            return Dict("outliers" => filter(i -> clustermappings[i] != clustid, 1:n))
         end
     end
-    return []
+    return Dict("outliers" => [])
 end
 
