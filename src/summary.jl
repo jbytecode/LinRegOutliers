@@ -50,14 +50,14 @@ function detectOutliers(X::Array{Float64,2}, y::Array{Float64,1}; methods=[])
             end
         elseif method == "ks89"
             try
-                result = ks89(X, y)
+                result = ks89(X, y)["outliers"]
             catch
                 result = Int[]
             end
         elseif method == "py95"
             result = py95(X, y)["outliers"]
         elseif method == "smr98"
-            result = smr98(X, y)
+            result = smr98(X, y)["outliers"]
         elseif method == "lts"
             try
                 result = lts(X, y)["outliers"]
@@ -83,7 +83,7 @@ function detectOutliers(X::Array{Float64,2}, y::Array{Float64,1}; methods=[])
         elseif method == "bacon"
             try            
                 _, p = size(X)
-                result = bacon(X, y, m=p + 1)
+                result = bacon(X, y, m=p + 1)["outliers"]
             catch
                 result = Int[]
             end
