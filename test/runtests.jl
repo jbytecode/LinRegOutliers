@@ -247,7 +247,8 @@ end
 @testset "Kianifard & Swallow 1989 - Algorithm" begin
     df = phones
     reg = createRegressionSetting(@formula(calls ~ year), df)
-    outset = ks89(reg, alpha=0.1)
+    result = ks89(reg, alpha=0.1)
+    outset = result["outliers"]
     @test 15 in outset
     @test 16 in outset
     @test 17 in outset
@@ -257,7 +258,8 @@ end
 
     df2 = stackloss
     reg2 = createRegressionSetting(@formula(stackloss ~ airflow + watertemp + acidcond), stackloss)
-    outset2 = ks89(reg2)
+    result2 = ks89(reg2)
+    outset2 = result2["outliers"]
     @test 4 in outset2
     @test 21 in outset2
 end
@@ -275,7 +277,7 @@ end
     y[n - 2] = y[n - 2] * 2.0
     df = DataFrame(x=x, y=y)
     reg = createRegressionSetting(@formula(y ~ x), df)
-    outset = smr98(reg)
+    outset = smr98(reg)["outliers"]
     @test 49 in outset
     @test 50 in outset
 end
@@ -599,7 +601,7 @@ end
     Random.seed!(12345)
     df = DataFrame(y=[0,1,2,3,3,4,10], x=[0,1,2,2,3,4,2])
     reg = createRegressionSetting(@formula(y ~ x), df)
-    result = ransac(reg, t=0.8, w=0.85)
+    result = ransac(reg, t=0.8, w=0.85)["outliers"]
     @test result == [7]
 end
 
@@ -679,7 +681,7 @@ end
 @testset "BACON 2000 - Algorithm" begin
     df = stackloss
     reg = createRegressionSetting(@formula(stackloss ~ airflow + watertemp + acidcond), stackloss)
-    result = bacon(reg, m=12)
+    result = bacon(reg, m=12)["outliers"]
     @test result == [1, 3, 4, 21]
 end
 
