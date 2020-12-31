@@ -85,10 +85,15 @@ Dict{Any,Any} with 6 entries:
   "objective"        => 3.43133
 ```  
 
+![lstandphonedata](https://github.com/jbytecode/jbytecode/blob/master/images/ltsandphonedata.png)
+
+Figure 1 - Phone Data and estimated LTS line
 
 
 
+_________________
 
+## Data Images
 ```julia
 julia> # Matrix of independent variables of Hawkins & Bradu & Kass data
 julia> data = hcat(hbk.x1, hbk.x2, hbk.x3);
