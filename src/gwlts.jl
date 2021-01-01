@@ -67,7 +67,15 @@ Perform Satman(2012) algorithm for estimating LTS coefficients.
 # Arguments
 - `setting`: A regression setting object.
 
-# Examples
+# Description 
+The algorithm performs a genetic search for estimating LTS coefficients using C-Steps. 
+
+# Output
+- `["betas"]`: Robust regression coefficients
+- `["best.subset"]`: Clean subset of h observations, where h is an integer greater than n / 2. The default value of h is `Int(floor((n + p + 1.0) / 2.0))`.
+- `["objective"]`: Objective value
+
+
 # Examples
 ```julia-repl
 julia> reg = createRegressionSetting(@formula(calls ~ year), phones);
