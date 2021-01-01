@@ -13,6 +13,13 @@ Perform signed gradient descent for clipped convex functions for a given regress
 - `tol::Float64`: Tolerance below which convergence is declared.
 
 
+# Output 
+- `["betas"]`: Robust regression coefficients
+- `[""outliers"]`: Array of indices of outliers
+- `[""lambdas"]`: Lambda coefficients estimated in each iteration 
+- `[""residuals"]`: Regression residuals.
+
+
 # Examples
 ```julia-repl
 julia> reg0001 = createRegressionSetting(@formula(calls ~ year), phones);
@@ -50,6 +57,13 @@ Perform signed gradient descent for clipped convex functions for a given regress
 - `max_iter::Int64`: Maximum number of iterations to run signed gradient descent.
 - `beta::Float64`: Step size parameter.
 - `tol::Float64`: Tolerance below which convergence is declared.
+
+# Output 
+- `["betas"]`: Robust regression coefficients
+- `[""outliers"]`: Array of indices of outliers
+- `[""lambdas"]`: Lambda coefficients estimated in each iteration 
+- `[""residuals"]`: Regression residuals.
+
 
 # References
 Barratt, S., Angeris, G. & Boyd, S. Minimizing a sum of clipped convex functions. Optim Lett 14, 2443–2459 (2020). https://doi.org/10.1007/s11590-020-01565-4
