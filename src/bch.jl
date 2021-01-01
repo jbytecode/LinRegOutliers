@@ -40,6 +40,24 @@ Perform the Billor & Chatterjee & Hadi (2006) algorithm for the given regression
 - `maxiter::Int`: Maximum number of iterations for calculating iterative weighted least squares estimates.
 - `epsilon::Float64`: Accuracy for determining convergency.
 
+# Description 
+The algorithm initially constructs a basic subset. These basic subset is then used to 
+generate initial weights for a iteratively least squares estimation. Regression coefficients obtained 
+in this stage are robust regression estimates. Squared normalized distances and squared normalized 
+residuals are used in `bchplot` which serves a visual way for investigation of outliers and their 
+properties.
+
+
+# Output
+- `["betas"]`: Final estimate of regression coefficients                               
+- `["squared.normalized.robust.distances"]`:  
+- `["weights"]`: Final weights used in calculation of WLS estimates                             
+- `["outliers"]`: Array of indices of outliers
+- `["squared.normalized.residuals"]`: Array of squared normalized residuals
+- `["residuals"]`: Array of regression residuals
+- `["basic.subset"]`: Array of indices of basic subset.
+
+
 # Examples
 ```julia-repl
 julia> reg  = createRegressionSetting(@formula(calls ~ year), phones);
