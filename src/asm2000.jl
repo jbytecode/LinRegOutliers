@@ -32,6 +32,16 @@ Perform the Setan, Halim and Mohd (2000) algorithm for the given regression sett
 # Arguments
 - `setting::RegressionSetting`: RegressionSetting object with a formula and dataset.
 
+# Description
+The algorithm performs a Least Trimmed Squares (LTS) estimate and yields standardized 
+residual - fitted response pairs. A single linkage clustering algorithm is performed on these
+pairs. Like `smr98`, the cluster tree is cut using the Majona criterion. Subtrees with 
+relatively small number of observations are declared to be outliers.
+
+# Output
+- `["outliers"]`: Vector of indices of outliers.
+
+
 # Examples
 ```julia-repl
 julia> reg0001 = createRegressionSetting(@formula(calls ~ year), phones);
