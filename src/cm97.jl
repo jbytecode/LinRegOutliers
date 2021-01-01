@@ -7,6 +7,15 @@ Perform the Chatterjee and Mächler (1997) algorithm for the given regression se
 # Arguments
 - `setting::RegressionSetting`: RegressionSetting object with a formula and dataset.
 
+# Description 
+The algorithm performs a iteratively weighted least squares estimation to obtain
+robust regression coefficients.
+
+# Output
+- `["betas"]`: Robust regression coefficients
+- `["iterations"]`: Number of iterations performed
+- `["converged"]`: true if the algorithm converges, otherwise, false.
+
 # Examples
 ```julia-repl
 julia> myreg = createRegressionSetting(@formula(stackloss ~ airflow + watertemp + acidcond), stackloss)
