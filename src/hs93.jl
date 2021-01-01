@@ -124,6 +124,16 @@ Perform the Hadi & Simonoff (1993) algorithm for the given regression setting.
 - `alpha::Float64`: Optional argument of the probability of rejecting the null hypothesis.
 - `basicsubsetindices::Array{Int, 1}`: Initial basic subset, by default, the algorithm creates an initial set of clean observations.
 
+# Description
+Performs a forward search by selecting and enlarging an initial clean subset of observations and 
+iterates until scaled residuals exceeds a threshold.
+ 
+# Output
+- `["outliers"]`: Array of indices of outliers
+- `["t"]`: Threshold, specifically, calculated quantile of a Student-T distribution
+- `["d"]`: Internal and external scaled residuals. 
+
+
 # Examples
 ```julia-repl
 julia> reg0001 = createRegressionSetting(@formula(calls ~ year), phones);
