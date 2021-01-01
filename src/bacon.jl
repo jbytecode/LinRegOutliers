@@ -173,6 +173,16 @@ Run the BACON algorithm to detect outliers on regression data.
  - `method`: The distance method to use for selecting the points for initial subset
  - `alpha`: The quantile used for cutoff
 
+# Description 
+BACON (Blocked Adaptive Computationally efficient Outlier Nominators) algoritm, defined in the citation below,
+has many versions, e.g BACON for multivariate data, BACON for regression etc. Since the design matrix of a
+regression model is multivariate data, BACON for multivariate data is performed in early stages of the algorithm.
+After selecting a clean subset of observations, then a forward search is applied. Observations with high
+studendized residuals are reported as outliers.
+
+# Output 
+- `["outliers"]`: Array of indices of outliers.
+
 # Examples
 ```julia-repl
 julia> reg = createRegressionSetting(@formula(stackloss ~ airflow + watertemp + acidcond), stackloss)
