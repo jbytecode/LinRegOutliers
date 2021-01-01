@@ -3,8 +3,19 @@
 
 Perform Hadi (1994) algorithm for a given multivariate data.
 
-# Arguments
--`multivariate::Array{Float64, 2}`: Multivariate data.
+# Arguments
+- `multivariateData::Array{Float64, 2}`: Multivariate data.
+
+# Description
+Algorithm starts with an initial subset and enlarges the subset to 
+obtain robust covariance matrix and location estimates. This algorithm 
+is an extension of `hadi1992`.
+
+# Output
+- `["outliers"]`: Array of indices of outliers
+- `["critical.chi.squared"]`: Threshold value for determining being an outlier
+- `["rth.robust.distance"]`: rth robust distance, where (r+1)th robust distance is the first one that exceeds the threshold.
+
 
 # Examples
 ```julia-repl
@@ -24,7 +35,7 @@ Journal of the Royal Statistical Society: Series B (Methodological) 56.2 (1994):
 function hadi1994(multivariateData::Array{Float64,2}; alpha=0.05)
     n, p = size(multivariateData)
     h = Int(round((n + p + 1.0) / 2.0))
-    cnp = (1 + ((2)/(n-1-3p)) + ((p+1)/(n-p)))^2
+    cnp = (1 + ((2) / (n - 1 - 3p)) + ((p + 1) / (n - p)))^2
     chi_50_quantile = quantile(Chisq(p), 0.50)
     critical_quantile = quantile(Chisq(p), 1 - alpha)
     allindices = collect(1:n)

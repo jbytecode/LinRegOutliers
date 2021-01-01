@@ -29,8 +29,8 @@ end
 
 Perform Hadi (1992) algorithm for a given multivariate data. 
 
-# Arguments
--`multivariate::Array{Float64, 2}`: Multivariate data.
+# Arguments
+- `multivariateData::Array{Float64, 2}`: Multivariate data.
 
 # Description
 Algorithm starts with an initial subset and enlarges the subset to 
