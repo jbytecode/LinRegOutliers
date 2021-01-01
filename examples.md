@@ -32,7 +32,7 @@ _________________
 ## Sebert & Montgomery & Rollier (1998) Algorithm
 Sebert & Montgometry & Rollier (smr98) algorithm starts with an ordinary least squares estimation for a given model and data. Residuals and fitted responses are calculated using the estimated model. A hierarchical clustering analysis is applied using standardized residuals and standardized fitted responses. The tree structure of clusters are cut using a threshold, e.g Majona criterion, as suggested by the authors. It is expected that the subtrees with relatively small number of observations are declared to be clusters of outliers.
 
-Hawkings & Bradu & Kass dataset has 4 variables and 75 observations. The observation 1-14 are known to be outliers. In the example below, we create an regression setting using the formula ```y ~ x1 + x2 + x3``` and ```hbk``` dataset. ```smr98``` is directly applied on this setting.  
+Hawkings & Bradu & Kass dataset has 4 variables and 75 observations. The observations 1-14 are known to be outliers. In the example below, we create an regression setting using the formula ```y ~ x1 + x2 + x3``` and ```hbk``` dataset. ```smr98``` is directly applied on this setting.  
 
 ```julia
 julia> using LinRegOutliers
@@ -51,7 +51,7 @@ ________________________
 
 Peña and Yohai (```py1995```) algorithm starts by constructing an influence matrix using results of an ordinary least squares estimate for a given model and data. In the second stage, the eigen structure of the influence matrix is examined for detecting suspected subsets of data. 
 
-Here is an example of ```py95``` method applied on the ```hbk``` data. The method returns a ```Dict``` object with keys ```outliers``` and ```suspected.sets```. An usual researcher may directly focused on the ```outliers``` indices. The method reports the observations 1-14 are outliers.
+Here is an example of ```py95``` method applied on the ```hbk``` data. The method returns a ```Dict```  object with keys ```outliers``` and ```suspected.sets```. An usual researcher may directly focus on the ```outliers``` indices. The method reports the observations 1-14 are outliers.
 
 ```julia
 julia> py95(reg)["outliers"]
