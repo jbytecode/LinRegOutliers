@@ -32,6 +32,16 @@ Perform Hadi (1992) algorithm for a given multivariate data.
 # Arguments
 -`multivariate::Array{Float64, 2}`: Multivariate data.
 
+# Description
+Algorithm starts with an initial subset and enlarges the subset to 
+obtain robust covariance matrix and location estimates. 
+
+
+# Output
+- `["outliers"]`: Array of indices of outliers
+- `["critical.chi.squared"]`: Threshold value for determining being an outlier
+- `["rth.robust.distance"]`: rth robust distance, where (r+1)th robust distance is the first one that exceeds the threshold.
+
 # Examples
 ```julia-repl
 julia> multidata = hcat(hbk.x1, hbk.x2, hbk.x3);
@@ -39,7 +49,7 @@ julia> multidata = hcat(hbk.x1, hbk.x2, hbk.x3);
 julia> hadi1992(multidata)
 Dict{Any,Any} with 3 entries:
   "outliers"              => [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-  "criticial.chi.squared" => 7.81473
+  "critical.chi.squared" => 7.81473
   "rth.robust.distance"   => 5.04541
 ```
 
@@ -103,7 +113,7 @@ function hadi1992(multivariateData::Array{Float64,2}; alpha=0.05)
 
     result = Dict()
     result["outliers"] = sort(outlierset)
-    result["criticial.chi.squared"] = critical_quantile
+    result["critical.chi.squared"] = critical_quantile
     result["rth.robust.distance"] = sorted_mah1[r - 1]
     return result
 end
