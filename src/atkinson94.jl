@@ -8,6 +8,21 @@ Runs the Atkinson94 algorithm to find out outliers using LMS method.
 - `iters::Int`: Number of random samples.
 - `crit::Float64`: Critical value for residuals
 
+# Description 
+The algorithm randomly selects initial basic subsets and performs a very robust method, e.g `lms`
+to enlarge the basic subset. In each iteration of forward search, the best objective value and parameter 
+estimates are stored. These values are also used in Atkinson's Stalactite Plot for a visual investigation of 
+outliers. See `atkinsonstalactiteplot`.
+
+# Output
+- `["optimum_index"]`: The iteration number in which the minimum objective is obtained
+- `["residuals_matrix"]`: Matrix of residuals obtained in each iteration
+- `["outliers"]`: Array of indices of detected outliers
+- `["objective"]`: Minimum objective value
+- `["coef"]`: Estimated regression coefficients
+- `["crit"]`: Critical value given by the user.
+
+
 # Examples
 ```julia-repl
 julia> reg = createRegressionSetting(@formula(stackloss ~ airflow + watertemp + acidcond), stackloss)
@@ -93,7 +108,7 @@ function atkinson94(X::Array{Float64,2}, y::Array{Float64,1}; iters=nothing, cri
                 bestparameters = betas
                 bestindex = m
                 copy_parameters = true
-            end
+        end
         end
 #         sigmas[iter, :] = sigma_tilde
 
