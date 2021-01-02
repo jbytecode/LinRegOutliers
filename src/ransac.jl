@@ -13,6 +13,10 @@ Run the RANSAC (1981) algorithm for the given regression setting
  - `d::Int`: The number of close data points required to accept the model. Defaults to number of data points multiplied by inlier ratio.
  - `confidence::Float64`: Required to determine the number of optimum iterations if k is not specified.
 
+ # Output
+- `["outliers"]`: Array of indices of outliers.
+
+
  # Examples
 ```julia-repl
 julia> df = DataFrame(y=[0,1,2,3,3,4,10], x=[0,1,2,2,3,4,2])
