@@ -59,12 +59,14 @@ In practice, many of the proposed methods have reasonable performance and yield 
 We have reimplemented many of the algorithms available in the literature in Julia [@julia], an open-source, high performance programming language designed primarily for scientific computing. Our package, `LinRegOutliers`, is a comprehensive and simple-to-use Julia package that includes many of the algorithms in the literature for detecting outliers in linear regression. The implemented `Julia` methods for diagnostics, direct methods, robust methods, multivariate methods, and visual diagnostics are shown in **Table 1**, **Table 2**, **Table 3**, **Table 4**, and **Table 5**, respectively. 
  
 
-| Algorithm(s)                    | Reference      | Method                         |
-| :------------------------------ | :------------- | :----------------------------- |
-| Hadi Measure                    | [@hadimeasure] | `hadimeasure`                  |
-| Covariance Ratio, DFBETA, DFFIT | [@diagnostics] | `covration`, `dfbeta`, `dffit` |
-| Mahalanobis Distances           | [@mahalanobis] | `mahalanobisSquaredMatrix`     |
-| Cook Distances                  | [@cooks]       | `cooks`                        |
+| Algorithm(s)          | Reference      | Method                     |
+| :-------------------- | :------------- | :------------------------- |
+| Hadi Measure          | [@hadimeasure] | `hadimeasure`              |
+| Covariance Ratio      | [@diagnostics] | `covratio`                 |
+| DFBETA                | [@diagnostics] | `dfbeta`                   |
+| DFFIT                 | [@diagnostics] | `dffit`                    |
+| Mahalanobis Distances | [@mahalanobis] | `mahalanobisSquaredMatrix` |
+| Cook Distances        | [@cooks]       | `cooks`                    |
 
 Table: Regression Diagnostics
 
