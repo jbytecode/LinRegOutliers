@@ -9,6 +9,15 @@ Perform Least Absolute Deviations regression for a given regression setting.
 - `starting_betas::Array{Float64,1}`: Starting values of parameter estimations that fed to local search optimizer.
 
 
+# Description 
+The LAD estimator searches for regression parameters estimates that minimizes the sum of absolute residuals.
+
+
+# Output
+- `["betas"]`: Estimated regression coefficients
+- `["residuals"]`: Regression residuals
+
+
 # Examples
 ```julia-repl
 julia> reg0001 = createRegressionSetting(@formula(calls ~ year), phones);
