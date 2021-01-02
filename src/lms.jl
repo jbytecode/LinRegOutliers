@@ -8,6 +8,22 @@ Perform Least Median of Squares regression estimator with random sampling.
 - `iters::Int`: Number of random samples.
 - `crit::Float64`: Critical value for standardized residuals. 
 
+
+# Description 
+LMS (Least Median of Squares) estimator is highly robust with 50% breakdown property. The algorithm
+searches for regression coefficients which minimize (h)th ordered squared residual where h is Int(floor((n + 1.0) / 2.0))
+
+
+# Output
+- `["stdres"]`: Array of standardized residuals
+- `["S"]`: Standard error of regression
+- `["outliers"]`: Array of indices of outliers
+- `["objective"]`: LMS objective value
+- `["coef"]`: Estimated regression coefficients
+- `["crit"]`: Threshold value.
+
+
+
 # Examples 
 ```julia-repl 
 julia> reg = createRegressionSetting(@formula(calls ~ year), phones);
