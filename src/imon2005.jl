@@ -19,7 +19,7 @@ one was used for detecting single outliers.
 # Notes
 The implementation uses LTS rather than LMS as suggested in the paper. 
 
-# Reference
+# References
 A. H. M. Rahmatullah Imon (2005) Identifying multiple influential observations in linear regression, 
 Journal of Applied Statistics, 32:9, 929-946, DOI: 10.1080/02664760500163599
  """
