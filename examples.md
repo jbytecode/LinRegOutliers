@@ -49,12 +49,12 @@ The algorithm successfully detects the outliers.
 ________________________
 ## Peña and Yohai (1995) 
 
-Peña and Yohai (```py1995```) algorithm starts by constructing an influence matrix using results of an ordinary least squares estimate for a given model and data. In the second stage, the eigen structure of the influence matrix is examined for detecting suspected subsets of data. 
+Peña and Yohai (```py1995```) algorithm starts by constructing an influence matrix using results of an ordinary least squares estimate for a given model and data. In the second stage, the eigen structure of the influence matrix is examined for detecting subset of potential outliers of data. 
 
 Here is an example of ```py95``` method applied on the ```hbk``` data. The method returns a ```Dict```  object with keys ```outliers``` and ```suspected.sets```. An usual researcher may directly focus on the ```outliers``` indices. The method reports the observations 1-14 are outliers.
 
 ```julia
-julia> py95(reg)["outliers"]
+julia> py95(reg)
 Dict{Any,Any} with 2 entries:
   "outliers"       => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
   "suspected.sets" => Set([[14, 13], [43, 54, 24, 38, 22], Int64[], [58, 66, 32, 28, 65, 36], [62], [73, 2…
@@ -85,6 +85,18 @@ Dict{Any,Any} with 6 entries:
   "objective"        => 3.43133
 ```  
 
+
+
+```julia
+using Plots
+x = phones[:,"year"]
+y = phones[:,"calls"]
+f(x) = -56.5219 +  1.16488x 
+scatter(x, y, label=false, title="Phone Data")
+px = [x[1], x[end]]
+py = map(f, px)
+plot!(px, py, label=false, color=:red, width=2) 
+```
 
 
 <img src="https://github.com/jbytecode/jbytecode/blob/master/images/ltsandphonedata.png" alt="dataimages" width="500"/>
