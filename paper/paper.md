@@ -50,24 +50,20 @@ y = X\beta + \epsilon.
 $$
 The usual approach to finding an estimate for $\beta$, which we call $\hat \beta$, is the Ordinary Least Squares (OLS) estimator given by $\hat{\beta} = (X^TX)^{-1}X^Ty$, which is efficient and has good statistical properties when the error terms are all of roughly the same magnitude (*i.e.*, there are no outliers). On the other hand, the OLS estimator is very sensitive to outliers: even if a single  observation lies far from the regression hyperplane, OLS will often fail to find a good estimate for the parameters, $\beta$.
 
-To solve this problem, a number of methods have been developed in the literature. These methods can be roughly placed in one or more of the four following categories: diagnostics, direct methods, robust methods, and multivariate methods. *Diagnostics* are methods which attempt to find points that significantly affect the fit of a model (often, such points can be labeled as outliers). Diagnostics can then be used to initialize *direct methods*, which fit a (usually non-robust) model to a subset of points suspected to be clear of outliers; remaining points which are not outliers with respect to this fit are continually added to this subset until all points not in the subset are deemed outliers. *Robust methods*, on the other hand, find a best-fit model by approximately minimizing a loss function that is resistant to outliers. Some of the proposed methods are also *multivariate methods*, which can accommodate fitting models that have multiple dependent variables for every data point.
+To solve this problem, a number of methods have been developed in the literature. These methods can be roughly placed in one or more of the five following categories: diagnostics, direct methods, robust methods, and multivariate methods. *Diagnostics* are methods which attempt to find points that significantly affect the fit of a model (often, such points can be labeled as outliers). Diagnostics can then be used to initialize *direct methods*, which fit a (usually non-robust) model to a subset of points suspected to be clear of outliers; remaining points which are not outliers with respect to this fit are continually added to this subset until all points not in the subset are deemed outliers. *Robust methods*, on the other hand, find a best-fit model by approximately minimizing a loss function that is resistant to outliers. Some of the proposed methods are also *multivariate methods*, which can accommodate fitting models that have multiple dependent variables for every data point. *Visual methods* generally work on the principle of visualizing the statistics obtained from these mentioned methods.
 
 # Statement of need 
 
 In practice, many of the proposed methods have reasonable performance and yield similar results for most datasets, but sometimes differ widely in specific circumstances by means of masking and swamping ratios. Additionally, some of the methods are relatively complicated and, if canonical implementations are available, they are often out of date or only found in specific languages of the author's choice, making it difficult for researchers to compare the performance of these algorithms on their datasets.
 
-We have reimplemented many of the algorithms available in the literature in Julia [@julia], an open-source, high performance programming language designed primarily for scientific computing. Our package, `LinRegOutliers`, is a comprehensive and simple-to-use Julia package that includes many of the algorithms in the literature for detecting outliers in linear regression. The package implements
-`hadimeasure` [@hadimeasure], `covratio`, `dfbeta`, `dffit` [@diagnostics], `cooks` [@cooks] for regression diagnostics,
-`ransac` [@ransac], `ks89` [@ks89], `hs93` [@hs93], `atkinson94` [@atkinson94],  `py95` [@py95], `cm97` [@cm97], `smr98` [@smr98], `asm2000` [@asm2000], `bacon` [@bacon],  `imon2005` [@imon2005], `bch` [@bch], `lad` [@lad], `lta` [@lta], 
-`lms` [@lms], `lts` [@lts], `galts` [@galts], `satman2013` [@satman2013], `satman2015` [@satman2015], `ccf` [@ccf] for regression data, and `hadi1992` [@hadi1992], `hadi1994` [@hadi1994], `mve` [@mve], `mcd` [@mcd], and `dataimage` [@dataimage] for multivariate data.
-
+We have reimplemented many of the algorithms available in the literature in Julia [@julia], an open-source, high performance programming language designed primarily for scientific computing. Our package, `LinRegOutliers`, is a comprehensive and simple-to-use Julia package that includes many of the algorithms in the literature for detecting outliers in linear regression. The implemented `Julia` methods for diagnostics, direct methods, robust methods, multivariate methods, and visual diagnostics are shown in Table 1, Table 2, Table 3, Table 4, and Table 5, respectively. 
  
 
 | Algorithm(s)                    | Reference      | Method                         |
 | :------------------------------ | :------------- | :----------------------------- |
 | Hadi Measure                    | [@hadimeasure] | `hadimeasure`                  |
 | Covariance Ratio, DFBETA, DFFIT | [@diagnostics] | `covration`, `dfbeta`, `dffit` |
-| Mahalanobis Distances           |                | `mahalanobisSquaredMatrix`     |
+| Mahalanobis Distances           | [@mahalanobis] | `mahalanobisSquaredMatrix`     |
 | Cook Distances                  | [@cooks]       | `cooks`                        |
 
 Table: Regression Diagnostics
@@ -113,12 +109,12 @@ Table: Robust Methods
 Table: Multivariate Methods
 
 
-| Algorithm       | Reference    | Method                   |
-| :-------------- | :----------- | :----------------------- |
-| BCH Plot        | [@bch]       | `bchplot`                |
-| MVE-LTS Plot    | [@mve]       | `mveltsplot`             |
-| Data Images     | [@dataimage] | `dataimage`              |
-| Stalactite Plot | [atkinson94] | `atkinsonstalactiteplot` |
+| Algorithm       | Reference     | Method                   |
+| :-------------- | :------------ | :----------------------- |
+| BCH Plot        | [@bch]        | `bchplot`                |
+| MVE-LTS Plot    | [@mve]        | `mveltsplot`             |
+| Data Images     | [@dataimage]  | `dataimage`              |
+| Stalactite Plot | [@atkinson94] | `atkinsonstalactiteplot` |
 
 Table: Visual Methods
 
