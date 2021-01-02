@@ -34,7 +34,7 @@ bibliography: paper.bib
 
 # Summary
 
-`LinRegOutliers` is a Julia package that implements a number of outlier detection algorithms for linear regression. The package also implements robust covariance matrix estimation and graphing functions which can be used to visualize the regression residuals and distances between observations, with many possible metrics (*e.g.*, the Euclidean or Mahalanobis distances with either given or estimated covariance matrices). Our package covers a significant portion of the literature on fitting with outliers and allows users to quickly try many different methods with reasonable default settings, while also providing a good starting framework for researchers who may want to extend the package with novel methods.
+`LinRegOutliers` is a Julia package that implements a number of outlier detection algorithms for linear regression. The package also implements robust covariance matrix estimation and graphing functions which can be used to visualize the regression residuals and distances between observations, with many possible metrics (*e.g.*, the Euclidean or Mahalanobis distances with either given or estimated covariance matrices). Our package covers a significant portion of the literature on model fitting with outliers and allows users to quickly try many different methods with reasonable default settings, while also providing a good starting framework for researchers who may want to extend the package with novel methods.
 
 
 # State of the field
@@ -61,6 +61,66 @@ We have reimplemented many of the algorithms available in the literature in Juli
 `ransac` [@ransac], `ks89` [@ks89], `hs93` [@hs93], `atkinson94` [@atkinson94],  `py95` [@py95], `cm97` [@cm97], `smr98` [@smr98], `asm2000` [@asm2000], `bacon` [@bacon],  `imon2005` [@imon2005], `bch` [@bch], `lad` [@lad], `lta` [@lta], 
 `lms` [@lms], `lts` [@lts], `galts` [@galts], `satman2013` [@satman2013], `satman2015` [@satman2015], `ccf` [@ccf] for regression data, and `hadi1992` [@hadi1992], `hadi1994` [@hadi1994], `mve` [@mve], `mcd` [@mcd], and `dataimage` [@dataimage] for multivariate data.
 
+ 
+
+| Algorithm(s)                    | Reference      | Method                         |
+| :------------------------------ | :------------- | :----------------------------- |
+| Hadi Measure                    | [@hadimeasure] | `hadimeasure`                  |
+| Covariance Ratio, DFBETA, DFFIT | [@diagnostics] | `covration`, `dfbeta`, `dffit` |
+| Mahalanobis Distances           |                | `mahalanobisSquaredMatrix`     |
+| Cook Distances                  | [@cooks]       | `cooks`                        |
+
+Table: Regression Diagnostics
+
+| Algorithm   | Reference     | Method       |
+| :---------- | :------------ | :----------- |
+| Ransac      | [@ransac]     | `ransac`     |
+| KS-89       | [@ks89]       | `ks89`       |
+| HS-93       | [@hs93]       | `hs93`       |
+| Atkinson-94 | [@atkinson94] | `atkinson94` |
+| PY-95       | [@py95]       | `py95`       |
+| CM-97       | [@cm97]       | `cm97`       |
+| SMR-98      | [@smr98]      | `smr98`      |
+| ASM-2000    | [@asm2000]    | `asm2000`    |
+| BACON       | [@bacon]      | `bacon`      |
+| Imon-2005   | [@imon2005]   | `imon2005`   |
+| bch         | [@bch]        | `bch`        |
+
+Table: Direct Methods
+
+
+| Algorithm                         | Reference     | Method       |
+| :-------------------------------- | :------------ | :----------- |
+| Least Absolute Deviations         | [@lad]        | `lad`        |
+| Least Absolute Trimmed Deviations | [@lta]        | `lta`        |
+| Least Median of Squares           | [@lms]        | `lms`        |
+| Least Trimmed Squares             | [@lts]        | `lts`        |
+| ga-lts                            | [@galts]      | `galts`      |
+| Satman-2013                       | [@satman2013] | `satman2013` |
+| Satman-2015                       | [@satman2015] | `satman2015` |
+| CCF                               | [@ccf]        | `ccf`        |
+
+Table: Robust Methods
+
+
+| Algorithm                      | Reference   | Method     |
+| :----------------------------- | :---------- | :--------- |
+| Hadi-1992                      | [@hadi1992] | `hadi1992` |
+| Hadi-1994                      | [@hadi1994] | `hadi1994` |
+| Minimum Volume Ellipsoid       | [@mve]      | `mve`      |
+| Minimum Covariance Determinant | [@mcd]      | `mcd`      |
+
+Table: Multivariate Methods
+
+
+| Algorithm       | Reference    | Method                   |
+| :-------------- | :----------- | :----------------------- |
+| BCH Plot        | [@bch]       | `bchplot`                |
+| MVE-LTS Plot    | [@mve]       | `mveltsplot`             |
+| Data Images     | [@dataimage] | `dataimage`              |
+| Stalactite Plot | [atkinson94] | `atkinsonstalactiteplot` |
+
+Table: Visual Methods
 
 # Installation and basic usage
 
@@ -76,6 +136,8 @@ in the Julia console. The regression methods follow a uniform call convention. F
 ```julia
 julia> setting = createRegressionSetting(@formula(calls ~ year), phones);
 julia> smr98(setting)
+Dict{String,Array{Int64,1}} with 1 entry:
+  "outliers" => [15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
 ```
 
 or
@@ -84,18 +146,8 @@ or
 julia> X = hcat(ones(24), phones[:, "year"]);
 julia> y = phones[:, "calls"];
 julia> smr98(X, y)
-10-element Array{Int64,1}:
- 15
- 16
- 17
- 18
- 19
- 20
- 21
- 22
- 23
- 24
-
+Dict{String,Array{Int64,1}} with 1 entry:
+  "outliers" => [15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
 ```
 
 to apply *smr98* [@smr98] on the Telephone dataset [@lms], where $X$ is the design matrix with ones in its first column. In this case, observations 15 to 24 are reported as outliers by the method. Some methods may also return additional information specific to the method which is passed back in a ```Dict``` object. For example, the *ccf* function returns a ```Dict``` object containing *betas*, *outliers*, *lambdas*, and *residuals*:
