@@ -204,6 +204,15 @@ Perform Satman (2015) algorithm for the given regression setting.
 # Arguments
 - `setting::RegressionSetting`: RegressionSetting object with a formula and dataset.
 
+# Description 
+The algorithm starts with sorting the design matrix using the Non-dominated sorting algorithm.
+An initial basic subset is then constructed using the ranks obtained in previous stage. After many 
+C-steps, observations with high standardized residuals are reported to be outliers.
+
+
+# Output
+- `["outliers]`": Array of indices of outliers.
+
 # Examples
 ```julia-repl
 julia> eg0001 = createRegressionSetting(@formula(y ~ x1 + x2 + x3), hbk);
