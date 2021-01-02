@@ -28,6 +28,17 @@ Perform the Sebert, Monthomery and Rollier (1998) algorithm for the given regres
 # Arguments
 - `setting::RegressionSetting`: RegressionSetting object with a formula and dataset.
 
+# Description 
+The algorithm starts with an ordinary least squares 
+estimation for a given model and data. Residuals and fitted responses are calculated 
+using the estimated model. A hierarchical clustering analysis is applied using standardized
+residuals and standardized fitted responses. The tree structure of clusters are cut using
+a threshold, e.g Majona criterion, as suggested by the authors. It is expected that 
+the subtrees with relatively small number of observations are declared to be clusters of outliers.
+
+# Output
+- `["outliers"]`: Array of indices of outliers.
+
 # Examples
 ```julia-repl
 julia> reg0001 = createRegressionSetting(@formula(calls ~ year), phones);
