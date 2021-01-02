@@ -7,6 +7,15 @@ Perform Satman (2013) algorithm for the given regression setting.
 # Arguments
 - `setting::RegressionSetting`: RegressionSetting object with a formula and dataset.
 
+# Description
+The algorithm constructs a fast and robust covariance matrix to calculate robust mahalanobis
+distances. These distances are then used to construct weights for later use in a weighted least 
+squares estimation. In the last stage, C-steps are iterated on the basic subset found in previous
+stages. 
+
+# Output
+- `["outliers"]`: Array of indices of outliers.
+
 # Examples
 ```julia-repl
 julia> eg0001 = createRegressionSetting(@formula(y ~ x1 + x2 + x3), hbk);
