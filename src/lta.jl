@@ -10,6 +10,16 @@ for the given regression setting.
 - `exact::Bool`: Consider all possible subsets of p or not where p is the number of regression parameters.
 
 
+# Description
+`lta` is a trimmed version of `lad` in which the sum of first h absolute residuals is minimized
+where h is Int(floor((n + p + 1.0) / 2.0)). 
+
+
+# Output
+- `["betas"]`: Estimated regression coefficients
+- `["objective]`: Objective value
+
+
 # Examples
 ```julia-repl
 julia> reg0001 = createRegressionSetting(@formula(calls ~ year), phones);
