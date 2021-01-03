@@ -40,6 +40,9 @@ A Julia package for outlier detection in linear regression.
 
 
 ## Installation
+
+```LinRegOutliers``` can be installed using the ```Julia``` REPL.  
+
 ```julia
 julia> ]
 (@v1.5) pkg> add LinRegOutliers
