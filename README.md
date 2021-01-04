@@ -36,7 +36,7 @@ A Julia package for outlier detection in linear regression.
 
 ## Unimplemented Methods
 - Depth based estimators (Regression depth, deepest regression, etc.)
-- Theil & Sen estimator for mutliple regression
+- Theil & Sen estimator for multiple regression
 
 
 ## Installation
