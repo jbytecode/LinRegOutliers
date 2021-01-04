@@ -75,7 +75,7 @@ Please check out the reference manual [here](https://jbytecode.github.io/LinRegO
 - We implemented ~25 outlier detection algorithms which covers a high percentage of the literature.
 
 
-## Want to have contributions?
+## Contributions
 You are probably the right contributor
 
 - If you have statistics background
@@ -85,5 +85,5 @@ However, the second condition is more important because an outlier detection alg
 
 
 ## Contact & Communication
-- Please use issues for a new feature request or bug reports
+- Please use issues for a new feature request or bug reports.
 - We are in #linregoutliers channel on [Julia Slack](http://julialang.slack.com/) for any discussion requires online chatting. 
