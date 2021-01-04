@@ -34,14 +34,16 @@ bibliography: paper.bib
 
 # Summary
 
-`LinRegOutliers` is a Julia package that implements a number of outlier detection algorithms for linear regression. The package also implements robust covariance matrix estimation and graphing functions which can be used to visualize the regression residuals and distances between observations, with many possible metrics (*e.g.*, the Euclidean or Mahalanobis distances with either given or estimated covariance matrices). Our package covers a significant portion of the literature on model fitting with outliers and allows users to quickly try many different methods with reasonable default settings, while also providing a good starting framework for researchers who may want to extend the package with novel methods.
+`LinRegOutliers` is a Julia package that implements a number of outlier detection algorithms for linear regression. The package also implements robust covariance matrix estimation and graphing functions which can be used to visualize the regression residuals and distances between observations, with many possible metrics (*e.g.*, the Euclidean or Mahalanobis distances with either given or estimated covariance matrices). Our package implements basics, diagnostics, and several algorithms of the literature on model fitting with outliers and allows users to quickly try many different methods with reasonable default settings, while also providing a good starting framework for researchers who may want to extend the package with novel methods.
 
 
 # State of the field
-In linear regression, we are given a number of data points (say, $n$) where each data point is represented by a vector $x_i$, with $p$ entries, and a dependent variable that corresponds to each of these data points, represented by the scalar $y_i$, for $i=1, 2, \dots, n$. We then seek to find the linear model which best describes the data (up to some error term, $\epsilon_i$):
+In linear regression, we are given a number of data points (say, $n$) where each data point is represented by a vector $x_i$, with $p$ entries, and a dependent variable that corresponds to each of these data points, represented by the scalar $y_i$, for $i=1, 2, \dots, n$. We then seek to find a linear model which best describes the data (up to some error term, $\epsilon_i$):
+
 $$
 y_i = \beta_1 (x_{i})_1+ \dots + \beta_{p} (x_i)_p +  \epsilon_i,
 $$
+
 where $\beta_1, \dots, \beta_p$ are the $p$ unknown parameters. We will assume that the $\epsilon_i$ are independent and identically-distributed (i.i.d.) error terms with zero mean. Note that, if $(x_i)_1 = 1$ for all $i=1, \dots, n$, this is equivalent to having an intercept term given by $\beta_1$.
 
 We can write this more conveniently by letting $X$ be the *design matrix* of size $n\times p$, whose $i$th row is given by the vectors $x_i$ (where $(x_i)_1=1$ if the model has an intercept), while $y$ is an $n$-vector of observations, whose entries are $y_i$, and similarly for $\epsilon$:
