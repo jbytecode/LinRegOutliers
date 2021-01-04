@@ -34,7 +34,7 @@ bibliography: paper.bib
 
 # Summary
 
-`LinRegOutliers` is a Julia package that implements a number of outlier detection algorithms for linear regression. The package also implements robust covariance matrix estimation and graphing functions which can be used to visualize the regression residuals and distances between observations, with many possible metrics (*e.g.*, the Euclidean or Mahalanobis distances with either given or estimated covariance matrices). Our package implements basics, diagnostics, and several algorithms of the literature on model fitting with outliers and allows users to quickly try many different methods with reasonable default settings, while also providing a good starting framework for researchers who may want to extend the package with novel methods.
+`LinRegOutliers` is a Julia package that implements a number of outlier detection algorithms for linear regression. The package also implements robust covariance matrix estimation and graphing functions which can be used to visualize the regression residuals and distances between observations, with many possible metrics (*e.g.*, the Euclidean or Mahalanobis distances with either given or estimated covariance matrices). Our package implements many algorithms and diagnostics for model fitting with outliers under a single interface, which allows users to quickly try many different methods with reasonable default settings, while also providing a good starting framework for researchers who may want to extend the package with novel methods.
 
 
 # State of the field
@@ -61,7 +61,7 @@ In practice, many of the proposed methods have reasonable performance and yield 
 We have reimplemented many of the algorithms available in the literature in Julia [@julia], an open-source, high performance programming language designed primarily for scientific computing. Our package, `LinRegOutliers`, is a comprehensive and simple-to-use Julia package that includes many of the algorithms in the literature for detecting outliers in linear regression. The implemented `Julia` methods for diagnostics, direct methods, robust methods, multivariate methods, and visual diagnostics are shown in **Table 1**, **Table 2**, **Table 3**, **Table 4**, and **Table 5**, respectively. 
  
 
-| Algorithm(s)          | Reference      | Method                     |
+| Algorithm             | Reference      | Method                     |
 | :-------------------- | :------------- | :------------------------- |
 | Hadi Measure          | [@hadimeasure] | `hadimeasure`              |
 | Covariance Ratio      | [@diagnostics] | `covratio`                 |
