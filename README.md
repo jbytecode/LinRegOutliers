@@ -84,6 +84,31 @@ You are probably the right contributor
 However, the second condition is more important because an outlier detection algorithm is just an algorithm. Reading the implemented methods is enough to implement new ones. Please follow the issues. [Here is the a bunch of first shot introductions for new comers](https://github.com/jbytecode/LinRegOutliers/issues/3). Welcome and thank you in advance!
 
 
+## Citation
+Please refer our original paper if you use the package in your research using
+
+```
+Satman et al., (2021). LinRegOutliers: A Julia package for detecting outliers in linear regression. Journal of Open Source Software, 6(57), 2892, https://doi.org/10.21105/joss.02892
+```
+
+or the bibtex entry
+
+```
+@article{Satman2021,
+  doi = {10.21105/joss.02892},
+  url = {https://doi.org/10.21105/joss.02892},
+  year = {2021},
+  publisher = {The Open Journal},
+  volume = {6},
+  number = {57},
+  pages = {2892},
+  author = {Mehmet Hakan Satman and Shreesh Adiga and Guillermo Angeris and Emre Akadal},
+  title = {LinRegOutliers: A Julia package for detecting outliers in linear regression},
+  journal = {Journal of Open Source Software}
+}
+```
+
+
 ## Contact & Communication
 - Please use issues for a new feature request or bug reports.
 - We are in #linregoutliers channel on [Julia Slack](http://julialang.slack.com/) for any discussion requires online chatting. 
