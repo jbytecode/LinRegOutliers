@@ -17,7 +17,7 @@ StatsModels = "3eaba693-59b7-5ba5-a881-562e759f1c8d"
 [compat]
 Clustering = "^0.14.1"
 Combinatorics = "^1.0.2"
-DataFrames = "0.22.0-0.22.5"
+DataFrames = "0.22.0 - 0.22.5"
 Distributions = "^0.23.9"
 Optim = "^1.1.0"
 Plots = "^1.6.0"
