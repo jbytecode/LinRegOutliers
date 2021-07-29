@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Satman"
+  given-names: "Mehmet Hakan"
+  orcid: "https://orcid.org/0000-0002-9402-1982"
+- family-names: "Adiga"
+  given-names: "Shreesh"
+  orcid: "https://orcid.org/0000-0002-1818-6961"
+- family-names: "Angeris"
+  given-names: "Guillermo"
+  orcid: "https://orcid.org/0000-0002-4950-3990"
+- family-names: "Akadal"
+  given-names: "Emre"
+  orcid: "https://orcid.org/0000-0001-6817-0127"
+  
+title: "LinRegOutliers: A Julia package for detecting outliers in linear regression"
+version: 0.8.4
+doi: 10.21105/joss.02892
+date-released: 2021-01-05
+url: "https://joss.theoj.org/papers/10.21105/joss.02892"
