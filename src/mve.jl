@@ -15,7 +15,7 @@ end
 
 
 function robcov(data::DataFrame; alpha=0.01, estimator=:mve)
-    dataMatrix = convert(Matrix, data)
+    dataMatrix = Matrix(data)
     n, p = size(dataMatrix)
     chisquared = Chisq(p)
     chisqcrit = quantile(chisquared, 1.0 - alpha)

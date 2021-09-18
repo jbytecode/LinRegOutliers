@@ -356,7 +356,7 @@ Mahalanobis, Prasanta Chandra. "On the generalized distance in statistics."
 National Institute of Science of India, 1936.
 """
 function mahalanobisSquaredMatrix(data::DataFrame; meanvector=nothing, covmatrix=nothing)::Union{Nothing,Array{Float64,2}}
-    datamat = convert(Matrix, data)
+    datamat = Matrix(data)
     return mahalanobisSquaredMatrix(datamat, meanvector=meanvector, covmatrix=covmatrix)
 end
 
