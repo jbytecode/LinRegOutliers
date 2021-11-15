@@ -75,7 +75,7 @@ julia> reg.betas
 See also: [`ols`](@ref), [`OLS`](@ref)
 
 """
-function wls(X::Array{Float64,2}, y::Array{Float64,1}, wts::Array{Float64,1})
+function wls(X::Array{Float64,2}, y::Array{Float64,1}, wts::Array{Float64,1})::OLS
     W = Diagonal(sqrt.(wts))
     #  I commented this because passing weighted values of X and y to OLS 
     #  causes wrong calculations of residuals.
@@ -94,7 +94,7 @@ Estimate weighted least squares regression and create OLS object with estimated 
 
 See also: [`ols`](@ref), [`wls`](@ref)
 """
-residuals(ols::OLS) = ols.y .- ols.X * ols.betas
+residuals(ols::OLS)::Array{Float64, 1} = ols.y .- ols.X * ols.betas
 
 
 """
@@ -107,7 +107,7 @@ Extract regression coefficients from an `OLS` object.
 
 See also: [`ols`](@ref), [`residuals`](@ref), [`predict`](@ref)
 """
-coef(ols::OLS) = ols.betas
+coef(ols::OLS)::Array{Float64, 1} = ols.betas
 
 
 """
@@ -120,7 +120,7 @@ Calculate estimated response using an `OLS` object.
 
 See also: [`ols`](@ref), [`residuals`](@ref)
 """
-predict(ols::OLS) = ols.X * ols.betas
+predict(ols::OLS)::Array{Float64, 1} = ols.X * ols.betas
 
-predict(ols::OLS, X::Array{Float64,2}) = X * ols.betas
+predict(ols::OLS, X::Array{Float64,2})::Array{Float64, 1} = X * ols.betas
 
