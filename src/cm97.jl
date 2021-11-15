@@ -39,7 +39,7 @@ end
 
 
 
-function cm97(X::Array{Float64,2}, y::Array{Float64,1}; maxiter::Int=1000)
+function cm97(X::Array{Float64,2}, y::Array{Float64,1}; maxiter::Int=1000)::Dict
 
     n, p = size(X)
     pbar::Float64 = p / n

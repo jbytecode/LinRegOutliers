@@ -40,7 +40,7 @@ Dict{Any,Any} with 6 entries:
 Atkinson, Anthony C. "Fast very robust methods for the detection of multiple outliers."
 Journal of the American Statistical Association 89.428 (1994): 1329-1339.
 """
-function atkinson94(setting::RegressionSetting; iters=nothing, crit=3.0)
+function atkinson94(setting::RegressionSetting; iters=nothing, crit=3.0)::Dict
     X, y = @extractRegressionSetting setting
     return atkinson94(X, y, iters=iters, crit=crit)
 end

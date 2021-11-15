@@ -68,7 +68,7 @@ function ks89(setting::RegressionSetting; alpha=0.05)
 end
 
 
-function ks89(X::Array{Float64,2}, y::Array{Float64,1}; alpha=0.05)
+function ks89(X::Array{Float64,2}, y::Array{Float64,1}; alpha=0.05)::Dict
     stdres = studentizedResiduals(X, y)
     orderingindices = sortperm(abs.(stdres))
     n, p = size(X)
