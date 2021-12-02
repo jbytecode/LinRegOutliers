@@ -15,7 +15,7 @@ import DataFrames: DataFrame
 import Distributions: TDist, Chisq, std, cov, median
 import Clustering: Hclust, hclust, cutree
 import StatsBase: quantile, standardize, ZScoreTransform, mean, sample
-import LinearAlgebra: inv, pinv, det, diag, eigen, norm, rank, qr, Diagonal, UpperTriangular
+import LinearAlgebra: inv, pinv, det, diag, eigen, norm, rank, qr, Diagonal, UpperTriangular, ColumnNorm
 import Plots: scatter, title!, xlabel!, ylabel!, hline!, vline!, RGB, plot, font, text
 import Optim: optimize, NelderMead
 import Combinatorics: combinations
