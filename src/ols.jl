@@ -44,8 +44,8 @@ julia> reg.betas
 See also: [`OLS`](@ref), [`wls`](@ref)
 
 """
-ols(X::Array{Float64,2}, y::Array{Float64,1})::OLS = OLS(X, y, qr(X, Val(true)) \ y)
-
+#ols(X::Array{Float64,2}, y::Array{Float64,1})::OLS = OLS(X, y, qr(X, Val(true)) \ y)
+ols(X::Array{Float64,2}, y::Array{Float64,1})::OLS = OLS(X, y, qr(X, ColumnNorm()) \ y)
 
 
 """
@@ -80,7 +80,8 @@ function wls(X::Array{Float64,2}, y::Array{Float64,1}, wts::Array{Float64,1})::O
     #  I commented this because passing weighted values of X and y to OLS 
     #  causes wrong calculations of residuals.
     #  return ols(W * X, W * y)
-    return OLS(X, y, qr(W * X, Val(true)) \ (W * y))
+    # return OLS(X, y, qr(W * X, Val(true)) \ (W * y))
+    return OLS(X, y, qr(W * X, ColumnNorm()) \ (W * y))
 end 
 
 
