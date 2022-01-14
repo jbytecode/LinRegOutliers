@@ -1,22 +1,34 @@
 """
 
-    lad(setting; starting_betas = nothing)
+    lad(setting)
 
 Perform Least Absolute Deviations regression for a given regression setting.
 
 # Arguments
 - `setting::RegressionSetting`: RegressionSetting object with a formula and dataset.
-- `starting_betas::Array{Float64,1}`: Starting values of parameter estimations that fed to local search optimizer.
-
 
 # Description 
 The LAD estimator searches for regression parameters estimates that minimizes the sum of absolute residuals.
+The optimization problem is 
 
+Min z = u1(-) + u1(+) + u2(-) + u2(+) + .... + un(-) + un(+)
+Subject to:
+    y_1 - beta0 - beta1 * x_2 + u1(-) - u1(+) = 0
+    y_2 - beta0 - beta1 * x_2 + u2(-) - u2(+) = 0
+    .
+    .
+    .
+    y_n - beta0 - beta1 * x_n + un(-) - un(+) = 0
+where 
+    ui(-), ui(+) >= 0
+    i = 1, 2, ..., n 
+    beta0, beta1 in R 
+    n : Number of observations 
 
 # Output
 - `["betas"]`: Estimated regression coefficients
 - `["residuals"]`: Regression residuals
-
+- `["model"]`: Linear Programming Model
 
 # Examples
 ```julia-repl
@@ -29,42 +41,48 @@ Dict{Any,Any} with 2 entries:
 ```
 
 """
-function lad(setting::RegressionSetting; starting_betas=nothing)
+function lad(setting::RegressionSetting)
     X, y = @extractRegressionSetting setting
-    return lad(X, y, starting_betas=starting_betas)
+    return lad(X, y)
 end
 
 
 """
 
-    lad(X, y; starting_betas = nothing)
+    lad(X, y)
 
 Perform Least Absolute Deviations regression for a given regression setting.
 
 # Arguments
 - `X::Array{Float64, 2}`: Design matrix of the linear model.
 - `y::Array{Float64, 1}`: Response vector of the linear model.
-- `starting_betas::Array{Float64,1}`: Starting values of parameter estimations that fed to local search optimizer.
-
 """
-function lad(X::Array{Float64,2}, y::Array{Float64,1}; starting_betas=nothing)
+function lad(X::Array{Float64,2}, y::Array{Float64,1})
     n, p = size(X)
 
-    if starting_betas isa Nothing
-        starting_betas = zeros(Float64, p)
+    m = JuMP.Model(GLPK.Optimizer)
+
+    JuMP.@variable(m, d[1:(2n)])
+    JuMP.@variable(m, beta[1:p])
+
+    JuMP.@objective(m, Min, sum(d[i] for i in 1:(2n)))
+
+    for i in 1:n
+        c = JuMP.@constraint(m,  y[i] -  sum(X[i,:] .* beta) + d[i] - d[n + i] == 0)
     end
 
-    function goal(betas::Array{Float64,1})::Float64
-        sum(abs.(y .- X * betas))
+    for i in 1:(2n)
+        JuMP.@constraint(m, d[i] >= 0)
     end
 
-    optim_result = optimize(goal, starting_betas, NelderMead())
-    betas = optim_result.minimizer 
-    residuals = y .- X * betas
+    JuMP.optimize!(m)
+
+    betahats = JuMP.value.(beta)
+    residuals = y .- X * betahats 
 
     result = Dict()
-    result["betas"] = optim_result.minimizer
+    result["betas"] = betahats
     result["residuals"] = residuals
-
+    result["model"] = m
     return result
 end
