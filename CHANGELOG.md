@@ -1,5 +1,5 @@
 # v.0.8.10
-- Julia compatibality level is not 1.7
+- Julia compatibality level is now 1.7
 
 
 # v0.8.9
