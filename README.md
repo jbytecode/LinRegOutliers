@@ -45,7 +45,7 @@ A Julia package for outlier detection in linear regression.
 
 ```julia
 julia> ]
-(@v1.5) pkg> add LinRegOutliers
+(@v1.7) pkg> add LinRegOutliers
 ```
 
 or
