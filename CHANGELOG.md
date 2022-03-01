@@ -1,4 +1,4 @@
-# v0.8.11 (Upcoming)
+# v0.8.11
 - Update JuMP and GLPK
 
 # v0.8.10
