@@ -1,4 +1,7 @@
-# v.0.8.10
+# v0.8.11 (Upcoming)
+- Update JuMP and GLPK
+
+# v0.8.10
 - Julia compatibality level is now 1.7
 
 
