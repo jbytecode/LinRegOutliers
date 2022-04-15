@@ -88,7 +88,7 @@ function lta(X::Array{Float64,2}, y::Array{Float64,1}; exact=false)
         end
     end
 
-    allpairs = asyncmap(lta_cost, psubsets)
+    allpairs = map(lta_cost, psubsets)
     allcosts = map(x -> first(x), allpairs)
     ordering_allcosts = sortperm(allcosts)
     best_pair = allpairs[ordering_allcosts[1]]

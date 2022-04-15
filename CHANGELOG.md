@@ -1,3 +1,7 @@
+# v0.8.11
+- asyncmap replaced with map in lta
+- JuMP version increased
+  
 # v0.8.10
 - Julia compatibality level is now 1.7
 - Update JuMP and GLPK

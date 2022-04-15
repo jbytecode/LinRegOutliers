@@ -304,4 +304,3 @@ function find_minimum_nonzero(arr::Array{Float64,1})
     return minimum(filter(x -> x > 0, arr))
 end
 
-
