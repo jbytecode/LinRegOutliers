@@ -22,7 +22,7 @@ julia> coordinatwisemedians(mat)
 ```
 """
 function coordinatwisemedians(datamat::Array{Float64,2})::Array{Float64,1}
-    n, p = size(datamat)
+    _, p = size(datamat)
     meds = map(i -> median(datamat[:, i]), 1:p)
     return meds
 end

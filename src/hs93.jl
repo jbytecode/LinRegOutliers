@@ -30,7 +30,7 @@ function hs93initialset(setting::RegressionSetting)::Array{Int,1}
 end
 
 function hs93initialset(X::Array{Float64,2}, y::Array{Float64,1})::Array{Int,1}
-    n, p = size(X)
+    _, p = size(X)
     s = p + 1
     dfs = abs.(dffit(X, y))
     sortedindices = sortperm(dfs)

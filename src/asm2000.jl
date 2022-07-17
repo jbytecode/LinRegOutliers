@@ -1,5 +1,5 @@
 function mahalanobisSquaredBetweenPairs(pairs::Matrix; covmatrix=nothing)
-    n, p = size(pairs)
+    n, _ = size(pairs)
     newmat = zeros(Float64, n, n)
     if covmatrix === nothing
         covmatrix = cov(pairs)

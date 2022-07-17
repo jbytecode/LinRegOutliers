@@ -31,7 +31,7 @@ function iterateCSteps(X::Array{Float64,2}, y::Array{Float64,1}, subsetindices::
     objective = Inf
     iter = 0
     maxiter = 10000
-    n, p = size(X)
+    n, _ = size(X)
     while iter < maxiter
         try
             Xsub = X[subsetindices, :]

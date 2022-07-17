@@ -15,7 +15,7 @@ Marchette, David J., and Jeffrey L. Solka. "Using data images for outlier detect
 Computational Statistics & Data Analysis 43.4 (2003): 541-552.
 """
 function euclideanDistances(dataMatrix::Array{Float64,2})::Array{Float64,2}
-    n, p = size(dataMatrix)
+    n, _ = size(dataMatrix)
     d = zeros(Float64, n, n)
     for i in 1:n
         for j in i:n
@@ -48,7 +48,7 @@ Marchette, David J., and Jeffrey L. Solka. "Using data images for outlier detect
 Computational Statistics & Data Analysis 43.4 (2003): 541-552.
 """
 function mahalanobisBetweenPairs(dataMatrix::Array{Float64,2})::Array{Float64,2}
-    n, p = size(dataMatrix)
+    n, _ = size(dataMatrix)
     d = zeros(Float64, n, n)
     covmat = cov(dataMatrix)
     if det(covmat) == 0.0

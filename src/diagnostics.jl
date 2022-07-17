@@ -232,7 +232,7 @@ end
 
 function adjustedResiduals(X::Array{Float64,2}, y::Array{Float64,1})::Array{Float64,1}
     olsreg = ols(X, y)
-    n, p = size(X)
+    n, _ = size(X)
     e = residuals(olsreg)
     hat = hatmatrix(X)
     stde = [e[i] / (sqrt(1 - hat[i, i])) for i in 1:n]

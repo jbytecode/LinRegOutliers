@@ -9,7 +9,7 @@ Two methods V1 and V2 are defined in the paper which use Mahalanobis distance or
  - `method`: The distance method to use for selecting the points for initial subset
 """
 function initial_basic_subset_multivariate_data(X::Array{Float64,2}, m::Int; method::String="mahalanobis")
-    n, p = size(X)
+    n, _ = size(X)
     if method == "mahalanobis"
         distances = sqrt.(diag(mahalanobisSquaredMatrix(X)))
     elseif method == "median"
@@ -142,7 +142,7 @@ function bacon_regression_initial_subset(
         method::String="mahalanobis",
         alpha=0.025
 )
-    n, p = size(X)
+    _, p = size(X)
 
     # remove the constant column and apply bacon_multivariate algorithm
     distances = bacon_multivariate_outlier_detection(X[:, 2:end], m, method=method, alpha=alpha)["distances"]

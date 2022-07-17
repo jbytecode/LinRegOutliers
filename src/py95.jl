@@ -180,7 +180,7 @@ end
 
 
 function py95(X::Array{Float64,2}, y::Array{Float64,1})
-    n, p = size(X)
+    n, _ = size(X)
     all_indices = collect(1:n)
     suspicious_sets = py95SuspectedObservations(X, y)
     outlierset = Set{Int}()

@@ -1,3 +1,9 @@
+# v0.8.13 (Upcoming)
+- Removed some unused variables 
+  
+# v0.8.12
+- Dependency entries updated in Project.toml
+  
 # v0.8.11
 - asyncmap replaced with map in lta
 - JuMP version increased
