@@ -40,12 +40,12 @@ Dict{Any,Any} with 6 entries:
 Atkinson, Anthony C. "Fast very robust methods for the detection of multiple outliers."
 Journal of the American Statistical Association 89.428 (1994): 1329-1339.
 """
-function atkinson94(setting::RegressionSetting; iters=nothing, crit=3.0)::Dict
+function atkinson94(setting::RegressionSetting; iters = nothing, crit = 3.0)::Dict
     X, y = @extractRegressionSetting setting
-    return atkinson94(X, y, iters=iters, crit=crit)
+    return atkinson94(X, y, iters = iters, crit = crit)
 end
 
-function atkinson94(X::Array{Float64,2}, y::Array{Float64,1}; iters=nothing, crit=3.0)
+function atkinson94(X::Array{Float64,2}, y::Array{Float64,1}; iters = nothing, crit = 3.0)
     n, p = size(X)
 
     # the median index
@@ -64,8 +64,8 @@ function atkinson94(X::Array{Float64,2}, y::Array{Float64,1}; iters=nothing, cri
     # store all the sigma values across all iterations
     sigmas = zeros(Float64, iters, n)
 
-    for iter in 1:iters
-        m_subset_indices = sample(indices, p, replace=false)
+    for iter = 1:iters
+        m_subset_indices = sample(indices, p, replace = false)
 
         # stores the n - p sigma values of a forward run
         sigma_tilde = zeros(Float64, n)
@@ -75,23 +75,25 @@ function atkinson94(X::Array{Float64,2}, y::Array{Float64,1}; iters=nothing, cri
         copy_parameters = false
 
         @inbounds for m = p:n
-            olsreg = ols(X[m_subset_indices,:], y[m_subset_indices])
+            olsreg = ols(X[m_subset_indices, :], y[m_subset_indices])
             betas = coef(olsreg)
             e = (y .- X * betas)
-            r = e.^2
+            r = e .^ 2
 
             # sigma is the median of the residuals
             sigma_tilde[m] = sqrt(sort(r)[h])
             XXinv = pinv(X[m_subset_indices, :]'X[m_subset_indices, :])
 
             # scale the residual according to whether it belongs to m_subset_indices or not
-            @inbounds for index in 1:n
+            @inbounds for index = 1:n
                 if index in m_subset_indices
                     h_i = X[index, :]' * XXinv * X[index, :]
-                    studentized_residuals[m, index] = abs(e[index]) / (sigma_tilde[m] * sqrt(abs(1 - h_i)))
+                    studentized_residuals[m, index] =
+                        abs(e[index]) / (sigma_tilde[m] * sqrt(abs(1 - h_i)))
                 else
                     d_i = X[index, :]' * XXinv * X[index, :]
-                    studentized_residuals[m, index] = abs(e[index]) / (sigma_tilde[m] * sqrt(1 + d_i))
+                    studentized_residuals[m, index] =
+                        abs(e[index]) / (sigma_tilde[m] * sqrt(1 + d_i))
                     r[index] = (e[index]^2) / (1 + d_i)
                 end
             end
@@ -99,7 +101,7 @@ function atkinson94(X::Array{Float64,2}, y::Array{Float64,1}; iters=nothing, cri
             # increase the size of subset by 1
             ordered_residue_indices = sortperm(r)
             if m != n
-                m_subset_indices = ordered_residue_indices[1:m + 1]
+                m_subset_indices = ordered_residue_indices[1:m+1]
             end
 
             # if sigma was lowest, record the parameters
@@ -108,22 +110,17 @@ function atkinson94(X::Array{Float64,2}, y::Array{Float64,1}; iters=nothing, cri
                 bestparameters = betas
                 bestindex = m
                 copy_parameters = true
+            end
         end
-        end
-#         sigmas[iter, :] = sigma_tilde
+
 
         # copy the entire n^2 residuals for the forward search to generate stalactite plot
         if copy_parameters
             bestres = copy(studentized_residuals)
         end
     end
-#     sigma_bar = mean(sigmas, dims=1)
-#     for m = p:n
-#         bestres[m, :] = bestres[m, :] .* sigma_bar[m]
-#     end
+
     d = Dict()
-#     d["sigma_bar"] = sigma_bar
-#     d["sigmas"] = sigmas[:, p:end]
     d["coef"] = bestparameters
     d["objective"] = bestobjective
     d["optimum_index"] = bestindex

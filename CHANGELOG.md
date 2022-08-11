@@ -1,5 +1,6 @@
 # v0.8.13 (Upcoming)
 - Removed some unused variables 
+- Refactor code
   
 # v0.8.12
 - Dependency entries updated in Project.toml

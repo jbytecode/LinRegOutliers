@@ -75,14 +75,20 @@ julia> Dict{Any,Any} with 7 entries:
 Billor, Nedret, Samprit Chatterjee, and Ali S. Hadi. "A re-weighted least squares method 
 for robust regression estimation." American journal of mathematical and management sciences 26.3-4 (2006): 229-252.
 """
-function bch(setting::RegressionSetting; alpha=0.05, maxiter=1000, epsilon=0.000001)
+function bch(setting::RegressionSetting; alpha = 0.05, maxiter = 1000, epsilon = 0.000001)
     X, y = @extractRegressionSetting setting
-    return bch(X, y, alpha=alpha, maxiter=maxiter, epsilon=epsilon)
+    return bch(X, y, alpha = alpha, maxiter = maxiter, epsilon = epsilon)
 end
 
 
 
-function bch(Xdesign::Array{Float64,2}, y::Array{Float64,1}; alpha=0.05, maxiter=1000, epsilon=0.000001)
+function bch(
+    Xdesign::Array{Float64,2},
+    y::Array{Float64,1};
+    alpha = 0.05,
+    maxiter = 1000,
+    epsilon = 0.000001,
+)
     n, p = size(Xdesign)
     h = Int(floor((n + p + 1.0) / 2))
     X = Xdesign
@@ -99,70 +105,95 @@ function bch(Xdesign::Array{Float64,2}, y::Array{Float64,1}; alpha=0.05, maxiter
     c = (2 * (n + 2 * p)) / (n - 2 * p)
 
     estimatedvariance = 0.0
-    estimatedvariances = []
+    estimatedvariances = Array{Float64,1}(undef, 0)
 
     # Algorithm 2 - Step 0.a
     coordmeds = coordinatwisemedians(X)
     A = ((X .- coordmeds')' * (X .- coordmeds')) / (n - 1)
-    dsquared = diag(mahalanobisSquaredMatrix(DataFrame(X, :auto), meanvector=coordmeds, covmatrix=A))
+    dsquared = diag(
+        mahalanobisSquaredMatrix(
+            DataFrame(X, :auto),
+            meanvector = coordmeds,
+            covmatrix = A,
+        ),
+    )
     d = sqrt.(dsquared)
 
     # Algorithm 2 - Step 0.b
     bestindicesofd = sortperm(d)[1:h]
     colmeansofh = map(i -> mean(X[bestindicesofd, i]), 1:p)
-    covmatofh = cov(X[bestindicesofd,:])
-    newdsquared = diag(mahalanobisSquaredMatrix(DataFrame(X, :auto), meanvector=colmeansofh, covmatrix=covmatofh))
+    covmatofh = cov(X[bestindicesofd, :])
+    newdsquared = diag(
+        mahalanobisSquaredMatrix(
+            DataFrame(X, :auto),
+            meanvector = colmeansofh,
+            covmatrix = covmatofh,
+        ),
+    )
     newd = sqrt.(newdsquared)
 
     # Algorithm 2 - Steps 1, 2, 3
-    basicsubsetindices = sortperm(newd)[1:(p + 1)]
+    basicsubsetindices = sortperm(newd)[1:(p+1)]
     while length(basicsubsetindices) < h
         colmeanofbasicsubset = map(i -> mean(X[basicsubsetindices, i]), 1:p)
-        covmatofbasicsubset = cov(X[basicsubsetindices,:]) 
-        newdsquared = diag(mahalanobisSquaredMatrix(DataFrame(X, :auto), meanvector=colmeanofbasicsubset, covmatrix=covmatofbasicsubset))
+        covmatofbasicsubset = cov(X[basicsubsetindices, :])
+        newdsquared = diag(
+            mahalanobisSquaredMatrix(
+                DataFrame(X, :auto),
+                meanvector = colmeanofbasicsubset,
+                covmatrix = covmatofbasicsubset,
+            ),
+        )
         newd = sqrt.(newdsquared)
-        basicsubsetindices = sortperm(newd)[1:(length(basicsubsetindices) + 1)]
+        basicsubsetindices = sortperm(newd)[1:(length(basicsubsetindices)+1)]
     end
 
     # Algorithm 2 - Steps 4
     while length(basicsubsetindices) < n
         r = length(basicsubsetindices)
         colmeanofbasicsubset = map(i -> mean(X[basicsubsetindices, i]), 1:p)
-        covmatofbasicsubset = cov(X[basicsubsetindices,:]) 
-        newdsquared = diag(mahalanobisSquaredMatrix(DataFrame(X, :auto), meanvector=colmeanofbasicsubset, covmatrix=covmatofbasicsubset))
+        covmatofbasicsubset = cov(X[basicsubsetindices, :])
+        newdsquared = diag(
+            mahalanobisSquaredMatrix(
+                DataFrame(X, :auto),
+                meanvector = colmeanofbasicsubset,
+                covmatrix = covmatofbasicsubset,
+            ),
+        )
         newd = sqrt.(newdsquared)
         sortednewdsquared = sort(newdsquared)
-        if sortednewdsquared[r + 1] >= crit 
+        if sortednewdsquared[r+1] >= crit
             break
         end
-        basicsubsetindices = sortperm(newd)[1:(r + 1)]
+        basicsubsetindices = sortperm(newd)[1:(r+1)]
     end
 
     # Algorithm 3 - Fitting
-    squared_normalized_robust_distances = newd.^2.0 / sum(newd.^2.0)
+    squared_normalized_robust_distances = newd .^ 2.0 / sum(newd .^ 2.0)
     md = median(newd)
-    newdmd = [newd[i] / maximum([newd[i], md]) for i in 1:n]
-    newdmd2 = newdmd.^2.0
+    newdmd = [newd[i] / maximum([newd[i], md]) for i = 1:n]
+    newdmd2 = newdmd .^ 2.0
     sumnewdmd2 = sum(newdmd2)
-    weights = newdmd2 / sumnewdmd2 
+    weights = newdmd2 / sumnewdmd2
 
     # Algorithm 3 - Step j
     betas = []
     squared_normalized_resids = []
     resids = []
-    for i in 1:maxiter
+    for i = 1:maxiter
         wols = wls(Xdesign, y, weights)
         betas = coef(wols)
         resids = residuals(wols)
-        squared_normalized_resids = (resids.^2.0) / (sum(resids.^2.0))
+        squared_normalized_resids = (resids .^ 2.0) / (sum(resids .^ 2.0))
         abssnresids = abs.(squared_normalized_resids)
         medsnresids = median(squared_normalized_resids)
-        a = [(1 - weights[i]) / maximum([abssnresids[i], medsnresids]) for i in 1:n]
-        weights = (a.^2.0) / (sum(a.^2.0))
-        estimatedvariance = n * c * sum(resids.^2) / (n - p + 1)
+        a = [(1 - weights[i]) / maximum([abssnresids[i], medsnresids]) for i = 1:n]
+        weights = (a .^ 2.0) / (sum(a .^ 2.0))
+        estimatedvariance = n * c * sum(resids .^ 2) / (n - p + 1)
         push!(estimatedvariances, estimatedvariance)
         if length(estimatedvariances) > 2
-            if abs(estimatedvariance - estimatedvariances[end - 1]) < epsilon || abs(estimatedvariance - estimatedvariances[end - 2]) < epsilon
+            if abs(estimatedvariance - estimatedvariances[end-1]) < epsilon ||
+               abs(estimatedvariance - estimatedvariances[end-2]) < epsilon
                 break
             end
         end
@@ -200,23 +231,37 @@ for the given regression setting.
 Billor, Nedret, Samprit Chatterjee, and Ali S. Hadi. "A re-weighted least squares method 
 for robust regression estimation." American journal of mathematical and management sciences 26.3-4 (2006): 229-252.
 """
-function bchplot(setting::RegressionSetting; alpha=0.05, maxiter=1000, epsilon=0.00001)
+function bchplot(
+    setting::RegressionSetting;
+    alpha = 0.05,
+    maxiter = 1000,
+    epsilon = 0.00001,
+)
     X = designMatrix(setting)
     y = responseVector(setting)
-    return bchplot(X, y, alpha=alpha, maxiter=maxiter, epsilon=epsilon)
+    return bchplot(X, y, alpha = alpha, maxiter = maxiter, epsilon = epsilon)
 end
 
-function bchplot(Xdesign::Array{Float64,2}, y::Array{Float64,1}; alpha=0.05, maxiter=1000, epsilon=0.00001)
-    result = bch(Xdesign, y, alpha=alpha, maxiter=maxiter, epsilon=epsilon)
+function bchplot(
+    Xdesign::Array{Float64,2},
+    y::Array{Float64,1};
+    alpha = 0.05,
+    maxiter = 1000,
+    epsilon = 0.00001,
+)
+    result = bch(Xdesign, y, alpha = alpha, maxiter = maxiter, epsilon = epsilon)
     squared_normalized_residuals = result["squared.normalized.residuals"]
     squared_normalized_robust_distances = result["squared.normalized.robust.distances"]
     n = length(squared_normalized_robust_distances)
-    scplot = scatter(squared_normalized_robust_distances, 
-            squared_normalized_residuals, 
-            legend=false, 
-            series_annotations=text.(1:n, :bottom),
-            tickfont=font(10), guidefont=font(10), labelfont=font(10)
-            )
+    scplot = scatter(
+        squared_normalized_robust_distances,
+        squared_normalized_residuals,
+        legend = false,
+        series_annotations = text.(1:n, :bottom),
+        tickfont = font(10),
+        guidefont = font(10),
+        labelfont = font(10),
+    )
     title!("Billor & Chatterjee & Hadi Plot")
     xlabel!("Squared Normalized Robust Distances")
     ylabel!("Squared Normalized Residuals")

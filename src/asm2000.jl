@@ -79,7 +79,7 @@ function asm2000(X::Array{Float64,2}, y::Array{Float64,1})::Dict
     covmatrix = cov(pairs[hsubset, :])
     mahdist = mahalanobisSquaredBetweenPairs(pairs, covmatrix=covmatrix)
 
-    outlierset = Array{Int,1}()
+    outlierset = Array{Int,1}(undef, 0)
 
     hcl = hclust(mahdist, linkage=:single)
     majonacrit = majona(hcl)
