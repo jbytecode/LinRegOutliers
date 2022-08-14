@@ -68,7 +68,7 @@ to make all the stuff be ready!
 We provide some examples [here](https://github.com/jbytecode/LinRegOutliers/blob/master/examples.md).
  
 ## Documentation
-Please check out the reference manual [here](https://jbytecode.github.io/LinRegOutliers/docs/build/).
+Please check out the reference manual [here](https://jbytecode.github.io/LinRegOutliers/).
 
 ## News
 - We implemented algorithm(X, y) style calls for all of the algorithms where X is the design matrix and y is the response vector. 
