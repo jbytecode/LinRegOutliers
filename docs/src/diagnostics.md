@@ -1,9 +1,5 @@
 # Diagnostics
 
-## ols 
-```@docs
-LinRegOutliers.ols
-```
 
 ## wls
 ```@docs

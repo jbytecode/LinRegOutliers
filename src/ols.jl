@@ -12,7 +12,6 @@
 - `y::Array{Float64, 1}`: Response vector.
 - `betas::Array{Float64, 1}`: Regression coefficients.
 
-See also: [`ols`](@ref), [`wls`](@ref)
 """
 struct OLS
     X::Array{Float64,2}
@@ -41,12 +40,9 @@ julia> reg.betas
     5.04147826086957
 ```
 
-See also: [`OLS`](@ref), [`wls`](@ref)
-
 """
-#ols(X::Array{Float64,2}, y::Array{Float64,1})::OLS = OLS(X, y, qr(X, Val(true)) \ y)
 ols(X::Array{Float64,2}, y::Array{Float64,1})::OLS = OLS(X, y, qr(X, ColumnNorm()) \ y)
-
+#ols(X::Array{Float64,2}, y::Array{Float64,1})::OLS = OLS(X, y, qr(X, Val(true)) \ y)
 
 """
     wls(X, y, wts)
@@ -72,7 +68,6 @@ julia> reg.betas
    1.3040571939231453
 ```
 
-See also: [`ols`](@ref), [`OLS`](@ref)
 
 """
 function wls(X::Array{Float64,2}, y::Array{Float64,1}, wts::Array{Float64,1})::OLS
@@ -93,7 +88,6 @@ Estimate weighted least squares regression and create OLS object with estimated 
 # Arguments
 - `ols::OLS`: OLS object, possible created using `ols` or `wls`.
 
-See also: [`ols`](@ref), [`wls`](@ref)
 """
 residuals(ols::OLS)::Array{Float64, 1} = ols.y .- ols.X * ols.betas
 
@@ -106,7 +100,6 @@ Extract regression coefficients from an `OLS` object.
 # Arguments
 - `ols::OLS`: OLS object, possible created using `ols` or `wls`.
 
-See also: [`ols`](@ref), [`residuals`](@ref), [`predict`](@ref)
 """
 coef(ols::OLS)::Array{Float64, 1} = ols.betas
 
@@ -119,7 +112,6 @@ Calculate estimated response using an `OLS` object.
 # Arguments
 - `ols::OLS`: OLS object, possible created using `ols` or `wls`.
 
-See also: [`ols`](@ref), [`residuals`](@ref)
 """
 predict(ols::OLS)::Array{Float64, 1} = ols.X * ols.betas
 

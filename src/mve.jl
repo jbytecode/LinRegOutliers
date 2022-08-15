@@ -83,7 +83,7 @@ Performs the Minimum Volume Ellipsoid algorithm for a robust covariance matrix.
 The method also reports a usable diagnostic measure, Mahalanobis distances, which are calculated using 
 the robust counterparts instead of mean vector and usual covariance matrix. Mahalanobis distances 
 are directly comparible with quantiles of a ChiSquare Distribution with `p` degrees of freedom.
-See also: [`mcd`](@ref)  
+
 
 # Output
 - `["goal"]`: Objective value
@@ -123,7 +123,7 @@ Performs the Minimum Covariance Determinant algorithm for a robust covariance ma
 The method also reports a usable diagnostic measure, Mahalanobis distances, which are calculated using 
 the robust counterparts instead of mean vector and usual covariance matrix. Mahalanobis distances 
 are directly comparible with quantiles of a ChiSquare Distribution with `p` degrees of freedom.  
-See also: [`mve`](@ref)
+
 
 # Output
 - `["goal"]`: Objective value
