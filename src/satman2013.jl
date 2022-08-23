@@ -1,3 +1,17 @@
+module Satman2013
+
+
+export satman2013
+
+
+import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..LTS: iterateCSteps 
+import ..OrdinaryLeastSquares: ols, coef
+import ..Diagnostics: mahalanobisSquaredMatrix
+import StatsBase: median 
+import LinearAlgebra: diag 
+
+
 """
 
     satman2013(setting)
@@ -87,3 +101,6 @@ function satman2013(X::Array{Float64,2}, y::Array{Float64,1})
 
     return result
 end
+
+
+end # end of module Satman2013

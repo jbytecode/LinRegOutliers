@@ -1,3 +1,15 @@
+module Basis
+
+export RegressionSetting
+export createRegressionSetting
+export @extractRegressionSetting
+export applyColumns
+export find_minimum_nonzero
+
+
+import DataFrames: DataFrame 
+import StatsModels: @formula, FormulaTerm, ModelFrame, ModelMatrix
+
 """
 
     struct RegressionSetting
@@ -198,7 +210,7 @@ julia> responseVector(setting)
 """
 function responseVector(setting::RegressionSetting)::Array{Float64,1}
     mf = ModelFrame(setting.formula, setting.data)
-return convert(Array{Float64,1}, setting.data[:,mf.f.lhs.sym])
+    return convert(Array{Float64,1}, setting.data[:,mf.f.lhs.sym])
 end
 
 
@@ -304,3 +316,5 @@ function find_minimum_nonzero(arr::Array{Float64,1})
     return minimum(filter(x -> x > 0, arr))
 end
 
+
+end # End of module Basis

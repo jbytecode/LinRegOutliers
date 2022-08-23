@@ -1,3 +1,11 @@
+module LTS 
+
+export lts 
+
+import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector
+import ..OrdinaryLeastSquares: ols, coef, residuals, predict
+import StatsBase: sample, mean
+
 """
 
     iterateCSteps(setting, subsetindices, h)
@@ -160,3 +168,4 @@ function lts(X::Array{Float64,2}, y::Array{Float64,1}; iters=nothing, crit=2.5)
     return result
 end
 
+end # End of module LTS 

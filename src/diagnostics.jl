@@ -1,3 +1,15 @@
+module Diagnostics 
+
+
+export dffit, hatmatrix, studentizedResiduals, adjustedResiduals, jacknifedS, cooks, mahalanobisSquaredMatrix, covratio, hadimeasure
+
+import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..OrdinaryLeastSquares: ols, coef, residuals, predict 
+import StatsBase: mean, std, cov 
+import LinearAlgebra: det 
+import DataFrames: DataFrame 
+
+
 """
 
     dffit(setting, i)
@@ -500,3 +512,4 @@ function hadimeasure(X::Array{Float64,2}, y::Array{Float64,1}; c::Float64=2.0)
     return Dict("measure" => H, "crit1" => crit1, "potentials" => potentials)
 end
 
+end # end of module Diagnostics 

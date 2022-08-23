@@ -1,13 +1,5 @@
 module LinRegOutliers
 
-# using StatsModels
-# using DataFrames
-# using Distributions
-# using Clustering
-# using StatsBase
-# using LinearAlgebra
-# using Plots
-# using Optim
 
 # import functions from corresponding packages
 import StatsModels: @formula, FormulaTerm, ModelFrame, ModelMatrix
@@ -23,16 +15,28 @@ import GLPK
 
 # Basis
 include("basis.jl")
+import .Basis: RegressionSetting, createRegressionSetting, @extractRegressionSetting, applyColumns, find_minimum_nonzero, designMatrix, responseVector
+export  RegressionSetting
+export  createRegressionSetting
+export  designMatrix
+export  responseVector
+export  applyColumns
+export  find_minimum_nonzero
+export  @extractRegressionSetting
+
 
 # Predefined datasets used in outlier detection literature
 include("data.jl")
 
-# Regression diagnostics
-include("diagnostics.jl")
-
 # Ordinary least squares type and functions
 # for fast regression tasks in outlier detection algorithms
 include("ols.jl")
+import .OrdinaryLeastSquares: OLS, ols, wls, residuals, predict, coef
+
+# Regression diagnostics
+include("diagnostics.jl")
+import .Diagnostics: dffit, dfbeta, hatmatrix, studentizedResiduals, adjustedResiduals, jacknifedS, cooks, mahalanobisSquaredMatrix, covratio, hadimeasure
+
 
 # Hadi & Simonoff (1993) algorithm
 include("hs93.jl")
@@ -42,15 +46,20 @@ include("ks89.jl")
 
 # Sebert et. al. (1998) algorithm
 include("smr98.jl")
-
-# asm (2000) algorithm
-include("asm2000.jl")
+import .SMR98: majona, smr98
 
 # Rousseeuw's Least Median of Squares estimator
 include("lms.jl")
 
 # Rousseeuw's Least Trimmed Squares estimator
 include("lts.jl")
+import .LTS: lts 
+
+
+# asm (2000) algorithm
+include("asm2000.jl")
+import .ASM2000: asm2000
+
 
 # Minimum Volume Ellipsoid estimator
 # for robust covariance matrix
@@ -67,9 +76,12 @@ include("py95.jl")
 
 # Satman (2013) algorithm
 include("satman2013.jl")
+import .Satman2013: satman2013
 
 # Satman (2015) algorithm
 include("satman2015.jl")
+import .Satman2015: satman2015, dominates 
+
 
 # Least Absolute Deviations estimator
 include("lad.jl")
@@ -94,9 +106,11 @@ include("cga.jl")
 
 # Genetic Algorithm
 include("ga.jl")
+import .GA: ga, RealChromosome 
 
 # Modified and original Satman (2012) algorithms
 include("gwlts.jl")
+import .GALTS: gwcga, galts 
 
 # RANSAC Algorithm
 include("ransac.jl")
@@ -125,14 +139,7 @@ include("summary.jl")
 export @formula, DataFrame
 export mean, quantile
 
-# Basics
-export RegressionSetting
-export createRegressionSetting
-export designMatrix
-export responseVector
-export applyColumns
-export find_minimum_nonzero
-export @extractRegressionSetting
+
 
 # Data
 export phones, hbk, stackloss
@@ -156,7 +163,8 @@ export OLS, ols, wls, residuals, predict, coef
 # Algorithms
 export hs93, hs93initialset, hs93basicsubset
 export ks89
-export smr98, asm2000
+export smr98
+export asm2000
 export lms
 export lts
 export mve, mcd

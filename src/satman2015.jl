@@ -1,3 +1,17 @@
+module Satman2015 
+
+
+export satman2015, dominates 
+
+import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..OrdinaryLeastSquares: ols, predict, residuals, coef
+import ..Diagnostics: mahalanobisSquaredMatrix
+import ..LTS: iterateCSteps
+import StatsBase: median, cov, mean  
+import LinearAlgebra: diag 
+import DataFrames: DataFrame 
+
+
 """
 
     dominates(p1::Array, p2::Array)
@@ -271,3 +285,5 @@ function satman2015(X::Array{Float64, 2}, y::Array{Float64, 1})
 
     return result
 end
+
+end # end of module Satman2015 

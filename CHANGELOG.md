@@ -1,3 +1,8 @@
+# v0.8.14 (Upcoming release)
+- Update documentation
+- Modularization  
+
+
 # v0.8.13
 - Removed some unused variables 
 - Refactor code

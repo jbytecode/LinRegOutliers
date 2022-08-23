@@ -1,3 +1,7 @@
+module GA
+
+import StatsBase: sample
+
 abstract type Chromosome end
 
 mutable struct RealChromosome <: Chromosome
@@ -39,7 +43,7 @@ end
 
 function Mutate(c::RealChromosome, prob::Float64)::RealChromosome
     genes = copy(c.genes)
-    @inbounds for i in 1:length(genes)
+    @inbounds for i in eachindex(genes)
         if rand(1)[1] < prob
             genes[i] += randn(1)[1] 
         end
@@ -142,3 +146,4 @@ function ga(
     return pop
 end
 
+end # end of module GA 

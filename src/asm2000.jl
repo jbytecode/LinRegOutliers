@@ -1,4 +1,15 @@
-function mahalanobisSquaredBetweenPairs(pairs::Matrix; covmatrix=nothing)
+module ASM2000
+
+export asm2000
+
+import StatsBase: quantile, standardize, ZScoreTransform, mean, sample, cov
+import LinearAlgebra: det
+import Clustering: Hclust, hclust, cutree
+import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector
+import ..LTS:  lts 
+import ..SMR98: majona
+
+function mahalanobisSquaredBetweenPairs(pairs::Matrix; covmatrix = nothing)
     n, _ = size(pairs)
     newmat = zeros(Float64, n, n)
     if covmatrix === nothing
@@ -6,10 +17,11 @@ function mahalanobisSquaredBetweenPairs(pairs::Matrix; covmatrix=nothing)
     end
     try
         invm = inv(covmatrix)
-        for i in 1:n
-            @inbounds for j in i:n
-                newmat[i, j] = ((pairs[i,:] .- pairs[j,:])' * invm * (pairs[i,:] .- pairs[j,:]))
-                newmat[j, i] = newmat[i,j]
+        for i = 1:n
+            @inbounds for j = i:n
+                newmat[i, j] =
+                    ((pairs[i, :] .- pairs[j, :])' * invm * (pairs[i, :] .- pairs[j, :]))
+                newmat[j, i] = newmat[i, j]
             end
         end
         return newmat
@@ -64,35 +76,37 @@ function asm2000(X::Array{Float64,2}, y::Array{Float64,1})::Dict
     n, p = size(X)
     h = floor((n + p - 1) / 2)
     ltsreg = lts(X, y)
-    
+
     betas = ltsreg["betas"]
     hsubset = ltsreg["hsubset"]
 
-    predicteds = [sum(X[i,:] .* betas) for i in 1:n]
+    predicteds = [sum(X[i, :] .* betas) for i = 1:n]
     resids = y .- predicteds
-    stdres = standardize(ZScoreTransform, resids, dims=1)
-    stdfit = standardize(ZScoreTransform, predicteds, dims=1)
+    stdres = standardize(ZScoreTransform, resids, dims = 1)
+    stdfit = standardize(ZScoreTransform, predicteds, dims = 1)
     pairs = hcat(stdfit, stdres)
 
     pairs = hcat(resids, predicteds)
 
     covmatrix = cov(pairs[hsubset, :])
-    mahdist = mahalanobisSquaredBetweenPairs(pairs, covmatrix=covmatrix)
+    mahdist = mahalanobisSquaredBetweenPairs(pairs, covmatrix = covmatrix)
 
     outlierset = Array{Int,1}(undef, 0)
 
-    hcl = hclust(mahdist, linkage=:single)
+    hcl = hclust(mahdist, linkage = :single)
     majonacrit = majona(hcl)
-    clustermappings = cutree(hcl, h=majonacrit)
+    clustermappings = cutree(hcl, h = majonacrit)
     uniquemappings = unique(clustermappings)
     for clustid in uniquemappings
         cnt = count(x -> x == clustid, clustermappings)
-        if cnt >= h 
+        if cnt >= h
             outlierset = filter(i -> clustermappings[i] != clustid, 1:n)
         end
     end
-    
+
     result = Dict()
     result["outliers"] = outlierset
     return result
 end
+
+end # End of the module ASM2000

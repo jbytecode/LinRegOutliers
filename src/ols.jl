@@ -1,3 +1,11 @@
+module OrdinaryLeastSquares
+
+
+export OLS, ols, wls, residuals, predict, coef
+
+import LinearAlgebra: ColumnNorm, qr, Diagonal
+
+
 """
     struct OLS
         X::Array{Float64,2}
@@ -117,3 +125,6 @@ predict(ols::OLS)::Array{Float64, 1} = ols.X * ols.betas
 
 predict(ols::OLS, X::Array{Float64,2})::Array{Float64, 1} = X * ols.betas
 
+
+
+end # end of module OrdinaryLeastSquares 

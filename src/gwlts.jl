@@ -1,3 +1,14 @@
+module GALTS 
+
+
+export galts, gwcga
+
+import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..OrdinaryLeastSquares: ols, predict, residuals, coef
+
+import ..LTS: iterateCSteps
+import ..GA: ga 
+
 """
 This method is a modified version of the algorithm given below.
 the modification will be available in a new paper.
@@ -125,3 +136,5 @@ function galts(X::Array{Float64,2}, y::Array{Float64,1})
 end
 
 
+
+end # end of module GALTS 

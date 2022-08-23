@@ -1,3 +1,14 @@
+module SMR98 
+
+
+export majona, smr98
+
+
+import Clustering: Hclust, hclust, cutree
+import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector
+import StatsBase: mean, std, standardize, ZScoreTransform
+import ..OrdinaryLeastSquares: ols, residuals, predict 
+
 function distances(resids::Array{Float64,1}, fitteds::Array{Float64})::Array{Float64,2}
     n = length(resids)
     d = zeros(Float64, n, n)
@@ -95,3 +106,4 @@ function smr98(X::Array{Float64,2}, y::Array{Float64,1})
     return Dict("outliers" => [])
 end
 
+end # end of module SMR98
