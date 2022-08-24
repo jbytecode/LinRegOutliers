@@ -1,3 +1,16 @@
+module HS93
+
+
+export hs93 
+
+
+import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..OrdinaryLeastSquares: ols, predict, residuals, coef
+import ..Diagnostics: dffit
+
+import Distributions: TDist
+import StatsBase: quantile 
+
 """
 
     hs93initialset(setting)
@@ -195,3 +208,6 @@ function hs93(X::Array{Float64,2}, y::Array{Float64,1}; alpha=0.05, basicsubseti
     end
     return []
 end
+
+
+end # end of module HS93

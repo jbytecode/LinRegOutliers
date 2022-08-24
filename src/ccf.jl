@@ -1,3 +1,15 @@
+module CCF 
+
+export ccf 
+
+import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..OrdinaryLeastSquares: ols, predict, residuals, coef, wls 
+
+import LinearAlgebra: norm 
+import StatsBase: mean 
+
+
+
 """
 
     ccf(setting; starting_lambdas = nothing)
@@ -107,3 +119,6 @@ function ccf(X::Array{Float64,2}, y::Array{Float64,1}; starting_lambdas=nothing,
 
     return result
 end
+
+
+end # end of module CCF 

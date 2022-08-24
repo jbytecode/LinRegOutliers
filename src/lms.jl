@@ -1,3 +1,16 @@
+module LMS 
+
+
+export lms 
+
+
+import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..OrdinaryLeastSquares: ols, predict, residuals, coef
+
+import StatsBase: sample 
+
+
+
 """
     lms(setting; iters = nothing, crit = 2.5)
 
@@ -90,3 +103,4 @@ function lms(X::Array{Float64,2}, y::Array{Float64,1}; iters=nothing, crit=2.5)
 end
 
 
+end # end of module LMS 

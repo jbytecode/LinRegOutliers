@@ -1,3 +1,15 @@
+module LTA 
+
+
+export lta
+
+
+import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..OrdinaryLeastSquares: ols, predict, residuals, coef
+
+import Combinatorics: combinations
+import StatsBase: sample 
+
 """
 
     lta(setting; exact = false)
@@ -101,3 +113,6 @@ function lta(X::Array{Float64,2}, y::Array{Float64,1}; exact=false)
     return result
 end
 
+
+
+end # end of module LTA 

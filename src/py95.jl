@@ -1,3 +1,16 @@
+module PY95
+
+
+export py95, py95SuspectedObservations
+
+
+import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..OrdinaryLeastSquares: ols, predict, residuals, coef
+import ..Diagnostics: hatmatrix
+
+
+import LinearAlgebra: eigen 
+
 """
 
     py95ProcessEigenVector(v)
@@ -201,3 +214,6 @@ function py95(X::Array{Float64,2}, y::Array{Float64,1})
     result["outliers"] = sort(collect(outlierset))
     return result
 end
+
+
+end # end of module PY95

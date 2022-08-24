@@ -1,3 +1,26 @@
+module Summary 
+
+export detectOutliers
+
+
+import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+
+import ..HS93: hs93 
+import ..PY95: py95
+import ..KS89: ks89
+import ..SMR98: majona, smr98
+import ..LMS: lms
+import ..LTS: lts
+import ..ASM2000: asm2000
+import ..LTA: lta
+import ..Imon2005: imon2005
+import ..Bacon: bacon 
+import ..BCH: bch 
+import ..Satman2013: satman2013 
+import ..Satman2015: satman2015 
+
+import DataFrames: DataFrame 
+
 function makeColorColumn(indices::Array{Int,1}, n::Int)::Array{String,1}
     colors = Array{String}(undef, n)
     for i in 1:n
@@ -103,3 +126,5 @@ function detectOutliers(X::Array{Float64,2}, y::Array{Float64,1}; methods=[])
     
     return outlier_matrix
 end
+
+end # end of module Summary 

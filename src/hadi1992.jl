@@ -1,3 +1,15 @@
+module Hadi92 
+
+export hadi1992
+
+import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns, find_minimum_nonzero
+import ..OrdinaryLeastSquares: ols, predict, residuals, coef
+import ..Diagnostics: mahalanobisSquaredMatrix, coordinatwisemedians
+
+import LinearAlgebra: eigen, diag, det  
+import StatsBase: quantile, mean, cov  
+import Distributions: Chisq
+
 """
     hadi1992_handle_singularity(S)
 
@@ -117,3 +129,6 @@ function hadi1992(multivariateData::Array{Float64,2}; alpha=0.05)
     result["rth.robust.distance"] = sorted_mah1[r - 1]
     return result
 end
+
+
+end # end of module Hadi92

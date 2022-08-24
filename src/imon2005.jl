@@ -1,3 +1,11 @@
+module Imon2005
+
+export imon2005
+
+import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..OrdinaryLeastSquares: ols, predict, residuals, coef
+import ..LTS: lts 
+
 """
     imon2005(setting)
 
@@ -85,3 +93,5 @@ function imon2005(X::Array{Float64,2}, y::Array{Float64,1})
     result["outliers"] = outlyingindex
     return result
 end
+
+end # end of module Imon2005

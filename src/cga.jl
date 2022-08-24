@@ -1,3 +1,8 @@
+module CGA 
+
+export cga 
+
+
 """
 Generates a binary array of values using a probability vector.
 Each single element of the probability vector is the probability of bit having 
@@ -91,3 +96,6 @@ function cga(;chsize::Int, costfunction::Function, popsize::Int)::Array{Bool,1}
     end
     return cgasample(probvector)
 end
+
+
+end # end of module CGA 

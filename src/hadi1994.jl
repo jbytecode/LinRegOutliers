@@ -1,3 +1,18 @@
+module Hadi94
+
+
+export hadi1994
+
+
+import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..Diagnostics: mahalanobisSquaredMatrix, coordinatwisemedians
+
+import StatsBase: mean, cov, quantile 
+import LinearAlgebra: det, diag 
+import Distributions: Chisq
+
+
+
 """
     hadi1994(multivariateData)
 
@@ -99,3 +114,6 @@ function hadi1994(multivariateData::Array{Float64,2}; alpha=0.05)
     result["rth.robust.distance"] = sorted_mah1[r - 1]
     return result
 end
+
+
+end # end of module Hadi94 

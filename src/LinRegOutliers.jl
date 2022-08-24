@@ -1,18 +1,6 @@
 module LinRegOutliers
 
 
-# import functions from corresponding packages
-import StatsModels: @formula, FormulaTerm, ModelFrame, ModelMatrix
-import DataFrames: DataFrame
-import Distributions: TDist, Chisq, std, cov, median
-import Clustering: Hclust, hclust, cutree
-import StatsBase: quantile, standardize, ZScoreTransform, mean, sample
-import LinearAlgebra: inv, pinv, det, diag, eigen, norm, rank, qr, Diagonal, UpperTriangular, ColumnNorm
-import Plots: scatter, title!, xlabel!, ylabel!, hline!, vline!, RGB, plot, font, text
-import Combinatorics: combinations
-import JuMP
-import GLPK
-
 # Basis
 include("basis.jl")
 import .Basis: RegressionSetting, createRegressionSetting, @extractRegressionSetting, applyColumns, find_minimum_nonzero, designMatrix, responseVector
@@ -27,6 +15,9 @@ export  @extractRegressionSetting
 
 # Predefined datasets used in outlier detection literature
 include("data.jl")
+import .DataSets: phones, hbk, stackloss
+import .DataSets: weightloss, hs93randomdata, woodgravity
+import .DataSets: hills, softdrinkdelivery
 
 # Ordinary least squares type and functions
 # for fast regression tasks in outlier detection algorithms
@@ -40,9 +31,11 @@ import .Diagnostics: dffit, dfbeta, hatmatrix, studentizedResiduals, adjustedRes
 
 # Hadi & Simonoff (1993) algorithm
 include("hs93.jl")
+import .HS93: hs93, hs93initialset, hs93basicsubset
 
 # Kianifard & Swallow (1989) algorithm
 include("ks89.jl")
+import .KS89: ks89
 
 # Sebert et. al. (1998) algorithm
 include("smr98.jl")
@@ -50,6 +43,8 @@ import .SMR98: majona, smr98
 
 # Rousseeuw's Least Median of Squares estimator
 include("lms.jl")
+import .LMS: lms 
+
 
 # Rousseeuw's Least Trimmed Squares estimator
 include("lts.jl")
@@ -64,15 +59,19 @@ import .ASM2000: asm2000
 # Minimum Volume Ellipsoid estimator
 # for robust covariance matrix
 include("mve.jl")
+import .MVE: mve, mcd 
 
 # MVE - LTS plot for visual detection of regression outliers
 include("mveltsplot.jl")
+import .MVELTSPlot: mveltsplot
 
 # Billor & Chatterjee & Hadi Algorithm for detecting outliers
 include("bch.jl")
+import .BCH: bch, bchplot
 
 # Pena & Yohai (1995) algorithm
 include("py95.jl")
+import .PY95: py95, py95SuspectedObservations
 
 # Satman (2013) algorithm
 include("satman2013.jl")
@@ -85,24 +84,34 @@ import .Satman2015: satman2015, dominates
 
 # Least Absolute Deviations estimator
 include("lad.jl")
+import .LAD: lad
+
 
 # Least Trimmed Absolute Deviations estimator
 include("lta.jl")
+import .LTA: lta 
+
+
 
 # Hadi (1992) detecting outliers in multivariate data
 # This algorithm is not directly related with the regression
 # however, detecting bad leverage points is same as detecting
 # outliers in X-space
 include("hadi1992.jl")
+import .Hadi92: hadi1992
 
 # Hadi (1994) algorithm
 include("hadi1994.jl")
+import .Hadi94: hadi1994
+
 
 # Gray-scale images of distance matrices
 include("dataimage.jl")
 
 # Compact genetic algorithm
 include("cga.jl")
+import .CGA: cga 
+
 
 # Genetic Algorithm
 include("ga.jl")
@@ -114,28 +123,43 @@ import .GALTS: gwcga, galts
 
 # RANSAC Algorithm
 include("ransac.jl")
+import .Ransac: ransac 
 
 
 # CCF formulation and heuristic; Barratt, Angeris, and Boyd (2020)
 include("ccf.jl")
+import .CCF: ccf 
+
 
 # Atkinson94 Algorithm
 include("atkinson94.jl")
+import .Atkinson94: atkinson94
+
 include("atkinsonstalactiteplot.jl")
+import .AtkinsonPlot: atkinsonstalactiteplot, generate_stalactite_plot
+
 
 # BACON 2000 Algorithm
 include("bacon.jl")
+import .Bacon: bacon
 
 # Imon 2005 Algorithm
 include("imon2005.jl")
+import .Imon2005: imon2005
 
 #  Chatterjee & Mächler (1997) Algorithm
 include("cm97.jl")
+import .CM97: cm97
 
 # All-in-one
 include("summary.jl")
+import .Summary: detectOutliers
+
 
 # Essentials from other packages
+import StatsModels: @formula
+import StatsBase: mean, quantile 
+import DataFrames: DataFrame 
 export @formula, DataFrame
 export mean, quantile
 

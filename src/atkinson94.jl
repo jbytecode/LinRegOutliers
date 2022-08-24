@@ -1,3 +1,15 @@
+module Atkinson94
+
+
+export atkinson94
+
+
+
+import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..OrdinaryLeastSquares: ols, predict, residuals, coef
+import StatsBase: sample 
+import LinearAlgebra: pinv
+
 """
         atkinson94(setting, iters, crit)
 
@@ -129,3 +141,6 @@ function atkinson94(X::Array{Float64,2}, y::Array{Float64,1}; iters = nothing, c
     d["outliers"] = filter(i -> bestres[bestindex, i] > crit, 1:n)
     return d
 end
+
+
+end # end of module Atkinson94

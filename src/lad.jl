@@ -1,3 +1,12 @@
+module LAD 
+
+export lad 
+
+using  JuMP
+using  GLPK 
+
+import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+
 """
 
     lad(setting)
@@ -86,3 +95,5 @@ function lad(X::Array{Float64,2}, y::Array{Float64,1})
     result["model"] = m
     return result
 end
+
+end # end of module LAD

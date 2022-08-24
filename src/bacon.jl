@@ -1,3 +1,17 @@
+module Bacon 
+
+
+export bacon 
+
+
+
+import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..OrdinaryLeastSquares: ols, predict, residuals, coef
+import ..Diagnostics: mahalanobisSquaredMatrix
+import LinearAlgebra: diag, norm, rank
+import StatsBase: median, cov, mean, quantile
+import Distributions: Chisq, TDist
+
 """
         initial_basic_subset_multivariate_data(X, m, method="mahalanobis")
 This function returns the m-subset according to algorithm #1 for multivariate data.
@@ -223,3 +237,6 @@ function bacon(setting::RegressionSetting; m::Int, method::String="mahalanobis",
     X, y = @extractRegressionSetting setting
     return bacon(X, y, m=m, method=method, alpha=alpha)
 end
+
+
+end # end of module Bacon 

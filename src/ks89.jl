@@ -1,3 +1,17 @@
+module KS89
+
+
+export ks89
+
+import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..OrdinaryLeastSquares: ols, predict, residuals, coef
+import ..Diagnostics: studentizedResiduals, jacknifedS 
+
+import Distributions: TDist
+import StatsBase: quantile 
+
+
+
 """
     ks89RecursiveResidual(setting; indices, k)
 Calculate recursive residual for the given regression setting and observation.
@@ -91,3 +105,7 @@ function ks89(X::Array{Float64,2}, y::Array{Float64,1}; alpha=0.05)::Dict
     )
     return result
 end
+
+
+
+end # end of module KS89

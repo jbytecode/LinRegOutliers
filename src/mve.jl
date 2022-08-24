@@ -1,6 +1,19 @@
+module MVE 
+
+export mve
+
+
+import DataFrames: DataFrame
+import LinearAlgebra: diag, det
+import StatsBase: median, cov, mean, quantile, sample 
+import Distributions: Chisq
+
+import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..Diagnostics: mahalanobisSquaredMatrix
+
+
 function enlargesubset(initialsubset, data::DataFrame, dataMatrix::Matrix, h::Int)
-    n, p = size(dataMatrix)
-    indices = collect(1:n)
+    n, _ = size(dataMatrix)
     basicsubset = copy(initialsubset)
     while length(basicsubset) < h
         meanvector = applyColumns(mean, data[basicsubset,:])
@@ -151,3 +164,6 @@ end
 function mcd(data::Array{Float64,2}; alpha=0.01)
     return mcd(DataFrame(data), alpha=alpha)
 end
+
+
+end # end of module MVE 

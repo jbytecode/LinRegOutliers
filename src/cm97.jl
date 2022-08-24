@@ -1,3 +1,13 @@
+module CM97
+
+
+export cm97
+
+import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..Diagnostics: hatmatrix
+import ..OrdinaryLeastSquares: ols, predict, residuals, coef, wls
+import StatsBase: median
+
 """
 
     cm97(setting; maxiter = 1000)
@@ -87,3 +97,4 @@ function cm97(X::Array{Float64,2}, y::Array{Float64,1}; maxiter::Int=1000)::Dict
 end
 
 
+end # end of module CM97

@@ -1,3 +1,7 @@
+module DataSets
+
+import DataFrames: DataFrame
+
 """
 Phone data
 
@@ -202,3 +206,5 @@ const softdrinkdelivery = DataFrame(
     cases=[7.0, 3.0, 3.0, 4.0, 6.0, 7.0, 2.0, 7.0, 30.0, 5.0, 16.0, 10.0, 4.0, 6.0, 9.0, 10.0, 6.0, 7.0, 3.0, 17.0, 10.0, 26.0, 9.0, 8.0, 4.0]
 )
 
+
+end # end of module DataSets

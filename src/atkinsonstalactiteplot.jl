@@ -1,3 +1,12 @@
+module AtkinsonPlot 
+
+
+export atkinsonstalactiteplot
+export generate_stalactite_plot
+
+import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..Atkinson94: atkinson94
+
 """
         atkinsonstalactiteplot(setting, iters, crit)
 
@@ -77,3 +86,6 @@ function stalactite_char_value(x, crit)
         return ' '
     end
 end
+
+
+end # end of module AtkinsonPlot 

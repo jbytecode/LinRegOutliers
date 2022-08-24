@@ -2,12 +2,46 @@ module Diagnostics
 
 
 export dffit, hatmatrix, studentizedResiduals, adjustedResiduals, jacknifedS, cooks, mahalanobisSquaredMatrix, covratio, hadimeasure
+export coordinatwisemedians
 
 import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
 import ..OrdinaryLeastSquares: ols, coef, residuals, predict 
-import StatsBase: mean, std, cov 
+import StatsBase: mean, std, cov, median 
 import LinearAlgebra: det 
 import DataFrames: DataFrame 
+
+
+
+"""
+
+    coordinatwisemedians(datamat)
+
+    Return vector of medians of each column in a matrix.
+
+# Arguments
+- `datamat::Array{Float64, 2}`: A matrix.
+
+# Example
+```julia-repl
+julia> mat = [1.0 2.0; 3.0 4.0; 5.0 6.0]
+3×2 Array{Float64,2}:
+ 1.0  2.0
+ 3.0  4.0
+ 5.0  6.0
+
+julia> coordinatwisemedians(mat)
+2-element Array{Float64,1}:
+ 3.0
+ 4.0
+```
+"""
+function coordinatwisemedians(datamat::Array{Float64,2})::Array{Float64,1}
+    _, p = size(datamat)
+    meds = map(i -> median(datamat[:, i]), 1:p)
+    return meds
+end
+
+
 
 
 """

@@ -8,6 +8,7 @@ import ..OrdinaryLeastSquares: ols, predict, residuals, coef
 
 import ..LTS: iterateCSteps
 import ..GA: ga 
+import ..CGA: cga 
 
 """
 This method is a modified version of the algorithm given below.

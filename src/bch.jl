@@ -1,31 +1,19 @@
-"""
+module BCH 
 
-    coordinatwisemedians(datamat)
+export bch 
+export bchplot
 
-    Return vector of medians of each column in a matrix.
+import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..OrdinaryLeastSquares: ols, predict, residuals, coef, wls
+import ..Diagnostics: mahalanobisSquaredMatrix, coordinatwisemedians
 
-# Arguments
-- `datamat::Array{Float64, 2}`: A matrix.
+import StatsBase: median, quantile, mean, cov 
+import Distributions: Chisq
+import LinearAlgebra: diag
+import DataFrames: DataFrame 
 
-# Example
-```julia-repl
-julia> mat = [1.0 2.0; 3.0 4.0; 5.0 6.0]
-3×2 Array{Float64,2}:
- 1.0  2.0
- 3.0  4.0
- 5.0  6.0
+using Plots 
 
-julia> coordinatwisemedians(mat)
-2-element Array{Float64,1}:
- 3.0
- 4.0
-```
-"""
-function coordinatwisemedians(datamat::Array{Float64,2})::Array{Float64,1}
-    _, p = size(datamat)
-    meds = map(i -> median(datamat[:, i]), 1:p)
-    return meds
-end
 
 
 """
@@ -266,3 +254,6 @@ function bchplot(
     xlabel!("Squared Normalized Robust Distances")
     ylabel!("Squared Normalized Residuals")
 end
+
+
+end  # end of module BCH 

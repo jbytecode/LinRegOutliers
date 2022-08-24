@@ -1,3 +1,16 @@
+module Ransac
+
+
+export ransac
+
+
+
+import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..OrdinaryLeastSquares: ols, predict, residuals, coef
+import StatsBase: sample 
+import LinearAlgebra: norm 
+
+
 """
 
     ransac(setting; t, w=0.5, m=0, k=0, d=0, confidence=0.99)
@@ -86,3 +99,6 @@ function ransac(X::Array{Float64,2}, y::Array{Float64,1}; t::Float64, w::Float64
     return result
 end
 
+
+
+end # end of module Ransac 
