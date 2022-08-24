@@ -1,4 +1,4 @@
-# v0.8.14 (Upcoming release)
+# v0.8.14
 - Update documentation
 - Modularization  
 
