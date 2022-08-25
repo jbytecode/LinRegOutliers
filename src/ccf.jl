@@ -81,7 +81,10 @@ Perform signed gradient descent for clipped convex functions for a given regress
 Barratt, S., Angeris, G. & Boyd, S. Minimizing a sum of clipped convex functions. Optim Lett 14, 2443–2459 (2020). https://doi.org/10.1007/s11590-020-01565-4
 
 """
-function ccf(X::Array{Float64,2}, y::Array{Float64,1}; starting_lambdas=nothing, alpha=nothing, p=3, max_iter=100, gamma=.1, tol=1e-4)
+function ccf(X::Array{Float64,2}, y::Array{Float64,1}; 
+             starting_lambdas=nothing, alpha=nothing, p=3, 
+             max_iter=100, gamma=.1, tol=1e-4)::Dict
+             
     n, p = size(X)
 
     if isnothing(starting_lambdas)

@@ -23,19 +23,19 @@ See `atkinson94` for details.
 Atkinson, Anthony C. "Fast very robust methods for the detection of multiple outliers."
 Journal of the American Statistical Association 89.428 (1994): 1329-1339.
 """
-function atkinsonstalactiteplot(setting::RegressionSetting; iters=nothing, crit=3.0)
+function atkinsonstalactiteplot(setting::RegressionSetting; iters=nothing, crit=3.0)::Nothing
     X, y = @extractRegressionSetting setting
     return atkinsonstalactiteplot(X, y, iters=iters, crit=crit)
 end
 
-function atkinsonstalactiteplot(X::Array{Float64,2}, y::Array{Float64,1}; iters=nothing, crit=3.0)
+function atkinsonstalactiteplot(X::Array{Float64,2}, y::Array{Float64,1}; iters=nothing, crit=3.0)::Nothing
     n, p = size(X)
     output = atkinson94(X, y, iters=iters, crit=crit)
     residuals_matrix = output["residuals_matrix"]
     generate_stalactite_plot(residuals_matrix, n, p, crit)
 end
 
-function generate_stalactite_plot(residuals_matrix::Array{Float64,2}, n::Int64, p::Int64, crit)
+function generate_stalactite_plot(residuals_matrix::Array{Float64,2}, n::Int64, p::Int64, crit)::Nothing
     print("m  ")
     print_tens_row(n)
     println()
@@ -62,7 +62,7 @@ function generate_stalactite_plot(residuals_matrix::Array{Float64,2}, n::Int64, 
     println()
 end
 
-function print_tens_row(n::Int64)
+function print_tens_row(n::Int64)::Nothing
     for i = 1:Int(floor(n / 10))
         for i = 1:9
             print(" ")
@@ -71,13 +71,14 @@ function print_tens_row(n::Int64)
     end
 end
 
-function print_ones_row(n::Int64)
+
+function print_ones_row(n::Int64)::Nothing
     for i = 1:n
         print(i % 10)
     end
 end
 
-function stalactite_char_value(x, crit)
+function stalactite_char_value(x, crit)::Char
     if x >= crit
         return '*'
     elseif x >= crit - 1

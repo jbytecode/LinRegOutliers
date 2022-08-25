@@ -2,13 +2,110 @@ module Diagnostics
 
 
 export dffit, hatmatrix, studentizedResiduals, adjustedResiduals, jacknifedS, cooks, mahalanobisSquaredMatrix, covratio, hadimeasure
-export coordinatwisemedians
+export coordinatwisemedians, mahalanobisBetweenPairs, euclideanDistances
 
 import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
 import ..OrdinaryLeastSquares: ols, coef, residuals, predict 
 import StatsBase: mean, std, cov, median 
 import LinearAlgebra: det 
 import DataFrames: DataFrame 
+
+
+"""
+
+    euclideanDistances(dataMatrix)
+
+Calculate Euclidean distances between pairs. 
+
+# Arguments
+- `dataMatrix::Array{Float64, 1}`: Data matrix with dimensions n x p, where n is the number of observations and p is the number of variables.
+
+# Notes
+    This is the helper function for the dataimage() function defined in Marchette & Solka (2003).
+    
+# References
+Marchette, David J., and Jeffrey L. Solka. "Using data images for outlier detection." 
+Computational Statistics & Data Analysis 43.4 (2003): 541-552.
+"""
+function euclideanDistances(dataMatrix::Array{Float64,2})::Array{Float64,2}
+    n, _ = size(dataMatrix)
+    d = zeros(Float64, n, n)
+    for i in 1:n
+        for j in i:n
+            if i != j 
+                @inbounds d[i, j] = sqrt(sum((dataMatrix[i,:] .- dataMatrix[j,:]).^2.0))
+                @inbounds d[j, i] = d[i, j]
+            end
+        end
+    end
+    return d
+end
+
+
+
+function mahalanobisSquaredBetweenPairs(pairs::Matrix; covmatrix = nothing)
+    n, _ = size(pairs)
+    newmat = zeros(Float64, n, n)
+    if covmatrix === nothing
+        covmatrix = cov(pairs)
+    end
+    try
+        invm = inv(covmatrix)
+        for i = 1:n
+            @inbounds for j = i:n
+                newmat[i, j] =
+                    ((pairs[i, :] .- pairs[j, :])' * invm * (pairs[i, :] .- pairs[j, :]))
+                newmat[j, i] = newmat[i, j]
+            end
+        end
+        return newmat
+    catch e
+        @warn e
+        if det(covmatrix) == 0
+            @warn "singular covariance matrix, mahalanobis distances can not be calculated"
+        end
+        return zeros(Float64, (n, n))
+    end
+end
+
+
+
+"""
+
+    mahalanobisBetweenPairs(dataMatrix)
+
+Calculate Mahalanobis distances between pairs. 
+
+# Arguments
+- `dataMatrix::Array{Float64, 1}`: Data matrix with dimensions n x p, where n is the number of observations and p is the number of variables.
+
+# Notes
+    Differently from Mahalabonis distances, this function calculates Mahalanobis distances between 
+    pairs, rather than the distances to center of the data. This is the helper function for the 
+    dataimage() function defined in Marchette & Solka (2003).
+    
+# References
+Marchette, David J., and Jeffrey L. Solka. "Using data images for outlier detection." 
+Computational Statistics & Data Analysis 43.4 (2003): 541-552.
+"""
+function mahalanobisBetweenPairs(dataMatrix::Array{Float64,2})::Array{Float64,2}
+    n, _ = size(dataMatrix)
+    d = zeros(Float64, n, n)
+    covmat = cov(dataMatrix)
+    if det(covmat) == 0.0
+        @warn "Covariance matrix is singular, mahalanobis distances can not be calculated."
+    end
+    covinv = inv(covmat)
+    for i in 1:n
+        for j in i:n
+            if i != j 
+                @inbounds d[i, j] = sqrt((dataMatrix[i,:] .- dataMatrix[j,:]) * covinv * (dataMatrix[i,:] .- dataMatrix[j,:])')
+                @inbounds d[j, i] = d[i, j]
+            end
+        end
+    end
+    return d
+end
 
 
 

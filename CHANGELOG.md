@@ -1,3 +1,8 @@
+# v0.8.15 (Upcoming release)
+- Modularize dataimage()
+- Grouped tests
+  
+
 # v0.8.14
 - Update documentation
 - Modularization  

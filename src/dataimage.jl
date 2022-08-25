@@ -1,70 +1,11 @@
-"""
-
-    euclideanDistances(dataMatrix)
-
-Calculate Euclidean distances between pairs. 
-
-# Arguments
-- `dataMatrix::Array{Float64, 1}`: Data matrix with dimensions n x p, where n is the number of observations and p is the number of variables.
-
-# Notes
-    This is the helper function for the dataimage() function defined in Marchette & Solka (2003).
-    
-# References
-Marchette, David J., and Jeffrey L. Solka. "Using data images for outlier detection." 
-Computational Statistics & Data Analysis 43.4 (2003): 541-552.
-"""
-function euclideanDistances(dataMatrix::Array{Float64,2})::Array{Float64,2}
-    n, _ = size(dataMatrix)
-    d = zeros(Float64, n, n)
-    for i in 1:n
-        for j in i:n
-            if i != j 
-                @inbounds d[i, j] = sqrt(sum((dataMatrix[i,:] .- dataMatrix[j,:]).^2.0))
-                @inbounds d[j, i] = d[i, j]
-            end
-        end
-    end
-    return d
-end
+module DataImage
 
 
-"""
 
-    mahalanobisBetweenPairs(dataMatrix)
+import ..Diagnostics: mahalanobisSquaredMatrix, euclideanDistances, mahalanobisSquaredBetweenPairs
 
-Calculate Mahalanobis distances between pairs. 
 
-# Arguments
-- `dataMatrix::Array{Float64, 1}`: Data matrix with dimensions n x p, where n is the number of observations and p is the number of variables.
-
-# Notes
-    Differently from Mahalabonis distances, this function calculates Mahalanobis distances between 
-    pairs, rather than the distances to center of the data. This is the helper function for the 
-    dataimage() function defined in Marchette & Solka (2003).
-    
-# References
-Marchette, David J., and Jeffrey L. Solka. "Using data images for outlier detection." 
-Computational Statistics & Data Analysis 43.4 (2003): 541-552.
-"""
-function mahalanobisBetweenPairs(dataMatrix::Array{Float64,2})::Array{Float64,2}
-    n, _ = size(dataMatrix)
-    d = zeros(Float64, n, n)
-    covmat = cov(dataMatrix)
-    if det(covmat) == 0.0
-        @warn "Covariance matrix is singular, mahalanobis distances can not be calculated."
-    end
-    covinv = inv(covmat)
-    for i in 1:n
-        for j in i:n
-            if i != j 
-                @inbounds d[i, j] = sqrt((dataMatrix[i,:] .- dataMatrix[j,:]) * covinv * (dataMatrix[i,:] .- dataMatrix[j,:])')
-                @inbounds d[j, i] = d[i, j]
-            end
-        end
-    end
-    return d
-end
+using Plots 
 
 
 
@@ -120,3 +61,6 @@ function dataimage(dataMatrix::Array{Float64,2}; distance=:mahalanobis)
     end
     plot(colormatrix)
 end
+
+
+end # end of module DataImage

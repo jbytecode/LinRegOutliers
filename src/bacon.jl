@@ -214,7 +214,7 @@ function bacon(
         m::Int,
         method::String="mahalanobis",
         alpha=0.025
-)
+)::Dict
     n, p = size(X)
     subset = bacon_regression_initial_subset(X, y, m, method=method, alpha=alpha)
     r_prev = 0
@@ -233,7 +233,7 @@ function bacon(
     return result
 end
 
-function bacon(setting::RegressionSetting; m::Int, method::String="mahalanobis", alpha=0.025)
+function bacon(setting::RegressionSetting; m::Int, method::String="mahalanobis", alpha=0.025)::Dict
     X, y = @extractRegressionSetting setting
     return bacon(X, y, m=m, method=method, alpha=alpha)
 end

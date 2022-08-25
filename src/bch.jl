@@ -63,7 +63,7 @@ julia> Dict{Any,Any} with 7 entries:
 Billor, Nedret, Samprit Chatterjee, and Ali S. Hadi. "A re-weighted least squares method 
 for robust regression estimation." American journal of mathematical and management sciences 26.3-4 (2006): 229-252.
 """
-function bch(setting::RegressionSetting; alpha = 0.05, maxiter = 1000, epsilon = 0.000001)
+function bch(setting::RegressionSetting; alpha = 0.05, maxiter = 1000, epsilon = 0.000001)::Dict
     X, y = @extractRegressionSetting setting
     return bch(X, y, alpha = alpha, maxiter = maxiter, epsilon = epsilon)
 end
@@ -76,7 +76,7 @@ function bch(
     alpha = 0.05,
     maxiter = 1000,
     epsilon = 0.000001,
-)
+)::Dict
     n, p = size(Xdesign)
     h = Int(floor((n + p + 1.0) / 2))
     X = Xdesign

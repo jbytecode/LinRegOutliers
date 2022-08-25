@@ -5,34 +5,13 @@ export asm2000
 import StatsBase: quantile, standardize, ZScoreTransform, mean, sample, cov
 import LinearAlgebra: det
 import Clustering: Hclust, hclust, cutree
+
+
 import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector
+import ..Diagnostics: mahalanobisSquaredBetweenPairs
 import ..LTS:  lts 
 import ..SMR98: majona
 
-function mahalanobisSquaredBetweenPairs(pairs::Matrix; covmatrix = nothing)
-    n, _ = size(pairs)
-    newmat = zeros(Float64, n, n)
-    if covmatrix === nothing
-        covmatrix = cov(pairs)
-    end
-    try
-        invm = inv(covmatrix)
-        for i = 1:n
-            @inbounds for j = i:n
-                newmat[i, j] =
-                    ((pairs[i, :] .- pairs[j, :])' * invm * (pairs[i, :] .- pairs[j, :]))
-                newmat[j, i] = newmat[i, j]
-            end
-        end
-        return newmat
-    catch e
-        @warn e
-        if det(covmatrix) == 0
-            @warn "singular covariance matrix, mahalanobis distances can not be calculated"
-        end
-        return zeros(Float64, (n, n))
-    end
-end
 
 
 """
@@ -66,7 +45,7 @@ Dict{Any,Any} with 1 entry:
 Setan, Halim, and Mohd Nor Mohamad. "Identifying multiple outliers in 
 linear regression: Robust fit and clustering approach." (2000).
 """
-function asm2000(setting::RegressionSetting)
+function asm2000(setting::RegressionSetting)::Dict
     X, y = @extractRegressionSetting setting
     return asm2000(X, y)
 end

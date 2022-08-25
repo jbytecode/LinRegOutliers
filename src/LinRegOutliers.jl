@@ -107,6 +107,7 @@ import .Hadi94: hadi1994
 
 # Gray-scale images of distance matrices
 include("dataimage.jl")
+import .DataImage: dataimage
 
 # Compact genetic algorithm
 include("cga.jl")
