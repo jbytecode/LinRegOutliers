@@ -1,15 +1,16 @@
 module HS93
 
 
-export hs93 
+export hs93
 
 
-import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..Basis:
+    RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
 import ..OrdinaryLeastSquares: ols, predict, residuals, coef
 import ..Diagnostics: dffit
 
 import Distributions: TDist
-import StatsBase: quantile 
+import StatsBase: quantile
 
 """
 
@@ -94,29 +95,36 @@ Hadi, Ali S., and Jeffrey S. Simonoff. "Procedures for the identification of
 multiple outliers in linear models." Journal of the American Statistical 
 Association 88.424 (1993): 1264-1272.
 """
-function hs93basicsubset(setting::RegressionSetting, initialindices::Array{Int,1})::Array{Int,1}
+function hs93basicsubset(
+    setting::RegressionSetting,
+    initialindices::Array{Int,1},
+)::Array{Int,1}
     X = designMatrix(setting)
     y = responseVector(setting)
     return hs93basicsubset(X, y, initialindices)
 end
 
 
-function hs93basicsubset(X::Array{Float64,2}, y::Array{Float64,1}, initialindices::Array{Int,1})::Array{Int,1}
+function hs93basicsubset(
+    X::Array{Float64,2},
+    y::Array{Float64,1},
+    initialindices::Array{Int,1},
+)::Array{Int,1}
     n, p = size(X)
     h = floor((n + p - 1) / 2)
     s = length(initialindices)
     indices = initialindices
-    for i in range(s + 1, stop=h)
-        olsreg = ols(X[indices,:], y[indices])
+    for i in range(s + 1, stop = h)
+        olsreg = ols(X[indices, :], y[indices])
         betas = coef(olsreg)
         d = zeros(Float64, n)
-        XM = X[indices,:]
-        for j in 1:n
-            xxxx = X[j,:]' * inv(XM'XM) * X[j,:]
+        XM = X[indices, :]
+        for j = 1:n
+            xxxx = X[j, :]' * inv(XM'XM) * X[j, :]
             if j in indices
-                @inbounds d[j] = abs.(y[j] - sum(X[j,:] .* betas)) / sqrt(1 - xxxx)
+                @inbounds d[j] = abs.(y[j] - sum(X[j, :] .* betas)) / sqrt(1 - xxxx)
             else
-                @inbounds d[j] = abs.(y[j] - sum(X[j,:] .* betas)) / sqrt(1 + xxxx)
+                @inbounds d[j] = abs.(y[j] - sum(X[j, :] .* betas)) / sqrt(1 + xxxx)
             end
         end
         orderingd = sortperm(abs.(d))
@@ -162,14 +170,19 @@ Hadi, Ali S., and Jeffrey S. Simonoff. "Procedures for the identification of
 multiple outliers in linear models." Journal of the American Statistical 
 Association 88.424 (1993): 1264-1272.
 """
-function hs93(setting::RegressionSetting; alpha=0.05, basicsubsetindices=nothing)
+function hs93(setting::RegressionSetting; alpha = 0.05, basicsubsetindices = nothing)
     X = designMatrix(setting)
     y = responseVector(setting)
-    return hs93(X, y, alpha=alpha, basicsubsetindices=basicsubsetindices)
+    return hs93(X, y, alpha = alpha, basicsubsetindices = basicsubsetindices)
 end
 
 
-function hs93(X::Array{Float64,2}, y::Array{Float64,1}; alpha=0.05, basicsubsetindices=nothing)
+function hs93(
+    X::Array{Float64,2},
+    y::Array{Float64,1};
+    alpha = 0.05,
+    basicsubsetindices = nothing,
+)
     if basicsubsetindices === nothing
         initialsetindices = hs93initialset(X, y)
         basicsubsetindices = hs93basicsubset(X, y, initialsetindices)
@@ -181,22 +194,22 @@ function hs93(X::Array{Float64,2}, y::Array{Float64,1}; alpha=0.05, basicsubseti
         olsreg = ols(X[indices, :], y[indices])
         betas = coef(olsreg)
         resids = residuals(olsreg)
-        sigma = sqrt(sum(resids.^2.0) / (length(resids) - p))
+        sigma = sqrt(sum(resids .^ 2.0) / (length(resids) - p))
         d = zeros(Float64, n)
-        XM = @inbounds X[indices,:]
+        XM = @inbounds X[indices, :]
         iXmXm = inv(XM'XM)
-        for j in 1:n
-            @inbounds xMMx = X[j,:]' * iXmXm * X[j,:]
+        for j = 1:n
+            @inbounds xMMx = X[j, :]' * iXmXm * X[j, :]
             if j in indices
-                @inbounds d[j] = (y[j] - sum(X[j,:] .* betas)) / (sigma * sqrt(1.0 - xMMx))
+                @inbounds d[j] = (y[j] - sum(X[j, :] .* betas)) / (sigma * sqrt(1.0 - xMMx))
             else
-                @inbounds d[j] = (y[j] - sum(X[j,:] .* betas)) / (sigma * sqrt(1.0 + xMMx))
+                @inbounds d[j] = (y[j] - sum(X[j, :] .* betas)) / (sigma * sqrt(1.0 + xMMx))
             end
         end
         orderingd = sortperm(abs.(d))
         tdist = TDist(s - p)
-        tcalc = quantile(tdist,  alpha / (2 * (s + 1)))
-        if abs(d[orderingd][s + 1]) > abs(tcalc)
+        tcalc = quantile(tdist, alpha / (2 * (s + 1)))
+        if abs(d[orderingd][s+1]) > abs(tcalc)
             result = Dict()
             result["d"] = d
             result["t"] = tcalc

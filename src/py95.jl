@@ -4,12 +4,13 @@ module PY95
 export py95, py95SuspectedObservations
 
 
-import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..Basis:
+    RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
 import ..OrdinaryLeastSquares: ols, predict, residuals, coef
 import ..Diagnostics: hatmatrix
 
 
-import LinearAlgebra: eigen 
+import LinearAlgebra: eigen
 
 """
 
@@ -34,27 +35,27 @@ function py95ProcessEigenVector(v::Array{Float64,1})
     ordered_coordinates = sortperm(v)
     a = zeros(Float64, n)
     b = zeros(Float64, n)
-    @inbounds for i in n:(-1):(n - c1)
-        a[i] = v[i] / v[i - 1]
+    @inbounds for i = n:(-1):(n-c1)
+        a[i] = v[i] / v[i-1]
     end
-    @inbounds for i in 1:c2
-        b[i] = v[i] / v[i + 1] 
+    @inbounds for i = 1:c2
+        b[i] = v[i] / v[i+1]
     end
     set_of_a = filter(i -> abs(a[i]) > k, ordered_coordinates)
     set_of_b = filter(i -> abs(b[i]) > k, ordered_coordinates)
     outliersetJ = Int[]
     outliersetI = Int[]
-    
+
     if length(set_of_a) == 0 || length(set_of_b) == 0
         return (nothing, nothing)
-    end 
+    end
     i0 = set_of_b[1]
     j0 = set_of_a[1]
-    if i0 > 1 
-        outliersetI = ordered_coordinates[1:(j0 - 1)]
+    if i0 > 1
+        outliersetI = ordered_coordinates[1:(j0-1)]
     end
     if j0 > 1
-        outliersetJ = ordered_coordinates[n:(-1):(n - i0 + 1)]
+        outliersetJ = ordered_coordinates[n:(-1):(n-i0+1)]
     end
     (outliersetI, outliersetJ)
 end
@@ -86,10 +87,10 @@ function py95SuspectedObservations(X::Array{Float64,2}, y::Array{Float64,1})
     olsreg = ols(X, y)
     resids = residuals(olsreg)
     H = hatmatrix(X)
-    s2 = sum(resids.^2.0) / (n - p)
+    s2 = sum(resids .^ 2.0) / (n - p)
     D = zeros(Float64, (n, n))
     E = zeros(Float64, (n, n))
-    @inbounds for i in 1:n
+    @inbounds for i = 1:n
         D[i, i] = 1 / (1 - H[i, i])
         E[i, i] = resids[i]
     end
@@ -99,13 +100,13 @@ function py95SuspectedObservations(X::Array{Float64,2}, y::Array{Float64,1})
     eig_vectors = eig.vectors
     nonzero_eigen_indices = filter(i -> imag(eig_values[i]) == 0, 1:n)
     nonzero_eigen_vectors = eig_vectors[:, nonzero_eigen_indices]
-    real_vectors = convert(Array{Float64,2}, nonzero_eigen_vectors) 
+    real_vectors = convert(Array{Float64,2}, nonzero_eigen_vectors)
     s1, s2 = size(real_vectors)
     suspected_observation_sets = Set{Array{Int,1}}()
-    for i in 1:s2
-        set1, set2 = py95ProcessEigenVector(real_vectors[:,i])
+    for i = 1:s2
+        set1, set2 = py95ProcessEigenVector(real_vectors[:, i])
         if !(set1 isa Nothing)
-            if length(set1) < nhalf 
+            if length(set1) < nhalf
                 push!(suspected_observation_sets, set1)
             end
         end
@@ -141,12 +142,16 @@ function jacknifedS(setting::RegressionSetting, omittedIndices::Array{Int,1})::F
     return jacknifedS(X, y, omittedIndices)
 end
 
-function jacknifedS(X::Array{Float64,2}, y::Array{Float64,1}, omittedIndices::Array{Int,1})::Float64
+function jacknifedS(
+    X::Array{Float64,2},
+    y::Array{Float64,1},
+    omittedIndices::Array{Int,1},
+)::Float64
     n, p = size(X)
     indices = [i for i in 1:n if !(i in omittedIndices)]
-    olsreg = ols(X[indices,:], y[indices])
+    olsreg = ols(X[indices, :], y[indices])
     e = residuals(olsreg)
-    s = sqrt(sum(e.^2.0) / (n - p - length(omittedIndices)))
+    s = sqrt(sum(e .^ 2.0) / (n - p - length(omittedIndices)))
     return s
 end
 
@@ -199,9 +204,9 @@ function py95(X::Array{Float64,2}, y::Array{Float64,1})
     outlierset = Set{Int}()
     for aset in suspicious_sets
         clean_indices = setdiff(all_indices, aset)
-        olsreg = ols(X[clean_indices,:], y[clean_indices])
+        olsreg = ols(X[clean_indices, :], y[clean_indices])
         betas = coef(olsreg)
-        e = [y[i] - sum(X[i,:] .* betas) for i in 1:n]
+        e = [y[i] - sum(X[i, :] .* betas) for i = 1:n]
         jks = jacknifedS(X, y, aset)
         stds = e / jks
         outlier_indices = filter(i -> abs(stds[i]) > 2.5, 1:n)

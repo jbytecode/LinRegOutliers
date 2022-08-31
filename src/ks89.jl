@@ -3,12 +3,13 @@ module KS89
 
 export ks89
 
-import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..Basis:
+    RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
 import ..OrdinaryLeastSquares: ols, predict, residuals, coef
-import ..Diagnostics: studentizedResiduals, jacknifedS 
+import ..Diagnostics: studentizedResiduals, jacknifedS
 
 import Distributions: TDist
-import StatsBase: quantile 
+import StatsBase: quantile
 
 
 
@@ -34,13 +35,18 @@ function ks89RecursiveResidual(setting::RegressionSetting, indices::Array{Int,1}
     return ks89RecursiveResidual(X, y, indices, k)
 end
 
-function ks89RecursiveResidual(X::Array{Float64,2}, y::Array{Float64,1}, indices::Array{Int,1}, k::Int)
+function ks89RecursiveResidual(
+    X::Array{Float64,2},
+    y::Array{Float64,1},
+    indices::Array{Int,1},
+    k::Int,
+)
     useX = X[indices, :]
     useY = y[indices]
     olsreg = ols(useX, useY)
     betas = coef(olsreg)
     XX = inv(useX'useX)
-    w = (y[k] - X[k,:]' * betas) / sqrt(1 + X[k,:]' * XX * X[k,:])
+    w = (y[k] - X[k, :]' * betas) / sqrt(1 + X[k, :]' * XX * X[k, :])
     return w
 end
 
@@ -75,14 +81,14 @@ Kianifard, Farid, and William H. Swallow. "Using recursive residuals, calculated
 adaptively-ordered observations, to identify outliers in linear regression."
 Biometrics (1989): 571-585.
 """
-function ks89(setting::RegressionSetting; alpha=0.05)
+function ks89(setting::RegressionSetting; alpha = 0.05)
     X = designMatrix(setting)
     y = responseVector(setting)
-    return ks89(X, y, alpha=alpha)
+    return ks89(X, y, alpha = alpha)
 end
 
 
-function ks89(X::Array{Float64,2}, y::Array{Float64,1}; alpha=0.05)::Dict
+function ks89(X::Array{Float64,2}, y::Array{Float64,1}; alpha = 0.05)::Dict
     stdres = studentizedResiduals(X, y)
     orderingindices = sortperm(abs.(stdres))
     n, p = size(X)
@@ -90,7 +96,7 @@ function ks89(X::Array{Float64,2}, y::Array{Float64,1}; alpha=0.05)::Dict
     w = zeros(Float64, n)
     s = zeros(Float64, n)
     ws = zeros(Float64, n)
-    @inbounds for i in (p + 1):n
+    @inbounds for i = (p+1):n
         index = orderingindices[i]
         w[index] = ks89RecursiveResidual(X, y, basisindices, index)
         s[index] = jacknifedS(X, y, index)
@@ -100,9 +106,7 @@ function ks89(X::Array{Float64,2}, y::Array{Float64,1}; alpha=0.05)::Dict
     td = TDist(n - p - 1)
     q = quantile(td, alpha)
     result = filter(i -> abs.(ws[i]) > abs(q), 1:n)
-    result = Dict(
-        "outliers" => result
-    )
+    result = Dict("outliers" => result)
     return result
 end
 

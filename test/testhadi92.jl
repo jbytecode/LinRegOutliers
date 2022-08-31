@@ -2,7 +2,7 @@
     phones_matrix = hcat(phones[:, "calls"], phones[:, "year"])
     result = hadi1992(phones_matrix)
     outlier_indices = result["outliers"]
-    for i in 15:20
+    for i = 15:20
         @test i in outlier_indices
     end
 
@@ -10,7 +10,7 @@
     hbk_n, hbk_p = size(hbk_matrix)
     result = hadi1992(hbk_matrix)
     outlier_indices = result["outliers"]
-    for i in 15:hbk_n
+    for i = 15:hbk_n
         @test !(i in outlier_indices)
     end
 

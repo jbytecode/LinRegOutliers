@@ -5,10 +5,11 @@ export ransac
 
 
 
-import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..Basis:
+    RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
 import ..OrdinaryLeastSquares: ols, predict, residuals, coef
-import StatsBase: sample 
-import LinearAlgebra: norm 
+import StatsBase: sample
+import LinearAlgebra: norm
 
 
 """
@@ -43,12 +44,29 @@ Dict{String,Array{Int64,1}} with 1 entry:
 Martin A. Fischler & Robert C. Bolles (June 1981). "Random Sample Consensus: A Paradigm for Model Fitting with Applications to Image Analysis and Automated Cartography"
 Comm. ACM. 24 (6): 381–395.
 """
-function ransac(setting::RegressionSetting; t::Float64, w::Float64=0.5, m::Int=0, k::Int=0, d::Int=0, confidence::Float64=0.99)
+function ransac(
+    setting::RegressionSetting;
+    t::Float64,
+    w::Float64 = 0.5,
+    m::Int = 0,
+    k::Int = 0,
+    d::Int = 0,
+    confidence::Float64 = 0.99,
+)
     X, y = @extractRegressionSetting setting
-    return ransac(X, y, t=t, w=w, m=m, k=k, d=d, confidence=confidence)
+    return ransac(X, y, t = t, w = w, m = m, k = k, d = d, confidence = confidence)
 end
 
-function ransac(X::Array{Float64,2}, y::Array{Float64,1}; t::Float64, w::Float64=0.5, m::Int=0, k::Int=0, d::Int=0, confidence::Float64=0.99)
+function ransac(
+    X::Array{Float64,2},
+    y::Array{Float64,1};
+    t::Float64,
+    w::Float64 = 0.5,
+    m::Int = 0,
+    k::Int = 0,
+    d::Int = 0,
+    confidence::Float64 = 0.99,
+)
 
     n, p = size(X)
     if d == 0
@@ -69,9 +87,9 @@ function ransac(X::Array{Float64,2}, y::Array{Float64,1}; t::Float64, w::Float64
     maximum_inlier_indices = zeros(Int, n)
     minimum_error = Inf
 
-    for iteration in 1:k
+    for iteration = 1:k
         inliers_count = 0
-        sampled_indices = sample(1:n, m, replace=false)
+        sampled_indices = sample(1:n, m, replace = false)
         ols_sampled_points = ols(X[sampled_indices, :], y[sampled_indices])
         betas = coef(ols_sampled_points)
 
@@ -93,9 +111,7 @@ function ransac(X::Array{Float64,2}, y::Array{Float64,1}; t::Float64, w::Float64
         end
     end
 
-    result = Dict(
-        "outliers" => setdiff(1:n, maximum_inlier_indices)
-    )
+    result = Dict("outliers" => setdiff(1:n, maximum_inlier_indices))
     return result
 end
 

@@ -1,15 +1,16 @@
-module MVELTSPlot 
+module MVELTSPlot
 
 export mveltsplot
 
-import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
-import ..LTS: lts 
-import ..MVE: mve 
+import ..Basis:
+    RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..LTS: lts
+import ..MVE: mve
 
 import Distributions: Chisq
-import StatsBase: quantile 
+import StatsBase: quantile
 
-using Plots 
+using Plots
 
 """
     mveltsplot(setting; alpha = 0.05, showplot = true)
@@ -42,7 +43,7 @@ good leverage points (observations far from the remaining of data in both x and 
 Van Aelst, Stefan, and Peter Rousseeuw. "Minimum volume ellipsoid." Wiley 
 Interdisciplinary Reviews: Computational Statistics 1.1 (2009): 71-82.
 """
-function mveltsplot(setting::RegressionSetting; alpha=0.05, showplot=true)
+function mveltsplot(setting::RegressionSetting; alpha = 0.05, showplot = true)
     ltsresult = lts(setting)
     mveresult = mve(setting.data)
 
@@ -54,21 +55,27 @@ function mveltsplot(setting::RegressionSetting; alpha=0.05, showplot=true)
 
     scaledresiduals = ltsresult["scaled.residuals"]
     robdistances = sqrt.(mveresult["squared.mahalanobis"])
-    
 
-    regularpoints = filter(i -> abs(scaledresiduals[i]) < 2.5 && robdistances[i] < chicrit, indices)
+
+    regularpoints =
+        filter(i -> abs(scaledresiduals[i]) < 2.5 && robdistances[i] < chicrit, indices)
     outliers = filter(i -> scaledresiduals[i] > 2.5 && robdistances[i] < chicrit, indices)
-    leverage = filter(i -> abs(scaledresiduals[i]) < 2.5 && robdistances[i] > chicrit, indices)
-    outlierandleveragepoints = filter(i -> abs(scaledresiduals[i]) > 2.5 && robdistances[i] > chicrit, indices)
+    leverage =
+        filter(i -> abs(scaledresiduals[i]) < 2.5 && robdistances[i] > chicrit, indices)
+    outlierandleveragepoints =
+        filter(i -> abs(scaledresiduals[i]) > 2.5 && robdistances[i] > chicrit, indices)
 
     scplot = nothing
     if showplot
-        scplot = scatter(robdistances, 
-            scaledresiduals, 
-            legend=false, 
-            series_annotations=text.(1:n, :bottom),
-            tickfont=font(10), guidefont=font(10), labelfont=font(10)
-            )
+        scplot = scatter(
+            robdistances,
+            scaledresiduals,
+            legend = false,
+            series_annotations = text.(1:n, :bottom),
+            tickfont = font(10),
+            guidefont = font(10),
+            labelfont = font(10),
+        )
         title!("MVE - LTS Plot")
         xlabel!("Robust distances")
         ylabel!("Scaled residuals")
@@ -83,7 +90,7 @@ function mveltsplot(setting::RegressionSetting; alpha=0.05, showplot=true)
     result["chi.squared"] = chicrit^2
     result["regular.points"] = regularpoints
     result["outlier.points"] = outliers
-    result["leverage.points"] = leverage 
+    result["leverage.points"] = leverage
     result["outlier.and.leverage.points"] = outlierandleveragepoints
     return result
 end

@@ -85,7 +85,7 @@ function wls(X::Array{Float64,2}, y::Array{Float64,1}, wts::Array{Float64,1})::O
     #  return ols(W * X, W * y)
     # return OLS(X, y, qr(W * X, Val(true)) \ (W * y))
     return OLS(X, y, qr(W * X, ColumnNorm()) \ (W * y))
-end 
+end
 
 
 """
@@ -97,7 +97,7 @@ Estimate weighted least squares regression and create OLS object with estimated 
 - `ols::OLS`: OLS object, possible created using `ols` or `wls`.
 
 """
-residuals(ols::OLS)::Array{Float64, 1} = ols.y .- ols.X * ols.betas
+residuals(ols::OLS)::Array{Float64,1} = ols.y .- ols.X * ols.betas
 
 
 """
@@ -109,7 +109,7 @@ Extract regression coefficients from an `OLS` object.
 - `ols::OLS`: OLS object, possible created using `ols` or `wls`.
 
 """
-coef(ols::OLS)::Array{Float64, 1} = ols.betas
+coef(ols::OLS)::Array{Float64,1} = ols.betas
 
 
 """
@@ -121,9 +121,9 @@ Calculate estimated response using an `OLS` object.
 - `ols::OLS`: OLS object, possible created using `ols` or `wls`.
 
 """
-predict(ols::OLS)::Array{Float64, 1} = ols.X * ols.betas
+predict(ols::OLS)::Array{Float64,1} = ols.X * ols.betas
 
-predict(ols::OLS, X::Array{Float64,2})::Array{Float64, 1} = X * ols.betas
+predict(ols::OLS, X::Array{Float64,2})::Array{Float64,1} = X * ols.betas
 
 
 

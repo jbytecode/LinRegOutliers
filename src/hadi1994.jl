@@ -4,11 +4,12 @@ module Hadi94
 export hadi1994
 
 
-import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..Basis:
+    RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
 import ..Diagnostics: mahalanobisSquaredMatrix, coordinatwisemedians
 
-import StatsBase: mean, cov, quantile 
-import LinearAlgebra: det, diag 
+import StatsBase: mean, cov, quantile
+import LinearAlgebra: det, diag
 import Distributions: Chisq
 
 
@@ -47,7 +48,7 @@ Dict{Any,Any} with 3 entries:
 Hadi, Ali S. "A modification of a method for the dedection of outliers in multivariate samples"
 Journal of the Royal Statistical Society: Series B (Methodological) 56.2 (1994): 393-396.
 """
-function hadi1994(multivariateData::Array{Float64,2}; alpha=0.05)
+function hadi1994(multivariateData::Array{Float64,2}; alpha = 0.05)
     n, p = size(multivariateData)
     h = Int(round((n + p + 1.0) / 2.0))
     cnp = (1 + ((2) / (n - 1 - 3p)) + ((p + 1) / (n - p)))^2
@@ -57,14 +58,15 @@ function hadi1994(multivariateData::Array{Float64,2}; alpha=0.05)
 
     meds = coordinatwisemedians(multivariateData)
     Sm = (1.0 / (n - 1.0)) * (multivariateData .- meds')' * (multivariateData .- meds')
-    mah0 = diag(mahalanobisSquaredMatrix(multivariateData, meanvector=meds, covmatrix=Sm))
+    mah0 =
+        diag(mahalanobisSquaredMatrix(multivariateData, meanvector = meds, covmatrix = Sm))
     ordering_indices_mah0 = sortperm(mah0)
     best_indices_mah0 = ordering_indices_mah0[1:h]
     starting_data = multivariateData[best_indices_mah0, :]
 
     Cv = coordinatwisemedians(starting_data)
     Sv = (1.0 / (h - 1.0)) * (starting_data .- Cv')' * (starting_data .- Cv')
-    mah1 = diag(mahalanobisSquaredMatrix(multivariateData, meanvector=Cv, covmatrix=Sv))
+    mah1 = diag(mahalanobisSquaredMatrix(multivariateData, meanvector = Cv, covmatrix = Sv))
     ordering_indices_mah1 = sortperm(mah1)
 
     r = p + 1
@@ -95,7 +97,13 @@ function hadi1994(multivariateData::Array{Float64,2}; alpha=0.05)
             end
         end
 
-        mah1 = diag(mahalanobisSquaredMatrix(multivariateData, meanvector=Cb, covmatrix=(cfactor * Sb)))
+        mah1 = diag(
+            mahalanobisSquaredMatrix(
+                multivariateData,
+                meanvector = Cb,
+                covmatrix = (cfactor * Sb),
+            ),
+        )
 
         ordering_indices_mah1 = sortperm(mah1)
         basic_subset_indices = ordering_indices_mah1[1:r]
@@ -111,7 +119,7 @@ function hadi1994(multivariateData::Array{Float64,2}; alpha=0.05)
     result = Dict()
     result["outliers"] = sort(outlierset)
     result["critical.chi.squared"] = critical_quantile
-    result["rth.robust.distance"] = sorted_mah1[r - 1]
+    result["rth.robust.distance"] = sorted_mah1[r-1]
     return result
 end
 

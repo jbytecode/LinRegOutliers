@@ -1,15 +1,16 @@
-module Satman2015 
+module Satman2015
 
 
-export satman2015, dominates 
+export satman2015, dominates
 
-import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..Basis:
+    RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
 import ..OrdinaryLeastSquares: ols, predict, residuals, coef
 import ..Diagnostics: mahalanobisSquaredMatrix
 import ..LTS: iterateCSteps
-import StatsBase: median, cov, mean  
-import LinearAlgebra: diag 
-import DataFrames: DataFrame 
+import StatsBase: median, cov, mean
+import LinearAlgebra: diag
+import DataFrames: DataFrame
 
 
 """
@@ -41,7 +42,7 @@ International conference on parallel problem solving from nature. Springer, Berl
 function dominates(p1::Array, p2::Array)::Bool
     n = length(p1)
     notworse = count(i -> p1[i] < p2[i], 1:n)
-    better   = count(i -> p1[i] > p2[i], 1:n)
+    better = count(i -> p1[i] > p2[i], 1:n)
     return (notworse == 0) && (better > 0)
 end
 
@@ -149,10 +150,10 @@ function ndsranks(data::Matrix)::Array{Int}
     n, _ = size(data)
     ranks = zeros(Int, n)
     mat = convert(Matrix, data)
-    for i in 1:n
-        for j in 1:n
-            if i != j 
-                if dominates(mat[i,:], mat[j,:])
+    for i = 1:n
+        for j = 1:n
+            if i != j
+                if dominates(mat[i, :], mat[j, :])
                     ranks[i] += 1
                 end
             end
@@ -194,7 +195,7 @@ julia> midlist(10,3)
 Satman, Mehmet Hakan. "A new algorithm for detecting outliers in linear regression." 
 International Journal of statistics and Probability 2.3 (2013): 101.
 """
-function midlist(n::Int, p::Int)::Array{Int, 1}
+function midlist(n::Int, p::Int)::Array{Int,1}
     midlist = []
     if (n - p) % 2 == 0
         start = ((n - p) / 2) + 1
@@ -202,9 +203,9 @@ function midlist(n::Int, p::Int)::Array{Int, 1}
         midlist = collect(start:stop)
     else
         start = Int(floor((n - p) / 2)) + 1
-        stop = start + p  
+        stop = start + p
         midlist = collect(start:stop)
-    end 
+    end
     return midlist
 end
 
@@ -246,7 +247,7 @@ function satman2015(setting::RegressionSetting)
 end
 
 
-function satman2015(X::Array{Float64, 2}, y::Array{Float64, 1})
+function satman2015(X::Array{Float64,2}, y::Array{Float64,1})
     n, p = size(X)
     h = Int(floor((n + p + 1.0) / 2.0))
 
@@ -258,8 +259,8 @@ function satman2015(X::Array{Float64, 2}, y::Array{Float64, 1})
     basic_center_indices = midlist(n, p)
     basic_subset_indices = ranks_ordering[basic_center_indices]
 
-    meanvector = applyColumns(mean, X[basic_subset_indices,:])
-    covmat = cov(X[basic_subset_indices,:])
+    meanvector = applyColumns(mean, X[basic_subset_indices, :])
+    covmat = cov(X[basic_subset_indices, :])
     mhs = mahalanobisSquaredMatrix(X, meanvector = meanvector, covmatrix = covmat)
     if mhs isa Nothing
         md2 = zeros(Float64, n)
@@ -277,9 +278,9 @@ function satman2015(X::Array{Float64, 2}, y::Array{Float64, 1})
     resids = y .- (X * betas)
     med_res = median(resids)
     standardized_resids = (resids .- med_res) / median(abs.(resids .- med_res))
-    
+
     outlierset = filter(i -> abs(standardized_resids[i]) > 2.5, allindices)
-    
+
     result = Dict()
     result["outliers"] = outlierset
 

@@ -1,11 +1,12 @@
-module Bacon 
+module Bacon
 
 
-export bacon 
+export bacon
 
 
 
-import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..Basis:
+    RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
 import ..OrdinaryLeastSquares: ols, predict, residuals, coef
 import ..Diagnostics: mahalanobisSquaredMatrix
 import LinearAlgebra: diag, norm, rank
@@ -22,13 +23,17 @@ Two methods V1 and V2 are defined in the paper which use Mahalanobis distance or
  - `m`: The number of points to include in the initial subset
  - `method`: The distance method to use for selecting the points for initial subset
 """
-function initial_basic_subset_multivariate_data(X::Array{Float64,2}, m::Int; method::String="mahalanobis")
+function initial_basic_subset_multivariate_data(
+    X::Array{Float64,2},
+    m::Int;
+    method::String = "mahalanobis",
+)
     n, _ = size(X)
     if method == "mahalanobis"
         distances = sqrt.(diag(mahalanobisSquaredMatrix(X)))
     elseif method == "median"
         median_vector = applyColumns(median, X)
-        distances = [norm(X[i, :] - median_vector, 2) for i in 1:n]
+        distances = [norm(X[i, :] - median_vector, 2) for i = 1:n]
     else
         return
     end
@@ -75,14 +80,19 @@ This function performs the outlier detection for multivariate data according to 
  - `method`: The distance method to use for selecting the points for initial subset
  - `alpha`: The quantile used for cutoff
 """
-function bacon_multivariate_outlier_detection(X::Array{Float64,2}, m::Int; method::String="mahalanobis", alpha::Float64=0.025)
+function bacon_multivariate_outlier_detection(
+    X::Array{Float64,2},
+    m::Int;
+    method::String = "mahalanobis",
+    alpha::Float64 = 0.025,
+)
     n, p = size(X)
     chisquared = Chisq(p)
     chisqcrit = quantile(chisquared, 1.0 - (alpha / n))
     chi = sqrt(chisqcrit)
     h = Int(floor((n + p + 1) / 2))
     c_np = 1 + (p + 1) / (n - p) + 1 / (n - h - p)
-    initial_basic_subset = initial_basic_subset_multivariate_data(X, m, method=method)
+    initial_basic_subset = initial_basic_subset_multivariate_data(X, m, method = method)
     r_prev = 0
     r = length(initial_basic_subset)
     subset = initial_basic_subset
@@ -90,9 +100,18 @@ function bacon_multivariate_outlier_detection(X::Array{Float64,2}, m::Int; metho
 
     # iterate until the size of the subset no longer changes
     while (r_prev != r)
-        mean_basic_subset = mean(X[subset], dims=1)
+        mean_basic_subset = mean(X[subset], dims = 1)
         cov_basic_subset = X[subset]'X[subset]
-        distances = sqrt.(diag(mahalanobisSquaredMatrix(X, meanvector=mean_basic_subset, covmatrix=cov_basic_subset)))
+        distances =
+            sqrt.(
+                diag(
+                    mahalanobisSquaredMatrix(
+                        X,
+                        meanvector = mean_basic_subset,
+                        covmatrix = cov_basic_subset,
+                    ),
+                )
+            )
         c_hr = (h - r) / (h + r)
         c_hr = c_hr < 0 ? 0 : c_hr
         c_npr = c_hr + c_np
@@ -126,7 +145,7 @@ function compute_t_distance(X::Array{Float64,2}, y::Array{Float64}, subset::Arra
     err = residuals(least_squares_fit)
     sigma = sqrt((err'err) / (n - p))
     covmatrix_inv = inv(X[subset, :]'X[subset, :])
-    for i in 1:n
+    for i = 1:n
         scale_factor = (X[i, :]') * (covmatrix_inv * X[i, :])
         residual = (y[i] - X[i, :]' * betas)
         if i in subset
@@ -150,16 +169,21 @@ This function computes the initial subset having at least m elements which are l
  - `alpha`: The quantile used for cutoff
 """
 function bacon_regression_initial_subset(
-        X::Array{Float64,2},
-        y::Array{Float64},
-        m::Int;
-        method::String="mahalanobis",
-        alpha=0.025
+    X::Array{Float64,2},
+    y::Array{Float64},
+    m::Int;
+    method::String = "mahalanobis",
+    alpha = 0.025,
 )
     _, p = size(X)
 
     # remove the constant column and apply bacon_multivariate algorithm
-    distances = bacon_multivariate_outlier_detection(X[:, 2:end], m, method=method, alpha=alpha)["distances"]
+    distances = bacon_multivariate_outlier_detection(
+        X[:, 2:end],
+        m,
+        method = method,
+        alpha = alpha,
+    )["distances"]
     initial_subset = select_subset(X, m, distances)
 
     t = compute_t_distance(X, y, initial_subset)
@@ -209,33 +233,36 @@ Billor, Nedret, Ali S. Hadi, and Paul F. Velleman. "BACON: blocked adaptive comp
 Computational statistics & data analysis 34.3 (2000): 279-298.
 """
 function bacon(
-        X::Array{Float64,2},
-        y::Array{Float64};
-        m::Int,
-        method::String="mahalanobis",
-        alpha=0.025
+    X::Array{Float64,2},
+    y::Array{Float64};
+    m::Int,
+    method::String = "mahalanobis",
+    alpha = 0.025,
 )::Dict
     n, p = size(X)
-    subset = bacon_regression_initial_subset(X, y, m, method=method, alpha=alpha)
+    subset = bacon_regression_initial_subset(X, y, m, method = method, alpha = alpha)
     r_prev = 0
     r = length(subset)
     while (r != r_prev)
         t = compute_t_distance(X, y, subset)
         tdist = TDist(r - p)
-        cutoff = quantile(tdist,  1 - alpha / (2 * (r + 1)))
+        cutoff = quantile(tdist, 1 - alpha / (2 * (r + 1)))
         subset = filter(x -> t[x] < cutoff, 1:n)
         r_prev = r
         r = length(subset)
     end
-    result = Dict(
-        "outliers" => setdiff(1:n, subset)
-    )
+    result = Dict("outliers" => setdiff(1:n, subset))
     return result
 end
 
-function bacon(setting::RegressionSetting; m::Int, method::String="mahalanobis", alpha=0.025)::Dict
+function bacon(
+    setting::RegressionSetting;
+    m::Int,
+    method::String = "mahalanobis",
+    alpha = 0.025,
+)::Dict
     X, y = @extractRegressionSetting setting
-    return bacon(X, y, m=m, method=method, alpha=alpha)
+    return bacon(X, y, m = m, method = method, alpha = alpha)
 end
 
 

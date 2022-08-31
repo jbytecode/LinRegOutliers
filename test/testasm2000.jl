@@ -4,7 +4,7 @@
     reg = createRegressionSetting(@formula(calls ~ year), df)
     result = asm2000(reg)
     outliers = result["outliers"]
-    for i in 15:20
+    for i = 15:20
         @test i in outliers
     end
 end

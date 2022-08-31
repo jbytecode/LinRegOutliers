@@ -1,14 +1,15 @@
-module LTA 
+module LTA
 
 
 export lta
 
 
-import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..Basis:
+    RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
 import ..OrdinaryLeastSquares: ols, predict, residuals, coef
 
 import Combinatorics: combinations
-import StatsBase: sample 
+import StatsBase: sample
 
 """
 
@@ -50,9 +51,9 @@ Dict{Any,Any} with 2 entries:
 Hawkins, Douglas M., and David Olive. "Applications and algorithms for least trimmed sum of 
 absolute deviations regression." Computational Statistics & Data Analysis 32.2 (1999): 119-134.
 """
-function lta(setting::RegressionSetting; exact=false)
+function lta(setting::RegressionSetting; exact = false)
     X, y = @extractRegressionSetting setting
-    return lta(X, y, exact=exact)
+    return lta(X, y, exact = exact)
 end
 
 
@@ -74,7 +75,7 @@ for the given regression setting.
 Hawkins, Douglas M., and David Olive. "Applications and algorithms for least trimmed sum of 
 absolute deviations regression." Computational Statistics & Data Analysis 32.2 (1999): 119-134.
 """
-function lta(X::Array{Float64,2}, y::Array{Float64,1}; exact=false)
+function lta(X::Array{Float64,2}, y::Array{Float64,1}; exact = false)
     n, p = size(X)
     h = Int(floor((n + p + 1.0) / 2.0))
 
@@ -82,19 +83,19 @@ function lta(X::Array{Float64,2}, y::Array{Float64,1}; exact=false)
         psubsets = combinations(1:n, p)
     else
         iters = p * 3000
-        psubsets = [sample(1:n, p, replace=false) for i in 1:iters]
+        psubsets = [sample(1:n, p, replace = false) for i = 1:iters]
     end
 
     function lta_cost(subsetindices::Array{Int,1})::Tuple{Float64,Array{Float64,1}}
         try
-            subX = X[subsetindices,:]
+            subX = X[subsetindices, :]
             suby = y[subsetindices]
             olsreg = ols(subX, suby)
             betas = coef(olsreg)
             res_abs = abs.(y .- X * betas)
             ordered_res = sort(res_abs)
             cost = sum(ordered_res[1:h])
-            return (cost, betas) 
+            return (cost, betas)
         catch
             return (Inf64, [])
         end

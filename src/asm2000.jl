@@ -9,7 +9,7 @@ import Clustering: Hclust, hclust, cutree
 
 import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector
 import ..Diagnostics: mahalanobisSquaredBetweenPairs
-import ..LTS:  lts 
+import ..LTS: lts
 import ..SMR98: majona
 
 

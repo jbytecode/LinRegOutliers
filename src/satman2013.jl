@@ -4,12 +4,13 @@ module Satman2013
 export satman2013
 
 
-import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
-import ..LTS: iterateCSteps 
+import ..Basis:
+    RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..LTS: iterateCSteps
 import ..OrdinaryLeastSquares: ols, coef
 import ..Diagnostics: mahalanobisSquaredMatrix
-import StatsBase: median 
-import LinearAlgebra: diag 
+import StatsBase: median
+import LinearAlgebra: diag
 
 
 """
@@ -64,18 +65,19 @@ function satman2013(X::Array{Float64,2}, y::Array{Float64,1})
 
     covmat = zeros(p0, p0)
 
-    for i in 1:p0
-        for j in 1:p0
-            if i == j 
+    for i = 1:p0
+        for j = 1:p0
+            if i == j
                 @inbounds covmat[i, j] = median(abs.(X0[:, i] .- median(X0[:, i])))
             else
-                @inbounds covmat[i, j] = median((X0[:, i] .- median(X0[:, i])) .* (X0[:, j] .- median(X0[:, j])))
+                @inbounds covmat[i, j] =
+                    median((X0[:, i] .- median(X0[:, i])) .* (X0[:, j] .- median(X0[:, j])))
             end
         end
     end
 
     medians = applyColumns(median, X0)
-    mhs = mahalanobisSquaredMatrix(X0, meanvector=medians, covmatrix=covmat)
+    mhs = mahalanobisSquaredMatrix(X0, meanvector = medians, covmatrix = covmat)
     if mhs isa Nothing
         md2 = zeros(Float64, n)
     else
@@ -87,7 +89,7 @@ function satman2013(X::Array{Float64,2}, y::Array{Float64,1})
     best_h_indices = sorted_indices[1:h]
 
     crit, bestset = iterateCSteps(X, y, best_h_indices, h)
-    
+
     olsreg = ols(X[bestset, :], y[bestset])
     betas = coef(olsreg)
     resids = y .- (X * betas)
@@ -95,7 +97,7 @@ function satman2013(X::Array{Float64,2}, y::Array{Float64,1})
     standardized_resids = (resids .- med_res) / median(abs.(resids .- med_res))
 
     outlierset = filter(i -> abs(standardized_resids[i]) > 2.5, allindices)
-    
+
     result = Dict()
     result["outliers"] = outlierset
 

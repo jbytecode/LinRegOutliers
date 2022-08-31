@@ -1,4 +1,4 @@
-module SMR98 
+module SMR98
 
 
 export majona, smr98
@@ -7,17 +7,17 @@ export majona, smr98
 import Clustering: Hclust, hclust, cutree
 import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector
 import StatsBase: mean, std, standardize, ZScoreTransform
-import ..OrdinaryLeastSquares: ols, residuals, predict 
+import ..OrdinaryLeastSquares: ols, residuals, predict
 
 function distances(resids::Array{Float64,1}, fitteds::Array{Float64})::Array{Float64,2}
     n = length(resids)
     d = zeros(Float64, n, n)
-    @inbounds for i in 1:n
-        for j in i:n
-            if i != j 
+    @inbounds for i = 1:n
+        for j = i:n
+            if i != j
                 p1 = [resids[i], fitteds[i]]
                 p2 = [resids[j], fitteds[j]]
-                d[i, j] = sqrt(sum((p1 .- p2).^2.0))
+                d[i, j] = sqrt(sum((p1 .- p2) .^ 2.0))
                 d[j, i] = d[i, j]
             end
         end
@@ -88,18 +88,18 @@ identifying multiple outliers in linear regression." Computational statistics & 
 
 function smr98(X::Array{Float64,2}, y::Array{Float64,1})
     olsreg = ols(X, y)
-    stdres = standardize(ZScoreTransform, residuals(olsreg), dims=1)
-    stdfit = standardize(ZScoreTransform, predict(olsreg), dims=1)
+    stdres = standardize(ZScoreTransform, residuals(olsreg), dims = 1)
+    stdfit = standardize(ZScoreTransform, predict(olsreg), dims = 1)
     n, p = size(X)
     d = distances(stdres, stdfit)
     h = floor((n + p - 1) / 2)
-    hcl = hclust(d, linkage=:single)
+    hcl = hclust(d, linkage = :single)
     majonacrit = majona(hcl)
-    clustermappings = cutree(hcl, h=majonacrit)
+    clustermappings = cutree(hcl, h = majonacrit)
     uniquemappings = unique(clustermappings)
     for clustid in uniquemappings
         cnt = count(x -> x == clustid, clustermappings)
-        if cnt >= h 
+        if cnt >= h
             return Dict("outliers" => filter(i -> clustermappings[i] != clustid, 1:n))
         end
     end

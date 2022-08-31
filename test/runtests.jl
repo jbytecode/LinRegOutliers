@@ -31,9 +31,3 @@ include("testatkinson94.jl")
 include("testimon2005.jl")
 include("testcm97.jl")
 include("testbacon2000.jl")
-
-
-
-
-
-

@@ -1,14 +1,15 @@
-module GALTS 
+module GALTS
 
 
 export galts, gwcga
 
-import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..Basis:
+    RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
 import ..OrdinaryLeastSquares: ols, predict, residuals, coef
 
 import ..LTS: iterateCSteps
-import ..GA: ga 
-import ..CGA: cga 
+import ..GA: ga
+import ..CGA: cga
 
 """
 This method is a modified version of the algorithm given below.
@@ -27,7 +28,7 @@ end
 function gwcga(X::Array{Float64,2}, y::Array{Float64,1})
     n, p = size(X)
     h = Int(floor((n + p + 1.0) / 2.0))
-    minp =  p + 1
+    minp = p + 1
     all_indices = collect(1:n)
 
     full_reg = ols(X, y)
@@ -39,25 +40,25 @@ function gwcga(X::Array{Float64,2}, y::Array{Float64,1})
         if number_of_ones < minp
             return Inf64
         end
-        
+
         indices = filter(i -> bitstring[i] == 1, all_indices)
         objective, clean_subset = iterateCSteps(X, y, indices, h)
         ltsreg = ols(X[clean_subset, :], y[clean_subset])
         res2 = residuals(ltsreg)
         sumres2 = sum(res2 .* res2)
-        
 
-        cost = -(sumres1 - sumres2) 
+
+        cost = -(sumres1 - sumres2)
         # @info sumres1 sumres2 cost
         return cost
     end
 
-    result_cga = cga(chsize=n, costfunction=costfunction, popsize=10)
+    result_cga = cga(chsize = n, costfunction = costfunction, popsize = 10)
     initial_indices = filter(i -> result_cga[i] == 1, all_indices)
     # @info "Initial subset: " result_cga initial_indices
 
     objective, clean_subset = iterateCSteps(X, y, initial_indices, h)
-    
+
     ltsreg = ols(X[clean_subset, :], y[clean_subset])
     betas = coef(ltsreg)
 
@@ -105,20 +106,20 @@ Satman, M. Hakan. "A genetic algorithm based modification on the lts algorithm f
 function galts(setting::RegressionSetting)
     X = designMatrix(setting)
     y = responseVector(setting)
-    return galts(X, y) 
+    return galts(X, y)
 end
 
 function galts(X::Array{Float64,2}, y::Array{Float64,1})
     n, p = size(X)
     h = Int(floor((n + p + 1.0) / 2.0))
-    
+
     function fcost(genes::Array{Float64,1})
         objective, indices = iterateCSteps(X, y, genes, h)
-        return objective         
+        return objective
     end
-    
+
     mins = ones(Float64, p) * 10^6 * (-1.0)
-    maxs = ones(Float64, p) * 10^6 
+    maxs = ones(Float64, p) * 10^6
     popsize = 30
 
     garesult = ga(popsize, p, fcost, mins, maxs, 0.90, 0.05, 1, 100)
@@ -131,9 +132,9 @@ function galts(X::Array{Float64,2}, y::Array{Float64,1})
 
     result = Dict()
     result["betas"] = betas
-    result["best.subset"] = sort(subsetindices) 
+    result["best.subset"] = sort(subsetindices)
     result["objective"] = objective
-    return result 
+    return result
 end
 
 

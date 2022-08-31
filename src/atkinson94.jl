@@ -5,9 +5,10 @@ export atkinson94
 
 
 
-import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..Basis:
+    RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
 import ..OrdinaryLeastSquares: ols, predict, residuals, coef
-import StatsBase: sample 
+import StatsBase: sample
 import LinearAlgebra: pinv
 
 """
@@ -57,7 +58,12 @@ function atkinson94(setting::RegressionSetting; iters = nothing, crit = 3.0)::Di
     return atkinson94(X, y, iters = iters, crit = crit)
 end
 
-function atkinson94(X::Array{Float64,2}, y::Array{Float64,1}; iters = nothing, crit = 3.0)::Dict
+function atkinson94(
+    X::Array{Float64,2},
+    y::Array{Float64,1};
+    iters = nothing,
+    crit = 3.0,
+)::Dict
     n, p = size(X)
 
     # the median index

@@ -1,11 +1,12 @@
-module LAD 
+module LAD
 
-export lad 
+export lad
 
-using  JuMP
-using  GLPK 
+using JuMP
+using GLPK
 
-import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..Basis:
+    RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
 
 """
 
@@ -74,20 +75,20 @@ function lad(X::Array{Float64,2}, y::Array{Float64,1})
     JuMP.@variable(m, d[1:(2n)])
     JuMP.@variable(m, beta[1:p])
 
-    JuMP.@objective(m, Min, sum(d[i] for i in 1:(2n)))
+    JuMP.@objective(m, Min, sum(d[i] for i = 1:(2n)))
 
-    for i in 1:n
-        c = JuMP.@constraint(m,  y[i] -  sum(X[i,:] .* beta) + d[i] - d[n + i] == 0)
+    for i = 1:n
+        c = JuMP.@constraint(m, y[i] - sum(X[i, :] .* beta) + d[i] - d[n+i] == 0)
     end
 
-    for i in 1:(2n)
+    for i = 1:(2n)
         JuMP.@constraint(m, d[i] >= 0)
     end
 
     JuMP.optimize!(m)
 
     betahats = JuMP.value.(beta)
-    residuals = y .- X * betahats 
+    residuals = y .- X * betahats
 
     result = Dict()
     result["betas"] = betahats

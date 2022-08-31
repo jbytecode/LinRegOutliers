@@ -2,10 +2,11 @@ module DataImage
 
 
 
-import ..Diagnostics: mahalanobisSquaredMatrix, euclideanDistances, mahalanobisSquaredBetweenPairs
+import ..Diagnostics:
+    mahalanobisSquaredMatrix, euclideanDistances, mahalanobisSquaredBetweenPairs
 
 
-using Plots 
+using Plots
 
 
 
@@ -40,22 +41,22 @@ julia> dataimage(mat)
 Marchette, David J., and Jeffrey L. Solka. "Using data images for outlier detection." 
 Computational Statistics & Data Analysis 43.4 (2003): 541-552.
 """
-function dataimage(dataMatrix::Array{Float64,2}; distance=:mahalanobis)
+function dataimage(dataMatrix::Array{Float64,2}; distance = :mahalanobis)
     d = nothing
     if distance == :mahalanobis
         d = mahalanobisSquaredBetweenPairs(dataMatrix)
     elseif distance == :euclidean
         d = euclideanDistances(dataMatrix)
     else
-        @error "Distance function unknown: " distance 
+        @error "Distance function unknown: " distance
         @error "Using mahalanobis instead"
         d = mahalanobisSquaredBetweenPairs(dataMatrix)
     end
     colours = 1.0 .- d / maximum(d)
     n, _ = size(d)
     colormatrix = Array{RGB{Float64}}(undef, n, n)
-    for i in 1:n
-        for j in 1:n
+    for i = 1:n
+        for j = 1:n
             @inbounds colormatrix[i, j] = RGB(colours[i, j])
         end
     end

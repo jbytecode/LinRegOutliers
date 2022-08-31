@@ -3,7 +3,8 @@ module CM97
 
 export cm97
 
-import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..Basis:
+    RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
 import ..Diagnostics: hatmatrix
 import ..OrdinaryLeastSquares: ols, predict, residuals, coef, wls
 import StatsBase: median
@@ -40,8 +41,8 @@ Dict{String,Any} with 3 entries:
 Chatterjee, Samprit, and Martin Mächler. "Robust regression: A weighted least squares approach." 
 Communications in Statistics-Theory and Methods 26.6 (1997): 1381-1394.
 """
-function cm97(setting::RegressionSetting; maxiter::Int=1000)
-    
+function cm97(setting::RegressionSetting; maxiter::Int = 1000)
+
     X, y = @extractRegressionSetting setting
     return cm97(X, y, maxiter = maxiter)
 
@@ -49,20 +50,20 @@ end
 
 
 
-function cm97(X::Array{Float64,2}, y::Array{Float64,1}; maxiter::Int=1000)::Dict
+function cm97(X::Array{Float64,2}, y::Array{Float64,1}; maxiter::Int = 1000)::Dict
 
     n, p = size(X)
     pbar::Float64 = p / n
     hat = hatmatrix(X)
-    
-    w_is  = Array{Float64}(undef, n)
+
+    w_is = Array{Float64}(undef, n)
     betas = Array{Float64}(undef, p)
-    
+
     converged::Bool = false
     iter::Int = 0
-    
+
     # initial weights
-    @inbounds for i in 1:n
+    @inbounds for i = 1:n
         w_is[i] = 1.0 / max(hat[i, i], pbar)
     end
 
@@ -73,8 +74,8 @@ function cm97(X::Array{Float64,2}, y::Array{Float64,1}; maxiter::Int=1000)::Dict
         betas = coef(wols)
         r = y - X * betas
         medi = median(abs.(r))
-        
-        @inbounds for i in 1:n
+
+        @inbounds for i = 1:n
             w_is[i] = (1.0 - hat[i, i])^2.0 / max(abs(r[i]), medi)
         end
 
@@ -86,12 +87,9 @@ function cm97(X::Array{Float64,2}, y::Array{Float64,1}; maxiter::Int=1000)::Dict
         iter += 1
 
     end
-    
-    result = Dict{String,Any}(
-        "converged" => converged,
-        "betas" => betas,
-        "iterations" => iter
-    ) 
+
+    result =
+        Dict{String,Any}("converged" => converged, "betas" => betas, "iterations" => iter)
 
     return result
 end

@@ -7,7 +7,7 @@ export applyColumns
 export find_minimum_nonzero
 
 
-import DataFrames: DataFrame 
+import DataFrames: DataFrame
 import StatsModels: @formula, FormulaTerm, ModelFrame, ModelMatrix
 
 """
@@ -162,7 +162,7 @@ julia> designMatrix(setting)
 function designMatrix(setting::RegressionSetting)::Array{Float64,2}
     mf = ModelFrame(setting.formula, setting.data)
     mm = ModelMatrix(mf)
-    return convert(Array{Float64, 2}, mm.m)
+    return convert(Array{Float64,2}, mm.m)
 end
 
 
@@ -210,7 +210,7 @@ julia> responseVector(setting)
 """
 function responseVector(setting::RegressionSetting)::Array{Float64,1}
     mf = ModelFrame(setting.formula, setting.data)
-    return convert(Array{Float64,1}, setting.data[:,mf.f.lhs.sym])
+    return convert(Array{Float64,1}, setting.data[:, mf.f.lhs.sym])
 end
 
 
@@ -277,7 +277,7 @@ end
 
 """
 function applyColumns(f::Function, data::DataFrame)
-    return [f(col) for col = eachcol(data)]
+    return [f(col) for col in eachcol(data)]
 end
 
 
@@ -292,7 +292,7 @@ end
 - `data::Matrix`: A Matrix object.
 """
 function applyColumns(f::Function, data::Matrix)
-    return [f(col) for col = eachcol(data)]
+    return [f(col) for col in eachcol(data)]
 end
 
 

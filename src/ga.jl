@@ -29,14 +29,20 @@ function Base.isless(c1::RealChromosome, c2::RealChromosome)::Bool
     return c1.cost < c2.cost
 end
 
-function LinearCrossover(c1::RealChromosome, c2::RealChromosome)::Tuple{RealChromosome,RealChromosome,RealChromosome}
+function LinearCrossover(
+    c1::RealChromosome,
+    c2::RealChromosome,
+)::Tuple{RealChromosome,RealChromosome,RealChromosome}
     offspring1 = 0.5 * c1 + 0.5 * c2
     offspring2 = 1.5 * c1 - 0.5 * c2
     offspring3 = 1.5 * c2 - 0.5 * c1
     return (offspring1, offspring2, offspring3)
 end
 
-function ArithmeticCrossOver(c1::RealChromosome, c2::RealChromosome)::Tuple{RealChromosome,RealChromosome}
+function ArithmeticCrossOver(
+    c1::RealChromosome,
+    c2::RealChromosome,
+)::Tuple{RealChromosome,RealChromosome}
     alpha = rand()
     return alpha * c1 + (1.0 - alpha) * c2
 end
@@ -45,23 +51,25 @@ function Mutate(c::RealChromosome, prob::Float64)::RealChromosome
     genes = copy(c.genes)
     @inbounds for i in eachindex(genes)
         if rand(1)[1] < prob
-            genes[i] += randn(1)[1] 
+            genes[i] += randn(1)[1]
         end
     end
     return RealChromosome(genes, Inf64)
 end
 
-function TournamentSelection(pop::Array{RealChromosome,1})::Tuple{RealChromosome,RealChromosome}
+function TournamentSelection(
+    pop::Array{RealChromosome,1},
+)::Tuple{RealChromosome,RealChromosome}
     n = length(pop)
-    indices = sample(collect(1:n), 4, replace=false)
+    indices = sample(collect(1:n), 4, replace = false)
     lucky1 = nothing
     lucky2 = nothing
-    if pop[indices[1]].cost < pop[indices[2]].cost 
+    if pop[indices[1]].cost < pop[indices[2]].cost
         lucky1 = pop[indices[1]]
     else
         lucky1 = pop[indices[2]]
     end
-    if pop[indices[3]].cost < pop[indices[4]].cost 
+    if pop[indices[3]].cost < pop[indices[4]].cost
         lucky2 = pop[indices[3]]
     else
         lucky2 = pop[indices[4]]
@@ -70,12 +78,14 @@ function TournamentSelection(pop::Array{RealChromosome,1})::Tuple{RealChromosome
 end
 
 
-function createPopulation(popsize::Int, 
-        chsize::Int, 
-        mins::Array{Float64,1}, 
-        maxs::Array{Float64,1})::Array{RealChromosome,1}
+function createPopulation(
+    popsize::Int,
+    chsize::Int,
+    mins::Array{Float64,1},
+    maxs::Array{Float64,1},
+)::Array{RealChromosome,1}
     pop = Array{RealChromosome,1}(undef, popsize)
-    @inbounds for i in 1:popsize
+    @inbounds for i = 1:popsize
         c = RealChromosome(mins .+ rand(chsize) .* (maxs - mins), Inf64)
         pop[i] = c
     end
@@ -93,18 +103,20 @@ function Evaluate(pop::Array{RealChromosome,1}, fcost::Function)::Array{RealChro
     return pop
 end
 
-function Generation(pop::Array{RealChromosome,1}, 
-                    fcost::Function, 
-                    elitism::Int, 
-                    pcross::Float64,
-                    pmutate::Float64)::Array{RealChromosome,1}
+function Generation(
+    pop::Array{RealChromosome,1},
+    fcost::Function,
+    elitism::Int,
+    pcross::Float64,
+    pmutate::Float64,
+)::Array{RealChromosome,1}
     popsize = length(pop)
     newpop = []
     pop = sort(Evaluate(pop, fcost))
-    @inbounds for i in 1:elitism
+    @inbounds for i = 1:elitism
         push!(newpop, pop[i])
     end
-    @inbounds while length(newpop) != popsize 
+    @inbounds while length(newpop) != popsize
         parent1, parent2 = TournamentSelection(pop)
         winner1 = nothing
         winner2 = nothing
@@ -129,18 +141,18 @@ end
 
 
 function ga(
-            popsize::Int,
-            chsize::Int,
-            fcost::Function,
-            mins::Array{Float64,1},
-            maxs::Array{Float64,1},
-            pcross::Float64,
-            pmutate::Float64,
-            elitisim::Int,
-            iterations::Int
-            )::Array{RealChromosome,1}
+    popsize::Int,
+    chsize::Int,
+    fcost::Function,
+    mins::Array{Float64,1},
+    maxs::Array{Float64,1},
+    pcross::Float64,
+    pmutate::Float64,
+    elitisim::Int,
+    iterations::Int,
+)::Array{RealChromosome,1}
     pop = createPopulation(popsize, chsize, mins, maxs)
-    for i in 1:iterations
+    for i = 1:iterations
         pop = Generation(pop, fcost, elitisim, pcross, pmutate)
     end
     return pop

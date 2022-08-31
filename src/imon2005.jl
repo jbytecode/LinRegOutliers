@@ -2,9 +2,10 @@ module Imon2005
 
 export imon2005
 
-import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..Basis:
+    RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
 import ..OrdinaryLeastSquares: ols, predict, residuals, coef
-import ..LTS: lts 
+import ..LTS: lts
 
 """
     imon2005(setting)
@@ -43,23 +44,23 @@ function imon2005(X::Array{Float64,2}, y::Array{Float64,1})
     function SigmaWithoutIndex(X, y, R, i)
         n, p = size(X)
         Ri = filter(x -> x != i, R)
-        XRi = X[Ri,:]
+        XRi = X[Ri, :]
         yRi = y[Ri]
         reg = ols(XRi, yRi)
         betas = coef(reg)
-        res = y .- X * betas 
-        return sqrt(sum(res.^2.0) / (n - p))
+        res = y .- X * betas
+        return sqrt(sum(res .^ 2.0) / (n - p))
     end
 
     n, p = size(X)
     allindex = collect(1:n)
     ltsreg = lts(X, y)
     R::Array{Int,1} = ltsreg["hsubset"]
-    XR = X[R,:]
+    XR = X[R, :]
     yR = y[R]
     XRXR = transpose(XR) * XR
     invXRXR = inv(XRXR)
-    wiiR = [X[i,:]' * invXRXR * X[i,:] for i in allindex]
+    wiiR = [X[i, :]' * invXRXR * X[i, :] for i in allindex]
     wiiRAsterix = zeros(Float64, n)
     @inbounds for i in allindex
         if i in R
@@ -71,7 +72,7 @@ function imon2005(X::Array{Float64,2}, y::Array{Float64,1})
     RegR = ols(XR, yR)
     BetaHatR = coef(RegR)
     resR = y - X * BetaHatR
-    sigmaR = sum(resR.^2.0) / (n - p)
+    sigmaR = sum(resR .^ 2.0) / (n - p)
     tAsterix = zeros(Float64, n)
     @inbounds for i in allindex
         if i in R

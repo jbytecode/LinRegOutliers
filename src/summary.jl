@@ -1,11 +1,12 @@
-module Summary 
+module Summary
 
 export detectOutliers
 
 
-import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..Basis:
+    RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
 
-import ..HS93: hs93 
+import ..HS93: hs93
 import ..PY95: py95
 import ..KS89: ks89
 import ..SMR98: majona, smr98
@@ -14,16 +15,16 @@ import ..LTS: lts
 import ..ASM2000: asm2000
 import ..LTA: lta
 import ..Imon2005: imon2005
-import ..Bacon: bacon 
-import ..BCH: bch 
-import ..Satman2013: satman2013 
-import ..Satman2015: satman2015 
+import ..Bacon: bacon
+import ..BCH: bch
+import ..Satman2013: satman2013
+import ..Satman2015: satman2015
 
-import DataFrames: DataFrame 
+import DataFrames: DataFrame
 
 function makeColorColumn(indices::Array{Int,1}, n::Int)::Array{String,1}
     colors = Array{String}(undef, n)
-    for i in 1:n
+    for i = 1:n
         if i in indices
             colors[i] = " 😔 "
         else
@@ -33,16 +34,16 @@ function makeColorColumn(indices::Array{Int,1}, n::Int)::Array{String,1}
     return colors
 end
 
-function detectOutliers(setting::RegressionSetting; methods=[])
-    
+function detectOutliers(setting::RegressionSetting; methods = [])
+
     X = designMatrix(setting)
     y = responseVector(setting)
-    return detectOutliers(X, y, methods=methods)
-    
+    return detectOutliers(X, y, methods = methods)
+
 end
 
 
-function detectOutliers(X::Array{Float64,2}, y::Array{Float64,1}; methods=[])
+function detectOutliers(X::Array{Float64,2}, y::Array{Float64,1}; methods = [])
     if length(methods) == 0
         methods = [
             "hs93",
@@ -55,8 +56,8 @@ function detectOutliers(X::Array{Float64,2}, y::Array{Float64,1}; methods=[])
             "asm20",
             "bch",
             "bacon",
-            "imon2005"
-            ]
+            "imon2005",
+        ]
     end
 
     n, p = size(X)
@@ -104,14 +105,14 @@ function detectOutliers(X::Array{Float64,2}, y::Array{Float64,1}; methods=[])
                 result = Int[]
             end
         elseif method == "bacon"
-            try            
+            try
                 _, p = size(X)
-                result = bacon(X, y, m=p + 1)["outliers"]
+                result = bacon(X, y, m = p + 1)["outliers"]
             catch
                 result = Int[]
             end
         elseif method == "imon2005"
-            try            
+            try
                 result = imon2005(X, y)["outliers"]
             catch
                 result = Int[]
@@ -122,8 +123,8 @@ function detectOutliers(X::Array{Float64,2}, y::Array{Float64,1}; methods=[])
         end
         outlier_matrix[:, method] = makeColorColumn(result, n)
     end
-    
-    
+
+
     return outlier_matrix
 end
 

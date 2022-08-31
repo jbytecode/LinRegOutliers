@@ -1,14 +1,23 @@
-module Diagnostics 
+module Diagnostics
 
 
-export dffit, hatmatrix, studentizedResiduals, adjustedResiduals, jacknifedS, cooks, mahalanobisSquaredMatrix, covratio, hadimeasure
+export dffit,
+    hatmatrix,
+    studentizedResiduals,
+    adjustedResiduals,
+    jacknifedS,
+    cooks,
+    mahalanobisSquaredMatrix,
+    covratio,
+    hadimeasure
 export coordinatwisemedians, mahalanobisBetweenPairs, euclideanDistances
 
-import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
-import ..OrdinaryLeastSquares: ols, coef, residuals, predict 
-import StatsBase: mean, std, cov, median 
-import LinearAlgebra: det 
-import DataFrames: DataFrame 
+import ..Basis:
+    RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+import ..OrdinaryLeastSquares: ols, coef, residuals, predict
+import StatsBase: mean, std, cov, median
+import LinearAlgebra: det
+import DataFrames: DataFrame
 
 
 """
@@ -30,10 +39,10 @@ Computational Statistics & Data Analysis 43.4 (2003): 541-552.
 function euclideanDistances(dataMatrix::Array{Float64,2})::Array{Float64,2}
     n, _ = size(dataMatrix)
     d = zeros(Float64, n, n)
-    for i in 1:n
-        for j in i:n
-            if i != j 
-                @inbounds d[i, j] = sqrt(sum((dataMatrix[i,:] .- dataMatrix[j,:]).^2.0))
+    for i = 1:n
+        for j = i:n
+            if i != j
+                @inbounds d[i, j] = sqrt(sum((dataMatrix[i, :] .- dataMatrix[j, :]) .^ 2.0))
                 @inbounds d[j, i] = d[i, j]
             end
         end
@@ -96,10 +105,14 @@ function mahalanobisBetweenPairs(dataMatrix::Array{Float64,2})::Array{Float64,2}
         @warn "Covariance matrix is singular, mahalanobis distances can not be calculated."
     end
     covinv = inv(covmat)
-    for i in 1:n
-        for j in i:n
-            if i != j 
-                @inbounds d[i, j] = sqrt((dataMatrix[i,:] .- dataMatrix[j,:]) * covinv * (dataMatrix[i,:] .- dataMatrix[j,:])')
+    for i = 1:n
+        for j = i:n
+            if i != j
+                @inbounds d[i, j] = sqrt(
+                    (dataMatrix[i, :] .- dataMatrix[j, :]) *
+                    covinv *
+                    (dataMatrix[i, :] .- dataMatrix[j, :])',
+                )
                 @inbounds d[j, i] = d[i, j]
             end
         end
@@ -183,7 +196,7 @@ function dffit(X::Array{Float64,2}, y::Array{Float64,1}, i::Int)::Float64
     n, _ = size(X)
     indices = [j for j in 1:n if i != j]
     olsfull = ols(X, y)
-    Xsub = X[indices,:]
+    Xsub = X[indices, :]
     ysub = y[indices]
     olsjacknife = ols(Xsub, ysub)
     return predict(olsfull, X)[i] - predict(olsjacknife, X)[i]
@@ -237,14 +250,14 @@ Identifying influential data and sources of collinearity. Vol. 571. John Wiley &
 """
 function dffit(setting::RegressionSetting)::Array{Float64,1}
     n, _ = size(setting.data)
-    result = [dffit(setting, i) for i in 1:n]
-    return result    
+    result = [dffit(setting, i) for i = 1:n]
+    return result
 end
 
 function dffit(X::Array{Float64,2}, y::Array{Float64,1})::Array{Float64,1}
     n, _ = size(X)
-    result = [dffit(X, y, i) for i in 1:n]
-    return result    
+    result = [dffit(X, y, i) for i = 1:n]
+    return result
 end
 
 """
@@ -320,9 +333,9 @@ function studentizedResiduals(X::Array{Float64,2}, y::Array{Float64,1})::Array{F
     olsreg = ols(X, y)
     n, p = size(X)
     e = residuals(olsreg)
-    s = sqrt(sum(e.^2.0) / (n - p))
+    s = sqrt(sum(e .^ 2.0) / (n - p))
     hat = hatmatrix(X)
-    stde = [e[i] / (s * sqrt(1.0 - hat[i, i])) for i in 1:n]
+    stde = [e[i] / (s * sqrt(1.0 - hat[i, i])) for i = 1:n]
     return stde
 end
 
@@ -378,7 +391,7 @@ function adjustedResiduals(X::Array{Float64,2}, y::Array{Float64,1})::Array{Floa
     n, _ = size(X)
     e = residuals(olsreg)
     hat = hatmatrix(X)
-    stde = [e[i] / (sqrt(1 - hat[i, i])) for i in 1:n]
+    stde = [e[i] / (sqrt(1 - hat[i, i])) for i = 1:n]
     return stde
 end
 
@@ -411,11 +424,11 @@ end
 function jacknifedS(X::Array{Float64,2}, y::Array{Float64,1}, k::Int)::Float64
     n, p = size(X)
     indices = [i for i in 1:n if i != k]
-    Xsub = X[indices,:]
+    Xsub = X[indices, :]
     ysub = y[indices]
     olsreg = ols(Xsub, ysub)
     e = residuals(olsreg)
-    s = sqrt(sum(e.^2.0) / (n - p - 1))
+    s = sqrt(sum(e .^ 2.0) / (n - p - 1))
     return s
 end
 
@@ -477,7 +490,7 @@ function cooks(X::Array{Float64,2}, y::Array{Float64,1})::Array{Float64,1}
     hat = hatmatrix(X)
     s2 = sum(res .* res) / (n - p)
     d = zeros(Float64, n)
-    for i in 1:n
+    for i = 1:n
         @inbounds d[i] = ((res[i]^2.0) / (p * s2)) * (hat[i, i] / (1 - hat[i, i])^2.0)
     end
     return d
@@ -498,13 +511,21 @@ Calculate Mahalanobis distances.
 Mahalanobis, Prasanta Chandra. "On the generalized distance in statistics." 
 National Institute of Science of India, 1936.
 """
-function mahalanobisSquaredMatrix(data::DataFrame; meanvector=nothing, covmatrix=nothing)::Union{Nothing,Array{Float64,2}}
+function mahalanobisSquaredMatrix(
+    data::DataFrame;
+    meanvector = nothing,
+    covmatrix = nothing,
+)::Union{Nothing,Array{Float64,2}}
     datamat = Matrix(data)
-    return mahalanobisSquaredMatrix(datamat, meanvector=meanvector, covmatrix=covmatrix)
+    return mahalanobisSquaredMatrix(datamat, meanvector = meanvector, covmatrix = covmatrix)
 end
 
 
-function mahalanobisSquaredMatrix(datamat::Matrix; meanvector=nothing, covmatrix=nothing)::Union{Nothing,Array{Float64,2}}
+function mahalanobisSquaredMatrix(
+    datamat::Matrix;
+    meanvector = nothing,
+    covmatrix = nothing,
+)::Union{Nothing,Array{Float64,2}}
     if meanvector === nothing
         meanvector = applyColumns(mean, datamat)
     end
@@ -549,7 +570,11 @@ function dfbeta(setting::RegressionSetting, omittedIndex::Int)::Array{Float64,1}
     return dfbeta(X, y, omittedIndex)
 end
 
-function dfbeta(X::Array{Float64,2}, y::Array{Float64,1}, omittedIndex::Int)::Array{Float64,1}
+function dfbeta(
+    X::Array{Float64,2},
+    y::Array{Float64,1},
+    omittedIndex::Int,
+)::Array{Float64,1}
     n = length(y)
     omittedindices = filter(x -> x != omittedIndex, 1:n)
     regfull = ols(X, y)
@@ -585,21 +610,21 @@ function covratio(X::Array{Float64,2}, y::Array{Float64,1}, omittedIndex::Int)
     n, p = size(X)
     reg = ols(X, y)
     r = residuals(reg)
-    s2 = sum(r.^2.0) / Float64(n - p)
+    s2 = sum(r .^ 2.0) / Float64(n - p)
     xxinv = inv(X'X)
-    
+
     indices = filter(x -> x != omittedIndex, 1:n)
-    
-    Xomitted = X[indices,:]
+
+    Xomitted = X[indices, :]
     yomitted = y[indices]
     xxinvomitted = inv(Xomitted' * Xomitted)
     regomitted = ols(Xomitted, yomitted)
     resomitted = residuals(regomitted)
-    s2omitted = sum(resomitted.^2.0) / Float64(n - p - 1)
-    
+    s2omitted = sum(resomitted .^ 2.0) / Float64(n - p - 1)
+
     covrat = det(s2omitted * xxinvomitted) / det(s2 * xxinv)
-    
-    return covrat 
+
+    return covrat
 end
 
 
@@ -622,21 +647,23 @@ julia> hadimeasure(setting)
 Chatterjee, Samprit and Hadi, Ali. Regression Analysis by Example.
      5th ed. N.p.: John Wiley & Sons, 2012.
 """
-function hadimeasure(setting::RegressionSetting; c::Float64=2.0)
+function hadimeasure(setting::RegressionSetting; c::Float64 = 2.0)
     X, y = @extractRegressionSetting setting
-    hadimeasure(X, y, c=c)
+    hadimeasure(X, y, c = c)
 end
 
-function hadimeasure(X::Array{Float64,2}, y::Array{Float64,1}; c::Float64=2.0)
+function hadimeasure(X::Array{Float64,2}, y::Array{Float64,1}; c::Float64 = 2.0)
     n, p = size(X)
     reg = ols(X, y)
     res = residuals(reg)
-    res2 = res.^2.0
+    res2 = res .^ 2.0
     sumres = sum(res2)
     hat = hatmatrix(X)
     H = zeros(Float64, n)
-    for i in 1:n
-        @inbounds H[i] = (p * res2[i]) / ((1 - hat[i, i]) * (sumres - res2[i])) + (hat[i, i] / (1 - hat[i, i])) 
+    for i = 1:n
+        @inbounds H[i] =
+            (p * res2[i]) / ((1 - hat[i, i]) * (sumres - res2[i])) +
+            (hat[i, i] / (1 - hat[i, i]))
     end
     crit1 = mean(H) + c * std(H)
     potentials = filter(i -> abs(H[i]) > crit1, 1:n)

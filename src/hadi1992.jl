@@ -1,13 +1,19 @@
-module Hadi92 
+module Hadi92
 
 export hadi1992
 
-import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns, find_minimum_nonzero
+import ..Basis:
+    RegressionSetting,
+    @extractRegressionSetting,
+    designMatrix,
+    responseVector,
+    applyColumns,
+    find_minimum_nonzero
 import ..OrdinaryLeastSquares: ols, predict, residuals, coef
 import ..Diagnostics: mahalanobisSquaredMatrix, coordinatwisemedians
 
-import LinearAlgebra: eigen, diag, det  
-import StatsBase: quantile, mean, cov  
+import LinearAlgebra: eigen, diag, det
+import StatsBase: quantile, mean, cov
 import Distributions: Chisq
 
 """
@@ -29,8 +35,8 @@ function hadi1992_handle_singularity(S::Array{Float64,2})::Array{Float64,2}
     vectors = eigen_structure.vectors
     lambda_s = find_minimum_nonzero(values)
     W = zeros(Float64, p, p)
-    for i in 1:p
-        @inbounds W[i, i] = 1 / max(values[i], lambda_s) 
+    for i = 1:p
+        @inbounds W[i, i] = 1 / max(values[i], lambda_s)
     end
     newS = vectors * W * vectors
     return newS
@@ -69,7 +75,7 @@ Dict{Any,Any} with 3 entries:
 Hadi, Ali S. "Identifying multiple outliers in multivariate data." 
 Journal of the Royal Statistical Society: Series B (Methodological) 54.3 (1992): 761-771.
 """
-function hadi1992(multivariateData::Array{Float64,2}; alpha=0.05)
+function hadi1992(multivariateData::Array{Float64,2}; alpha = 0.05)
     n, p = size(multivariateData)
     h = Int(floor((n + p + 1.0) / 2.0))
     chi_50_quantile = quantile(Chisq(p), 0.50)
@@ -79,14 +85,15 @@ function hadi1992(multivariateData::Array{Float64,2}; alpha=0.05)
     # Step 0
     meds = coordinatwisemedians(multivariateData)
     Sm = (1.0 / (n - 1.0)) * (multivariateData .- meds')' * (multivariateData .- meds')
-    mah0 = diag(mahalanobisSquaredMatrix(multivariateData, meanvector=meds, covmatrix=Sm))
+    mah0 =
+        diag(mahalanobisSquaredMatrix(multivariateData, meanvector = meds, covmatrix = Sm))
     ordering_indices_mah0 = sortperm(mah0)
     best_indices_mah0 = ordering_indices_mah0[1:h]
     starting_data = multivariateData[best_indices_mah0, :]
 
     Cv = coordinatwisemedians(starting_data)
     Sv = (1.0 / (h - 1.0)) * (starting_data .- Cv')' * (starting_data .- Cv')
-    mah1 = diag(mahalanobisSquaredMatrix(multivariateData, meanvector=Cv, covmatrix=Sv))
+    mah1 = diag(mahalanobisSquaredMatrix(multivariateData, meanvector = Cv, covmatrix = Sv))
     ordering_indices_mah1 = sortperm(mah1)
 
     r = p + 1
@@ -105,19 +112,31 @@ function hadi1992(multivariateData::Array{Float64,2}; alpha=0.05)
         cfactor = cnpr * sqrt(sort(mah1)[h]) / chi_50_quantile
         if det(cfactor * Sb) == 0
             @info "singular Sb case"
-            newSb = hadi1992_handle_singularity(cfactor * Sb) 
-            mah1 = diag(mahalanobisSquaredMatrix(multivariateData, meanvector=Cb, covmatrix=newSb))
+            newSb = hadi1992_handle_singularity(cfactor * Sb)
+            mah1 = diag(
+                mahalanobisSquaredMatrix(
+                    multivariateData,
+                    meanvector = Cb,
+                    covmatrix = newSb,
+                ),
+            )
             ordering_indices_mah1 = sortperm(mah1)
             basic_subset_indices = ordering_indices_mah1[1:r]
         else
-            mah1 = diag(mahalanobisSquaredMatrix(multivariateData, meanvector=Cb, covmatrix=(cfactor * Sb)))
+            mah1 = diag(
+                mahalanobisSquaredMatrix(
+                    multivariateData,
+                    meanvector = Cb,
+                    covmatrix = (cfactor * Sb),
+                ),
+            )
             ordering_indices_mah1 = sortperm(mah1)
             basic_subset_indices = ordering_indices_mah1[1:r]
         end
-        
+
         sorted_mah1 = sort(mah1)
         if sorted_mah1[r] >= critical_quantile
-            break 
+            break
         end
     end
 
@@ -126,7 +145,7 @@ function hadi1992(multivariateData::Array{Float64,2}; alpha=0.05)
     result = Dict()
     result["outliers"] = sort(outlierset)
     result["critical.chi.squared"] = critical_quantile
-    result["rth.robust.distance"] = sorted_mah1[r - 1]
+    result["rth.robust.distance"] = sorted_mah1[r-1]
     return result
 end
 
