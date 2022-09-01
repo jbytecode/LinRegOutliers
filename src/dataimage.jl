@@ -34,14 +34,15 @@ julia> x1 = hbk[:,"x1"];
 julia> x2 = hbk[:,"x2"];
 julia> x3 = hbk[:,"x3"];
 julia> mat = hcat(x1, x2, x3);
-julia> dataimage(mat)
+julia> di = dataimage(mat, distance = :euclidean)
+julia> Plots.plot(di)
 ```
 
 # References
 Marchette, David J., and Jeffrey L. Solka. "Using data images for outlier detection." 
 Computational Statistics & Data Analysis 43.4 (2003): 541-552.
 """
-function dataimage(dataMatrix::Array{Float64,2}; distance = :mahalanobis)
+function dataimage(dataMatrix::Array{Float64,2}; distance = :mahalanobis)::Array{RGB{Float64}, 2}
     d = nothing
     if distance == :mahalanobis
         d = mahalanobisSquaredBetweenPairs(dataMatrix)
@@ -54,13 +55,13 @@ function dataimage(dataMatrix::Array{Float64,2}; distance = :mahalanobis)
     end
     colours = 1.0 .- d / maximum(d)
     n, _ = size(d)
-    colormatrix = Array{RGB{Float64}}(undef, n, n)
+    colormatrix = Array{RGB{Float64}, 2}(undef, n, n)
     for i = 1:n
         for j = 1:n
             @inbounds colormatrix[i, j] = RGB(colours[i, j])
         end
     end
-    plot(colormatrix)
+    return colormatrix
 end
 
 
