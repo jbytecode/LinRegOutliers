@@ -6,7 +6,7 @@ import ..Diagnostics:
     mahalanobisSquaredMatrix, euclideanDistances, mahalanobisSquaredBetweenPairs
 
 
-using Plots
+import Plots: RGB
 
 
 

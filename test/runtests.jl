@@ -4,6 +4,8 @@ using Random
 using LinearAlgebra
 
 using LinRegOutliers
+import Plots: RGB
+
 
 include("testdiagnostics.jl")
 include("testbasis.jl")
