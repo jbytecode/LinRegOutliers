@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/jbytecode/LinRegOutliers.svg?branch=master)](https://travis-ci.org/jbytecode/LinRegOutliers) [![DOI](https://joss.theoj.org/papers/10.21105/joss.02892/status.svg)](https://doi.org/10.21105/joss.02892)
 [![Doc](https://img.shields.io/badge/docs-dev-blue.svg)](https://jbytecode.github.io/LinRegOutliers/dev/)
+[![codecov](https://codecov.io/gh/jbytecode/LinRegOutliers/branch/master/graph/badge.svg?token=DM4XXML78A)](https://codecov.io/gh/jbytecode/LinRegOutliers)
 
 # LinRegOutliers
 
