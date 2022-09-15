@@ -1,6 +1,10 @@
-# v0.8.15 (Upcoming release)
+# v0.8.16 (Upcoming Release)
+
+
+# v0.8.15 
 - Modularize dataimage()
 - Grouped tests
+- x === nothing style decisions replaces by isnothing(x)
   
 
 # v0.8.14

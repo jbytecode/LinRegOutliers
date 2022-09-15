@@ -65,7 +65,7 @@ end
 function lms(X::Array{Float64,2}, y::Array{Float64,1}; iters = nothing, crit = 2.5)
     n, p = size(X)
     h = Int(floor((n + 1.0) / 2.0))
-    if iters === nothing
+    if isnothing(iters)
         iters = minimum([500 * p, 3000])
     end
     bestobjective = Inf

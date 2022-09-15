@@ -183,7 +183,7 @@ function hs93(
     alpha = 0.05,
     basicsubsetindices = nothing,
 )
-    if basicsubsetindices === nothing
+    if isnothing(basicsubsetindices)
         initialsetindices = hs93initialset(X, y)
         basicsubsetindices = hs93basicsubset(X, y, initialsetindices)
     end

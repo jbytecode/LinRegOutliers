@@ -55,7 +55,7 @@ end
 function mahalanobisSquaredBetweenPairs(pairs::Matrix; covmatrix = nothing)
     n, _ = size(pairs)
     newmat = zeros(Float64, n, n)
-    if covmatrix === nothing
+    if isnothing(covmatrix) 
         covmatrix = cov(pairs)
     end
     try
@@ -526,10 +526,10 @@ function mahalanobisSquaredMatrix(
     meanvector = nothing,
     covmatrix = nothing,
 )::Union{Nothing,Array{Float64,2}}
-    if meanvector === nothing
+    if isnothing(meanvector)
         meanvector = applyColumns(mean, datamat)
     end
-    if covmatrix === nothing
+    if isnothing(covmatrix)
         covmatrix = cov(datamat)
     end
     try

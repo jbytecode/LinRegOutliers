@@ -69,7 +69,7 @@ function atkinson94(
     # the median index
     h = Int(floor((n + p + 1) / 2.0))
 
-    if iters === nothing
+    if isnothing(iters)
         iters = minimum([500 * p, 3000])
     end
 

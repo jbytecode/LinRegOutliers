@@ -88,7 +88,7 @@ function satman2013(X::Array{Float64,2}, y::Array{Float64,1})
     sorted_indices = sortperm(md)
     best_h_indices = sorted_indices[1:h]
 
-    crit, bestset = iterateCSteps(X, y, best_h_indices, h)
+    _, bestset = iterateCSteps(X, y, best_h_indices, h)
 
     olsreg = ols(X[bestset, :], y[bestset])
     betas = coef(olsreg)

@@ -58,8 +58,9 @@ Sort multidimensional data usin non-dominated sorting algorithm.
 
 
 # References
-Satman, Mehmet Hakan. "A new algorithm for detecting outliers in linear regression." 
-International Journal of statistics and Probability 2.3 (2013): 101.
+Satman, Mehmet Hakan. "Fast online detection of outliers using least-trimmed squares 
+regression with non-dominated sorting based initial subsets." 
+International Journal of Advanced Statistics and Probability 3.1 (2015): 53.
 
 Deb, Kalyanmoy, et al. "A fast elitist non-dominated sorting genetic algorithm for multi-objective optimization: NSGA-II." 
 International conference on parallel problem solving from nature. Springer, Berlin, Heidelberg, 2000.
@@ -140,8 +141,9 @@ julia> ndsranks(datamat)
 ```
 
 # References
-Satman, Mehmet Hakan. "A new algorithm for detecting outliers in linear regression." 
-International Journal of statistics and Probability 2.3 (2013): 101.
+Satman, Mehmet Hakan. "Fast online detection of outliers using least-trimmed squares 
+regression with non-dominated sorting based initial subsets." 
+International Journal of Advanced Statistics and Probability 3.1 (2015): 53.
 
 Deb, Kalyanmoy, et al. "A fast elitist non-dominated sorting genetic algorithm for multi-objective optimization: NSGA-II." 
 International conference on parallel problem solving from nature. Springer, Berlin, Heidelberg, 2000.
@@ -192,8 +194,9 @@ julia> midlist(10,3)
 ```
 
 # References
-Satman, Mehmet Hakan. "A new algorithm for detecting outliers in linear regression." 
-International Journal of statistics and Probability 2.3 (2013): 101.
+Satman, Mehmet Hakan. "Fast online detection of outliers using least-trimmed squares 
+regression with non-dominated sorting based initial subsets." 
+International Journal of Advanced Statistics and Probability 3.1 (2015): 53.
 """
 function midlist(n::Int, p::Int)::Array{Int,1}
     midlist = []
@@ -238,8 +241,9 @@ Dict{Any,Any} with 1 entry:
 ```
 
 # References
-Satman, Mehmet Hakan. "A new algorithm for detecting outliers in linear regression." 
-International Journal of statistics and Probability 2.3 (2013): 101.
+Satman, Mehmet Hakan. "Fast online detection of outliers using least-trimmed squares
+ regression with non-dominated sorting based initial subsets." 
+International Journal of Advanced Statistics and Probability 3.1 (2015): 53.
 """
 function satman2015(setting::RegressionSetting)
     X, y = @extractRegressionSetting setting
@@ -271,7 +275,7 @@ function satman2015(X::Array{Float64,2}, y::Array{Float64,1})
     sorted_indices = sortperm(md)
     best_h_indices = sorted_indices[1:h]
 
-    crit, bestset = iterateCSteps(X, y, best_h_indices, h)
+    _, bestset = iterateCSteps(X, y, best_h_indices, h)
 
     olsreg = ols(X[bestset, :], y[bestset])
     betas = coef(olsreg)
