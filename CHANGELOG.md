@@ -1,4 +1,10 @@
-# v0.8.17 (Upcoming release)
+# v0.8.18 (Upcoming Release)
+
+
+
+
+# v0.8.17
+- Remove dependency of StatsBase
 
 
 # v0.8.16
