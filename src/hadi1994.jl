@@ -8,7 +8,7 @@ import ..Basis:
     RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
 import ..Diagnostics: mahalanobisSquaredMatrix, coordinatwisemedians
 
-import StatsBase: mean, cov, quantile
+import Distributions: mean, cov, quantile
 import LinearAlgebra: det, diag
 import Distributions: Chisq
 

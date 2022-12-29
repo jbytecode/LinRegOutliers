@@ -1,6 +1,6 @@
 module GA
 
-import StatsBase: sample
+import Distributions: sample
 
 abstract type Chromosome end
 

@@ -7,7 +7,7 @@ import ..Basis:
     RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
 import ..Diagnostics: hatmatrix
 import ..OrdinaryLeastSquares: ols, predict, residuals, coef, wls
-import StatsBase: median
+import Distributions: median
 
 """
 

@@ -8,8 +8,7 @@ import ..Basis:
 import ..OrdinaryLeastSquares: ols, predict, residuals, coef
 import ..Diagnostics: studentizedResiduals, jacknifedS
 
-import Distributions: TDist
-import StatsBase: quantile
+import Distributions: TDist, quantile
 
 
 

@@ -8,7 +8,7 @@ export atkinson94
 import ..Basis:
     RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
 import ..OrdinaryLeastSquares: ols, predict, residuals, coef
-import StatsBase: sample
+import Distributions: sample
 import LinearAlgebra: pinv
 
 """

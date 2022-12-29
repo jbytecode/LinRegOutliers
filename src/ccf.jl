@@ -7,7 +7,7 @@ import ..Basis:
 import ..OrdinaryLeastSquares: ols, predict, residuals, coef, wls
 
 import LinearAlgebra: norm
-import StatsBase: mean
+import Distributions: mean
 
 
 

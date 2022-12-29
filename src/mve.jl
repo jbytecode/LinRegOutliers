@@ -5,8 +5,7 @@ export mve
 
 import DataFrames: DataFrame
 import LinearAlgebra: diag, det
-import StatsBase: median, cov, mean, quantile, sample
-import Distributions: Chisq
+import Distributions: median, cov, mean, quantile, sample, Chisq
 
 import ..Basis:
     RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns

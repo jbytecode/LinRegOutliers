@@ -8,7 +8,7 @@ import ..Basis:
 import ..OrdinaryLeastSquares: ols, predict, residuals, coef, wls
 import ..Diagnostics: mahalanobisSquaredMatrix, coordinatwisemedians
 
-import StatsBase: median, quantile, mean, cov
+import Distributions: median, quantile, mean, cov
 import Distributions: Chisq
 import LinearAlgebra: diag
 import DataFrames: DataFrame

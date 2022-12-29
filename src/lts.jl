@@ -4,7 +4,7 @@ export lts
 
 import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector
 import ..OrdinaryLeastSquares: ols, coef, residuals, predict
-import StatsBase: sample, mean
+import Distributions: sample, mean
 
 """
 

@@ -10,7 +10,7 @@ import ..Basis:
 import ..OrdinaryLeastSquares: ols, predict, residuals, coef
 import ..Diagnostics: mahalanobisSquaredMatrix
 import LinearAlgebra: diag, norm, rank
-import StatsBase: median, cov, mean, quantile
+import Distributions: median, cov, mean, quantile
 import Distributions: Chisq, TDist
 
 """

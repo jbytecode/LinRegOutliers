@@ -9,7 +9,7 @@ import ..Basis:
 import ..OrdinaryLeastSquares: ols, predict, residuals, coef
 
 import Combinatorics: combinations
-import StatsBase: sample
+import Distributions: sample
 
 """
 

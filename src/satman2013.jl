@@ -9,7 +9,7 @@ import ..Basis:
 import ..LTS: iterateCSteps
 import ..OrdinaryLeastSquares: ols, coef
 import ..Diagnostics: mahalanobisSquaredMatrix
-import StatsBase: median
+import Distributions: median
 import LinearAlgebra: diag
 
 

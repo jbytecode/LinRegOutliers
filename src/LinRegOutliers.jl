@@ -179,7 +179,7 @@ import .Summary: detectOutliers
 
 # Essentials from other packages
 import StatsModels: @formula
-import StatsBase: mean, quantile
+import Distributions: mean, quantile
 import DataFrames: DataFrame
 export @formula, DataFrame
 export mean, quantile

@@ -9,6 +9,7 @@ export find_minimum_nonzero
 
 import DataFrames: DataFrame
 import StatsModels: @formula, FormulaTerm, ModelFrame, ModelMatrix
+import Distributions: mean, std
 
 """
 
@@ -316,5 +317,9 @@ function find_minimum_nonzero(arr::Array{Float64,1})
     return minimum(filter(x -> x > 0, arr))
 end
 
+
+function zstandardize(v::Vector{Float64})::Vector{Float64}
+    return (v .- mean(v)) ./ std(v)
+end
 
 end # End of module Basis

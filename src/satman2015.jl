@@ -8,9 +8,10 @@ import ..Basis:
 import ..OrdinaryLeastSquares: ols, predict, residuals, coef
 import ..Diagnostics: mahalanobisSquaredMatrix
 import ..LTS: iterateCSteps
-import StatsBase: median, cov, mean
+import Distributions: median, cov, mean
 import LinearAlgebra: diag
 import DataFrames: DataFrame
+import ..Basis: zstandardize
 
 
 """

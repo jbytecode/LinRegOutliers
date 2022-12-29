@@ -15,7 +15,7 @@ export coordinatwisemedians, mahalanobisBetweenPairs, euclideanDistances
 import ..Basis:
     RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
 import ..OrdinaryLeastSquares: ols, coef, residuals, predict
-import StatsBase: mean, std, cov, median
+import Distributions: mean, std, cov, median
 import LinearAlgebra: det
 import DataFrames: DataFrame
 

@@ -5,8 +5,8 @@ export majona, smr98
 
 
 import Clustering: Hclust, hclust, cutree
-import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector
-import StatsBase: mean, std, standardize, ZScoreTransform
+import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, zstandardize
+import Distributions: mean, std
 import ..OrdinaryLeastSquares: ols, residuals, predict
 
 function distances(resids::Array{Float64,1}, fitteds::Array{Float64})::Array{Float64,2}
@@ -88,8 +88,10 @@ identifying multiple outliers in linear regression." Computational statistics & 
 
 function smr98(X::Array{Float64,2}, y::Array{Float64,1})
     olsreg = ols(X, y)
-    stdres = standardize(ZScoreTransform, residuals(olsreg), dims = 1)
-    stdfit = standardize(ZScoreTransform, predict(olsreg), dims = 1)
+    #stdres = standardize(ZScoreTransform, residuals(olsreg), dims = 1)
+    #stdfit = standardize(ZScoreTransform, predict(olsreg), dims = 1)
+    stdres = zstandardize(residuals(olsreg))
+    stdfit = zstandardize(predict(olsreg))
     n, p = size(X)
     d = distances(stdres, stdfit)
     h = floor((n + p - 1) / 2)

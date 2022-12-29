@@ -2,12 +2,12 @@ module ASM2000
 
 export asm2000
 
-import StatsBase: quantile, standardize, ZScoreTransform, mean, sample, cov
+import Distributions: quantile, mean, sample, cov
 import LinearAlgebra: det
 import Clustering: Hclust, hclust, cutree
 
 
-import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector
+import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, zstandardize
 import ..Diagnostics: mahalanobisSquaredBetweenPairs
 import ..LTS: lts
 import ..SMR98: majona
@@ -61,8 +61,11 @@ function asm2000(X::Array{Float64,2}, y::Array{Float64,1})::Dict
 
     predicteds = [sum(X[i, :] .* betas) for i = 1:n]
     resids = y .- predicteds
-    stdres = standardize(ZScoreTransform, resids, dims = 1)
-    stdfit = standardize(ZScoreTransform, predicteds, dims = 1)
+    #stdres = standardize(ZScoreTransform, resids, dims = 1)
+    #stdfit = standardize(ZScoreTransform, predicteds, dims = 1)
+    stdres = zstandardize(resids)
+    stdfit = zstandardize(predicteds)
+    
     pairs = hcat(stdfit, stdres)
 
     pairs = hcat(resids, predicteds)

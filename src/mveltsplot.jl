@@ -7,8 +7,7 @@ import ..Basis:
 import ..LTS: lts
 import ..MVE: mve
 
-import Distributions: Chisq
-import StatsBase: quantile
+import Distributions: Chisq, quantile
 
 using Plots
 
