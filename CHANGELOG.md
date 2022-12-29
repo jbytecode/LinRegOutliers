@@ -1,4 +1,8 @@
-# v0.8.16 (Upcoming Release)
+# v0.8.17 (Upcoming release)
+
+
+# v0.8.16
+- Quantile Regression implemented
 
 
 # v0.8.15 

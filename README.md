@@ -21,6 +21,7 @@ A Julia package for outlier detection in linear regression.
 - Satman (2015)
 - Setan & Halim & Mohd (2000)
 - Least Absolute Deviations (LAD)
+- Quantile Regression Parameter Estimation (quantileregression)
 - Least Trimmed Absolute Deviations (LTA)
 - Hadi (1992)
 - Marchette & Solka (2003) Data Images

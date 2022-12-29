@@ -103,6 +103,9 @@ import .Satman2015: satman2015, dominates
 include("lad.jl")
 import .LAD: lad
 
+# Quantile Regression Estimator
+include("quantileregression.jl")
+import .QuantileRegression: quantileregression
 
 # Least Trimmed Absolute Deviations estimator
 include("lta.jl")
@@ -216,6 +219,7 @@ export py95, py95SuspectedObservations
 export satman2013
 export satman2015, dominates
 export lad
+export quantileregression
 export lta
 export hadi1992
 export hadi1994

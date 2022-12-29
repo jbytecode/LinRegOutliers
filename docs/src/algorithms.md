@@ -125,6 +125,10 @@ LinRegOutliers.hadi1994
 LinRegOutliers.cm97
 ```
 
+## Quantile Regression 
+```@docs
+LinRegOutliers.quantileregression
+```
 
 
 

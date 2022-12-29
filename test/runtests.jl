@@ -6,7 +6,6 @@ using LinearAlgebra
 using LinRegOutliers
 import Plots: RGB
 
-
 include("testdiagnostics.jl")
 include("testbasis.jl")
 include("testols.jl")
@@ -20,6 +19,7 @@ include("testmvemcd.jl")
 include("testbch.jl")
 include("testpy95.jl")
 include("testlad.jl")
+include("testquantileregression.jl")
 include("testga.jl")
 include("testccf.jl")
 include("testsatman2013.jl")
