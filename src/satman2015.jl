@@ -216,7 +216,7 @@ end
 
 """
 
-    satman2013(setting)
+    satman2015(setting)
 
 Perform Satman (2015) algorithm for the given regression setting.
 
@@ -235,7 +235,7 @@ C-steps, observations with high standardized residuals are reported to be outlie
 # Examples
 ```julia-repl
 julia> eg0001 = createRegressionSetting(@formula(y ~ x1 + x2 + x3), hbk);
-julia> satman2013(reg0001)
+julia> satman2015(reg0001)
 Dict{Any,Any} with 1 entry:
   "outliers" => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 14, 47]
 
