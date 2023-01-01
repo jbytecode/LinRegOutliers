@@ -21,7 +21,6 @@ Consequent c-steps are performed to find the best subset of clean observations.
 Satman, M. Hakan. "A genetic algorithm based modification on the lts algorithm for large data sets."
  Communications in Statistics-Simulation and Computation 41.5 (2012): 644-652.
 """
-
 function gwcga(setting::RegressionSetting)
     X, y = @extractRegressionSetting setting
     return gwcga(X, y)
