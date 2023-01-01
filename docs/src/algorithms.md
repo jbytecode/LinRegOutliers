@@ -85,6 +85,12 @@ LinRegOutliers.dataimage
 LinRegOutliers.galts
 ```
 
+## Satman's (modified) GA based LTS estimation (2012)
+```@docs
+LinRegOutliers.gwlts
+```
+
+
 ## Fischler & Bolles (1981) RANSAC Algorithm
 ```@docs
 LinRegOutliers.ransac

@@ -12,7 +12,7 @@
     end
 
 
-    @testset "gwcga - Algorithm - phone data" begin
+    @testset "gwcga -  Modified (Satman, 2012) - Algorithm - phone data" begin
         df = phones
         reg = createRegressionSetting(@formula(calls ~ year), df)
         result = gwcga(reg)

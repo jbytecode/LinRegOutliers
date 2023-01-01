@@ -13,8 +13,10 @@ import ..CGA: cga
 
 """
 This method is a modified version of the algorithm given below.
-the modification will be available in a new paper.
-Working is in progress.
+the modification will be available in a new paper. This method uses the 
+Compact Genetic Algorithms rather than the Float-Point Genetic Algorithms.
+The CGA optimizer seeks a true indices of clean observation to construct a basic subset.
+Consequent c-steps are performed to find the best subset of clean observations.
 
 Satman, M. Hakan. "A genetic algorithm based modification on the lts algorithm for large data sets."
  Communications in Statistics-Simulation and Computation 41.5 (2012): 644-652.

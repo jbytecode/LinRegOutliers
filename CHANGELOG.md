@@ -1,5 +1,10 @@
-# v0.8.18 (Upcoming Release)
-- Update documentation
+# Upcoming Release 
+
+
+
+
+# v0.8.18 
+- Add docs for Satman's (modified) GA based LTS estimation (2012)
 
 
 
