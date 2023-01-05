@@ -1,6 +1,7 @@
 # Upcoming Release 
 
-
+# v0.8.19
+- Update Satman(2013) algorithm
 
 
 # v0.8.18 

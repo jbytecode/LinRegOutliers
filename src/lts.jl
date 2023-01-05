@@ -1,6 +1,7 @@
 module LTS
 
 export lts
+export iterateCSteps
 
 import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector
 import ..OrdinaryLeastSquares: ols, coef, residuals, predict

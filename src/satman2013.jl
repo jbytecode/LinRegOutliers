@@ -7,7 +7,7 @@ export satman2013
 import ..Basis:
     RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
 import ..LTS: iterateCSteps
-import ..OrdinaryLeastSquares: ols, coef
+import ..OrdinaryLeastSquares: ols, coef, wls, residuals
 import ..Diagnostics: mahalanobisSquaredMatrix
 import Distributions: median
 import LinearAlgebra: diag
@@ -30,6 +30,8 @@ stages.
 
 # Output
 - `["outliers"]`: Array of indices of outliers.
+- `["betas"]`: Array of estimated regression coefficients.
+- `["residuals"]`: Array of residuals.
 
 # Examples
 ```julia-repl
@@ -37,7 +39,8 @@ julia> eg0001 = createRegressionSetting(@formula(y ~ x1 + x2 + x3), hbk);
 julia> satman2013(reg0001)
 Dict{Any,Any} with 1 entry:
   "outliers" => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 47]
-
+  "betas" => ...
+  "residuals" => ...
 ```
 
 # References
@@ -51,9 +54,13 @@ end
 
 
 function satman2013(X::Array{Float64,2}, y::Array{Float64,1})
+    # Sample size and the number of regression parameters
     n, p = size(X)
+
+    # A lower limit for the number of clean observations 
     h = Int(floor((n + p + 1.0) / 2.0))
 
+    # If the intercept is included, remove it from the data
     X0 = X
     p0 = p
     if X0[:, 1] == ones(n)
@@ -63,8 +70,10 @@ function satman2013(X::Array{Float64,2}, y::Array{Float64,1})
 
     allindices = collect(1:n)
 
+    # Initial covariance matrix 
     covmat = zeros(p0, p0)
 
+    # Construct an estimation of the covariance matrix
     for i = 1:p0
         for j = 1:p0
             if i == j
@@ -85,11 +94,18 @@ function satman2013(X::Array{Float64,2}, y::Array{Float64,1})
     end
     md = sqrt.(md2)
 
-    sorted_indices = sortperm(md)
+    # Perform Weighted Least Squares using the weights based on Mahalanobis distances
+    wlsreg = wls(X, y, 1.0 ./ md)
+    wlsresiduals = residuals(wlsreg)
+
+    # Find best h indices using the residuals obtained from WLS
+    sorted_indices = sortperm(abs.(wlsresiduals))
     best_h_indices = sorted_indices[1:h]
 
+    # Iterate C-steps
     _, bestset = iterateCSteps(X, y, best_h_indices, h)
 
+    # Estimate the final regression parameters
     olsreg = ols(X[bestset, :], y[bestset])
     betas = coef(olsreg)
     resids = y .- (X * betas)
@@ -100,6 +116,8 @@ function satman2013(X::Array{Float64,2}, y::Array{Float64,1})
 
     result = Dict()
     result["outliers"] = outlierset
+    result["betas"] = betas 
+    result["residuals"] = resids
 
     return result
 end
