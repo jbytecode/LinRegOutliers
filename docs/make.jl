@@ -1,4 +1,4 @@
-using Documenter, LinRegOutliers
+using Documenter, Plots, LinRegOutliers
 
 
 makedocs(
