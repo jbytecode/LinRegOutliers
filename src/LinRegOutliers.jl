@@ -1,5 +1,26 @@
 module LinRegOutliers
 
+using Requires
+
+# After the module is loaded, we check if Plots is installed and loaded.
+# If Plots is installed and loaded, we load the corresponding modules.
+function __init__()
+    @require Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80" begin
+  
+        import .Plots: RGB
+
+        include("mveltsplot.jl")
+        include("dataimage.jl")
+        include("bchplot.jl")
+
+        import .MVELTSPlot: mveltsplot
+        import .DataImage: dataimage
+        import .BCHPlot: bchplot
+        
+        export mveltsplot, dataimage, bchplot, RGB
+
+    end
+end
 
 # Basis
 include("basis.jl")
@@ -91,13 +112,14 @@ import .ASM2000: asm2000
 include("mve.jl")
 import .MVE: mve, mcd
 
+# Moved into grahhics.jl
 # MVE - LTS plot for visual detection of regression outliers
-include("mveltsplot.jl")
-import .MVELTSPlot: mveltsplot
+#include("mveltsplot.jl")
+#import .MVELTSPlot: mveltsplot
 
 # Billor & Chatterjee & Hadi Algorithm for detecting outliers
 include("bch.jl")
-import .BCH: bch, bchplot
+import .BCH: bch
 
 # Pena & Yohai (1995) algorithm
 include("py95.jl")
@@ -138,9 +160,10 @@ include("hadi1994.jl")
 import .Hadi94: hadi1994
 
 
+# Moved into graphics.jl
 # Gray-scale images of distance matrices
-include("dataimage.jl")
-import .DataImage: dataimage
+#include("dataimage.jl")
+#import .DataImage: dataimage
 
 
 # Modified and original Satman (2012) algorithms
@@ -218,8 +241,7 @@ export asm2000
 export lms
 export lts
 export mve, mcd
-export mveltsplot
-export bch, bchplot
+export bch
 export py95, py95SuspectedObservations
 export satman2013
 export satman2015, dominates
@@ -228,7 +250,6 @@ export quantileregression
 export lta
 export hadi1992
 export hadi1994
-export dataimage
 export gwcga, galts, ga, cga, RealChromosome
 export detectOutliers
 export ransac

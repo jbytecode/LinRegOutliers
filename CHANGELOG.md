@@ -1,5 +1,10 @@
-# Upcoming Release 
+# Upcoming Release 
+
+
+# 0.9.0
 - Add exact argument for LAD. If exact is true then the linear programming based exact solution is found. Otherwise, a GA based search is performed to yield approximate solutions. 
+- Remove dependency of Plots.jl. If Plots.jl is installed and loaded manually, the functionality that uses Plot is autmatically loaded by Requires.jl. Affected functions are `dataimage`, `mveltsplot`, and `bchplot`.
+
 
 # v0.8.19
 - Update Satman(2013) algorithm

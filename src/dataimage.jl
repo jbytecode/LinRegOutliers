@@ -1,14 +1,11 @@
 module DataImage
 
-
+export dataimage
 
 import ..Diagnostics:
     mahalanobisSquaredMatrix, euclideanDistances, mahalanobisSquaredBetweenPairs
 
-
-import Plots: RGB
-
-
+import ..RGB 
 
 """
 
@@ -41,11 +38,15 @@ julia> Plots.plot(di)
 # References
 Marchette, David J., and Jeffrey L. Solka. "Using data images for outlier detection." 
 Computational Statistics & Data Analysis 43.4 (2003): 541-552.
+
+!!! warning "Dependencies"
+    This method is enabled when the Plots package is installed and loaded.
+    
 """
 function dataimage(
     dataMatrix::Array{Float64,2};
     distance = :mahalanobis,
-)::Array{RGB{Float64},2}
+)::Matrix{RGB{Float64}}
     d = nothing
     if distance == :mahalanobis
         d = mahalanobisSquaredBetweenPairs(dataMatrix)

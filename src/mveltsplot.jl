@@ -9,7 +9,6 @@ import ..MVE: mve
 
 import Distributions: Chisq, quantile
 
-using Plots
 
 """
     mveltsplot(setting; alpha = 0.05, showplot = true)
@@ -41,6 +40,10 @@ good leverage points (observations far from the remaining of data in both x and 
 # References
 Van Aelst, Stefan, and Peter Rousseeuw. "Minimum volume ellipsoid." Wiley 
 Interdisciplinary Reviews: Computational Statistics 1.1 (2009): 71-82.
+
+!!! warning "Dependencies"
+    This method is enabled when the Plots package is installed and loaded.
+    
 """
 function mveltsplot(setting::RegressionSetting; alpha = 0.05, showplot = true)
     ltsresult = lts(setting)

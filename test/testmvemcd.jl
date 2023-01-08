@@ -26,6 +26,7 @@
 
 
     @testset "MVE & LTS Plot - Algorithm - Phone data" begin
+        using Plots
         df = phones
         reg = createRegressionSetting(@formula(calls ~ year), df)
         result = mveltsplot(reg, showplot = false)
