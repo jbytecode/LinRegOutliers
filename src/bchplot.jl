@@ -5,7 +5,7 @@ export bchplot
 
 
 import ..BCH: bch
-import ..Basis: RegressionSetting
+import ..Basis: RegressionSetting, designMatrix, responseVector
 
 
 """

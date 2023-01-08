@@ -1,4 +1,5 @@
 # Upcoming Release 
+- fix bchplot dependencies
 
 
 # 0.9.0
