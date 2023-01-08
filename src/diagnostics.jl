@@ -55,7 +55,7 @@ end
 function mahalanobisSquaredBetweenPairs(pairs::Matrix; covmatrix = nothing)
     n, _ = size(pairs)
     newmat = zeros(Float64, n, n)
-    if isnothing(covmatrix) 
+    if isnothing(covmatrix)
         covmatrix = cov(pairs)
     end
     try
@@ -194,7 +194,7 @@ end
 
 function dffit(X::Array{Float64,2}, y::Array{Float64,1}, i::Int)::Float64
     n, _ = size(X)
-    indices = [j for j in 1:n if i != j]
+    indices = [j for j = 1:n if i != j]
     olsfull = ols(X, y)
     Xsub = X[indices, :]
     ysub = y[indices]
@@ -423,7 +423,7 @@ end
 
 function jacknifedS(X::Array{Float64,2}, y::Array{Float64,1}, k::Int)::Float64
     n, p = size(X)
-    indices = [i for i in 1:n if i != k]
+    indices = [i for i = 1:n if i != k]
     Xsub = X[indices, :]
     ysub = y[indices]
     olsreg = ols(Xsub, ysub)

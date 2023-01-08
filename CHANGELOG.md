@@ -1,4 +1,5 @@
 # Upcoming Release 
+- Add exact argument for LAD. If exact is true then the linear programming based exact solution is found. Otherwise, a GA based search is performed to yield approximate solutions. 
 
 # v0.8.19
 - Update Satman(2013) algorithm

@@ -116,7 +116,7 @@ function satman2013(X::Array{Float64,2}, y::Array{Float64,1})
 
     result = Dict()
     result["outliers"] = outlierset
-    result["betas"] = betas 
+    result["betas"] = betas
     result["residuals"] = resids
 
     return result

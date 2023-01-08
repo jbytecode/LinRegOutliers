@@ -7,7 +7,8 @@ import LinearAlgebra: det
 import Clustering: Hclust, hclust, cutree
 
 
-import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, zstandardize
+import ..Basis:
+    RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, zstandardize
 import ..Diagnostics: mahalanobisSquaredBetweenPairs
 import ..LTS: lts
 import ..SMR98: majona
@@ -65,7 +66,7 @@ function asm2000(X::Array{Float64,2}, y::Array{Float64,1})::Dict
     #stdfit = standardize(ZScoreTransform, predicteds, dims = 1)
     stdres = zstandardize(resids)
     stdfit = zstandardize(predicteds)
-    
+
     pairs = hcat(stdfit, stdres)
 
     pairs = hcat(resids, predicteds)

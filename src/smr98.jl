@@ -5,7 +5,8 @@ export majona, smr98
 
 
 import Clustering: Hclust, hclust, cutree
-import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, zstandardize
+import ..Basis:
+    RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, zstandardize
 import Distributions: mean, std
 import ..OrdinaryLeastSquares: ols, residuals, predict
 

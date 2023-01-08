@@ -8,14 +8,18 @@ using GLPK
 import ..Basis:
     RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
 
+import ..HookeJeeves: hj
+import ..GA: ga
+
 """
 
-    lad(setting)
+    lad(setting; exact = true)
 
 Perform Least Absolute Deviations regression for a given regression setting.
 
 # Arguments
 - `setting::RegressionSetting`: RegressionSetting object with a formula and dataset.
+- `exact::Bool`: If true, use exact LAD regression. If false, estimate LAD regression parameters using GA. Default is true.
 
 # Description 
 The LAD estimator searches for regression the parameters estimates that minimize the sum of absolute residuals.
@@ -51,23 +55,52 @@ Dict{Any,Any} with 2 entries:
 ```
 
 """
-function lad(setting::RegressionSetting)
+function lad(setting::RegressionSetting; exact::Bool = true)
     X, y = @extractRegressionSetting setting
-    return lad(X, y)
+    return lad(X, y, exact = exact)
 end
 
 
 """
 
-    lad(X, y)
+    lad(X, y, exact = true)
 
 Perform Least Absolute Deviations regression for a given regression setting.
 
 # Arguments
 - `X::Array{Float64, 2}`: Design matrix of the linear model.
 - `y::Array{Float64, 1}`: Response vector of the linear model.
+- `exact::Bool`: If true, use exact LAD regression. If false, estimate LAD regression parameters using GA. Default is true.
 """
-function lad(X::Array{Float64,2}, y::Array{Float64,1})
+function lad(X::Array{Float64,2}, y::Array{Float64,1}; exact::Bool = true)
+    if exact
+        return lad_exact(X, y)
+    else
+        return lad_approx(X, y)
+    end
+end
+
+function lad_approx(X::Array{Float64,2}, y::Array{Float64,1})
+    n, p = size(X)
+
+    mins = ones(Float64, p) * 10^6 * (-1.0)
+    maxs = ones(Float64, p) * 10^6
+    popsize = 100
+
+    function fcost(par)
+        return sum(abs.(y .- X * par))
+    end
+
+    garesult = ga(popsize, p, fcost, mins, maxs, 0.90, 0.05, 1, p * 1000)
+    best = garesult[1]
+    hookejeevesresult =
+        hj(fcost, best.genes, maxiter = 109000, startstep = 10.0, endstep = 0.000001)
+    betas = hookejeevesresult["par"]
+    result = Dict("betas" => betas, "residuals" => y .- X * betas)
+    return result
+end
+
+function lad_exact(X::Array{Float64,2}, y::Array{Float64,1})
     n, p = size(X)
 
     m = JuMP.Model(GLPK.Optimizer)

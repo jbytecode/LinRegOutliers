@@ -27,7 +27,7 @@
 
         betas2 = result["betas"]
         @test abs(betas2[1] - 48.0057823) < eps
-        @test abs(betas2[2] - 0.4856801 ) < eps
+        @test abs(betas2[2] - 0.4856801) < eps
     end
 
     @testset "Quantile Regression - q = 0.95" begin

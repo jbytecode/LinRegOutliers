@@ -20,6 +20,19 @@ export find_minimum_nonzero
 export @extractRegressionSetting
 
 
+# Compact genetic algorithm
+include("cga.jl")
+import .CGA: cga
+
+# Hooke-Jeeves algorithm
+include("hj.jl")
+# The function hj() is not exported.
+
+# Genetic Algorithm
+include("ga.jl")
+import .GA: ga, RealChromosome
+
+
 # Predefined datasets used in outlier detection literature
 include("data.jl")
 import .DataSets: phones, hbk, stackloss
@@ -129,14 +142,6 @@ import .Hadi94: hadi1994
 include("dataimage.jl")
 import .DataImage: dataimage
 
-# Compact genetic algorithm
-include("cga.jl")
-import .CGA: cga
-
-
-# Genetic Algorithm
-include("ga.jl")
-import .GA: ga, RealChromosome
 
 # Modified and original Satman (2012) algorithms
 include("gwlts.jl")

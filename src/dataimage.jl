@@ -42,7 +42,10 @@ julia> Plots.plot(di)
 Marchette, David J., and Jeffrey L. Solka. "Using data images for outlier detection." 
 Computational Statistics & Data Analysis 43.4 (2003): 541-552.
 """
-function dataimage(dataMatrix::Array{Float64,2}; distance = :mahalanobis)::Array{RGB{Float64}, 2}
+function dataimage(
+    dataMatrix::Array{Float64,2};
+    distance = :mahalanobis,
+)::Array{RGB{Float64},2}
     d = nothing
     if distance == :mahalanobis
         d = mahalanobisSquaredBetweenPairs(dataMatrix)
@@ -55,7 +58,7 @@ function dataimage(dataMatrix::Array{Float64,2}; distance = :mahalanobis)::Array
     end
     colours = 1.0 .- d / maximum(d)
     n, _ = size(d)
-    colormatrix = Array{RGB{Float64}, 2}(undef, n, n)
+    colormatrix = Array{RGB{Float64},2}(undef, n, n)
     for i = 1:n
         for j = 1:n
             @inbounds colormatrix[i, j] = RGB(colours[i, j])

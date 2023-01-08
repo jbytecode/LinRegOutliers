@@ -148,7 +148,7 @@ function jacknifedS(
     omittedIndices::Array{Int,1},
 )::Float64
     n, p = size(X)
-    indices = [i for i in 1:n if !(i in omittedIndices)]
+    indices = [i for i = 1:n if !(i in omittedIndices)]
     olsreg = ols(X[indices, :], y[indices])
     e = residuals(olsreg)
     s = sqrt(sum(e .^ 2.0) / (n - p - length(omittedIndices)))
