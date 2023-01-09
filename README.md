@@ -38,7 +38,8 @@ A Julia package for outlier detection in linear regression.
 
 
 ## Unimplemented Methods
-- Depth based estimators (Regression depth, deepest regression, etc.)
+- Depth based estimators (Regression depth, deepest regression, etc.) See [#13](https://github.com/jbytecode/LinRegOutliers/issues/13) for the related issue.
+- Pena & Yohai (1999). See [#25](https://github.com/jbytecode/LinRegOutliers/issues/25) for the related issue.
 - Theil & Sen estimator for multiple regression
 
 
@@ -74,9 +75,8 @@ We provide some examples [here](https://github.com/jbytecode/LinRegOutliers/blob
 Please check out the reference manual [here](https://jbytecode.github.io/LinRegOutliers/).
 
 ## News
-- We implemented algorithm(X, y) style calls for all of the algorithms where X is the design matrix and y is the response vector. 
 - We implemented ~25 outlier detection algorithms which covers a high percentage of the literature.
-
+- Visit the [CHANGELOG.md](https://github.com/jbytecode/LinRegOutliers/blob/master/CHANGELOG.md) for the log of latest changes.
 
 ## Contributions
 You are probably the right contributor
