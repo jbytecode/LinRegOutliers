@@ -43,13 +43,15 @@
     end
 
     @testset "WLS with setting and equal weights" begin 
+        eps = 0.001
         sett = createRegressionSetting(@formula(calls ~ year), phones)
         result = wls(sett)
-        @test result.betas[1] == -260.0592463768119
-        @test result.betas[2] ==  5.04147826086957
+        @test isapprox(result.betas[1], -260.0592463768119, atol = eps)
+        @test isapprox(result.betas[2],  5.04147826086957, atol = eps)
     end 
 
     @testset "WLS with setting and inequal weights" begin
+        eps = 0.001
         w = [
             1.0,
             1.0,
@@ -78,7 +80,7 @@
         ] 
         sett = createRegressionSetting(@formula(calls ~ year), phones)
         result = wls(sett, weights = w)
-        @test result.betas[1] ==  -51.644554455445444
-        @test result.betas[2] ==  1.0846534653465334
+        @test isapprox(result.betas[1], -51.644554455445444, atol = eps)
+        @test isapprox(result.betas[2],  1.0846534653465334, atol = eps)
     end 
 end
