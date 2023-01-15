@@ -231,6 +231,10 @@ C-steps, observations with high standardized residuals are reported to be outlie
 
 # Output
 - `["outliers]`": Array of indices of outliers.
+- `[betas]`: Array of regression coefficients.
+- `[residuals]`: Array of residuals.
+- `[standardized_residuals]`: Array of standardized residuals.
+
 
 # Examples
 ```julia-repl
@@ -287,7 +291,11 @@ function satman2015(X::Array{Float64,2}, y::Array{Float64,1})
     outlierset = filter(i -> abs(standardized_resids[i]) > 2.5, allindices)
 
     result = Dict()
+
     result["outliers"] = outlierset
+    result["betas"] = betas
+    result["residuals"] = resids
+    result["standardized_residuals"] = standardized_resids
 
     return result
 end
