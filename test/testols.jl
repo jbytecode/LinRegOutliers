@@ -15,6 +15,14 @@
         @test isapprox(predict(olsreg), y, atol = tol)
     end
 
+    @testset "OLS with setting" begin 
+        sett = createRegressionSetting(@formula(calls ~ year), phones)
+        result = ols(sett)
+        @test result.betas[1] == -260.0592463768119
+        @test result.betas[2] ==  5.04147826086957
+    end 
+
+
     @testset "Weighted Least Squares" begin
         tol = 0.0001
         n = 7
@@ -34,4 +42,43 @@
         @test isapprox(predict(olsreg)[1:(n-2)], y[1:(n-2)], atol = tol)
     end
 
+    @testset "WLS with setting and equal weights" begin 
+        sett = createRegressionSetting(@formula(calls ~ year), phones)
+        result = wls(sett)
+        @test result.betas[1] == -260.0592463768119
+        @test result.betas[2] ==  5.04147826086957
+    end 
+
+    @testset "WLS with setting and inequal weights" begin
+        w = [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            1.0
+        ] 
+        sett = createRegressionSetting(@formula(calls ~ year), phones)
+        result = wls(sett, weights = w)
+        @test result.betas[1] ==  -51.644554455445444
+        @test result.betas[2] ==  1.0846534653465334
+    end 
 end

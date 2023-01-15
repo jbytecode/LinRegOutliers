@@ -4,7 +4,8 @@ module OrdinaryLeastSquares
 export OLS, ols, wls, residuals, predict, coef
 
 import LinearAlgebra: ColumnNorm, qr, Diagonal
-
+import ..Basis:
+    RegressionSetting, @extractRegressionSetting
 
 """
     struct OLS
@@ -52,6 +53,14 @@ julia> reg.betas
 ols(X::Array{Float64,2}, y::Array{Float64,1})::OLS = OLS(X, y, qr(X, ColumnNorm()) \ y)
 #ols(X::Array{Float64,2}, y::Array{Float64,1})::OLS = OLS(X, y, qr(X, Val(true)) \ y)
 
+
+function ols(setting::RegressionSetting)::OLS
+    X, y = @extractRegressionSetting setting
+    return ols(X, y)
+end 
+
+
+
 """
     wls(X, y, wts)
 
@@ -87,6 +96,15 @@ function wls(X::Array{Float64,2}, y::Array{Float64,1}, wts::Array{Float64,1})::O
     return OLS(X, y, qr(W * X, ColumnNorm()) \ (W * y))
 end
 
+
+function wls(setting::RegressionSetting; weights = nothing)::OLS
+    X, y = @extractRegressionSetting setting
+    if isnothing(weights)
+        return ols(X, y)
+    else
+        return wls(X, y, weights)
+    end 
+end 
 
 """
     residuals(ols)

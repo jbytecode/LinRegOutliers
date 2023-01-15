@@ -1,6 +1,7 @@
 # Upcoming Release 
 
 - Increase test coverage 
+- Add ols(setting) and wls(setting, weights = w) type method call where setting is a regression setting 
 
 # v0.9.1
 

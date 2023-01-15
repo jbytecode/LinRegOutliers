@@ -8,7 +8,7 @@
         ]
     sett = LinRegOutliers.createRegressionSetting(@formula(calls ~ year), phones)
     result = LinRegOutliers.detectOutliers(sett, methods = methods)
-    display(result)
+    
     for i in 15:21
         @test result[:, "hs93"][i] == smiley
     end 
