@@ -1,5 +1,6 @@
 # Upcoming Release 
 
+- Increase test coverage 
 
 # v0.9.1
 
