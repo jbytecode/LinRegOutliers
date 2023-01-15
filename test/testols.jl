@@ -16,10 +16,11 @@
     end
 
     @testset "OLS with setting" begin 
+        eps = 0.001
         sett = createRegressionSetting(@formula(calls ~ year), phones)
         result = ols(sett)
-        @test result.betas[1] == -260.0592463768119
-        @test result.betas[2] ==  5.04147826086957
+        @test isapprox(result.betas[1], -260.0592463768119, atol = eps)
+        @test isapprox(result.betas[2], 5.04147826086957, atol = eps)
     end 
 
 
