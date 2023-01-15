@@ -5,7 +5,7 @@ export OLS, ols, wls, residuals, predict, coef
 
 import LinearAlgebra: ColumnNorm, qr, Diagonal
 import ..Basis:
-    RegressionSetting, @extractRegressionSetting
+    RegressionSetting, @extractRegressionSetting, designMatrix, responseVector
 
 """
     struct OLS
