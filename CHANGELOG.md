@@ -1,13 +1,16 @@
 # Upcoming Release 
 
+
+# v0.9.2
+
 - Increase test coverage 
 - Add ols(setting) and wls(setting, weights = w) type method call where setting is a regression setting 
 - Implement cooksoutliers() method for determining potential regression outliers using a cutoff value.
 - Update documentation
-- Theil-Sen estimator for multiple regression
+- Implement Theil-Sen estimator for multiple regression
 
 
-# v0.9.1
+# v0.9.1
 
 - Fix bchplot dependencies
 - Update README with new instructions
