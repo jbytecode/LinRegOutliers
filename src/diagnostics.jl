@@ -1,7 +1,8 @@
 module Diagnostics
 
 
-export dffit,
+export dffit, 
+    dfbeta,
     hatmatrix,
     studentizedResiduals,
     adjustedResiduals,

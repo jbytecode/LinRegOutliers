@@ -3,6 +3,7 @@
 - Increase test coverage 
 - Add ols(setting) and wls(setting, weights = w) type method call where setting is a regression setting 
 - Implement cooksoutliers() method for determining potential regression outliers using a cutoff value.
+- Update documentation
 
 
 # v0.9.1

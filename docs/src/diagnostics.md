@@ -37,6 +37,11 @@ LinRegOutliers.jacknifedS
 LinRegOutliers.cooks
 ```
 
+## cooksoutliers
+```@docs
+LinRegOutliers.cooksoutliers 
+```
+
 ## mahalanobisSquaredMatrix
 ```@docs
 LinRegOutliers.mahalanobisSquaredMatrix
