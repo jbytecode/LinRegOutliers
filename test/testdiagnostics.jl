@@ -96,6 +96,17 @@
         @test map((x, y) -> abs(x - y) < eps, cookdists, knowncooks) == trues(24)
     end
 
+    @testset "Cook's distance - Cutoff" begin 
+        eps = 0.001
+        sett = createRegressionSetting(@formula(calls ~ year), phones)
+        result = cooksoutliers(sett, alpha = 0.5)
+        @test result isa Dict 
+        @test isapprox(result["cutoff"], 0.715452, atol = eps) 
+        potentials = result["potentials"]
+        @test potentials isa Vector 
+        @test length(potentials) == 0
+    end 
+
 
     @testset "Jacknifed standard error of regression" begin
         eps = 0.00001

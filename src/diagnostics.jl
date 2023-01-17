@@ -6,7 +6,7 @@ export dffit,
     studentizedResiduals,
     adjustedResiduals,
     jacknifedS,
-    cooks,
+    cooks, cooksoutliers,
     mahalanobisSquaredMatrix,
     covratio,
     hadimeasure
@@ -15,7 +15,7 @@ export coordinatwisemedians, mahalanobisBetweenPairs, euclideanDistances
 import ..Basis:
     RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
 import ..OrdinaryLeastSquares: ols, coef, residuals, predict
-import Distributions: mean, std, cov, median
+import Distributions: mean, std, cov, median, FDist, quantile
 import LinearAlgebra: det
 import DataFrames: DataFrame
 
@@ -494,6 +494,40 @@ function cooks(X::Array{Float64,2}, y::Array{Float64,1})::Array{Float64,1}
         @inbounds d[i] = ((res[i]^2.0) / (p * s2)) * (hat[i, i] / (1 - hat[i, i])^2.0)
     end
     return d
+end
+
+"""
+
+    cooksoutliers(setting; alpha = 0.5)
+
+Calculates Cooks distance for a given regression setting and reports the potentials outliers
+
+
+# Arguments
+- `setting::RegressionSetting`: RegressionSetting object with a formula and dataset.
+- `alpha::Float`: Probability for cutoff value. quantile(Fdist(p, n-p), alpha) is used for cutoff. Default is 0.5.
+
+
+# Output
+- `["distance"]`: Cooks distances.
+- `["cutoff"]`: Quantile of the F distribution.
+- `["potentials"]`: Vector of indices of potential regression outliers.
+"""
+function cooksoutliers(setting::RegressionSetting; alpha::Float64 = 0.5)::Dict 
+    X, y = @extractRegressionSetting setting
+    return cooksoutliers(X, y, alpha = alpha)
+end
+
+function cooksoutliers(X::Array{Float64, 2}, y::Array{Float64, 1}; alpha::Float64 = 0.5)::Dict 
+    n, p = size(X)
+    d = cooks(X, y)
+    cutoff = quantile(FDist(p, n-p), alpha)
+    potentials = filter(i -> d[i] >= cutoff, 1:n)
+    return Dict(
+        "distance" => d, 
+        "cutoff" => cutoff, 
+        "potentials" => potentials
+    )
 end
 
 

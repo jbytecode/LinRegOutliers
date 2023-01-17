@@ -75,6 +75,7 @@ import .Diagnostics:
     adjustedResiduals,
     jacknifedS,
     cooks,
+    cooksoutliers,
     mahalanobisSquaredMatrix,
     covratio,
     hadimeasure
@@ -226,6 +227,7 @@ export studentizedResiduals
 export adjustedResiduals
 export jacknifedS
 export cooks
+export cooksoutliers
 export mahalanobisSquaredMatrix
 export covratio
 export hadimeasure
