@@ -201,6 +201,10 @@ import .Imon2005: imon2005
 include("cm97.jl")
 import .CM97: cm97
 
+# Theil-Sen Estimator
+include("theilsen.jl")
+import .TheilSen: theilsen
+
 # All-in-one
 include("summary.jl")
 import .Summary: detectOutliers
@@ -260,5 +264,6 @@ export imon2005
 export atkinson94, atkinsonstalactiteplot, generate_stalactite_plot
 export bacon
 export cm97
+export theilsen
 
 end # module
