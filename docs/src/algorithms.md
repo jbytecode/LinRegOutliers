@@ -136,6 +136,10 @@ LinRegOutliers.cm97
 LinRegOutliers.quantileregression
 ```
 
+## Theil-Sen estimator for multiple regresion 
+```@docs
+LinRegOutliers.theilsen
+```
 
 
 

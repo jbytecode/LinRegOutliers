@@ -92,12 +92,8 @@ function createPopulation(
     return pop
 end
 
-# Change the number of threads before starting Julia 
-# for using multi-core fitness evaluation.
-# Example:
-# $ export JULIA_NUM_THREADS=4
 function Evaluate(pop::Array{RealChromosome,1}, fcost::Function)::Array{RealChromosome,1}
-    Base.Threads.@threads for i in eachindex(pop)
+    for i in eachindex(pop)
         @inbounds pop[i].cost = fcost(pop[i].genes)
     end
     return pop

@@ -35,13 +35,14 @@ A Julia package for outlier detection in linear regression.
 - BACON Algorithm (Billor & Hadi & Velleman (2000))
 - Hadi (1994) Algorithm
 - Chatterjee & Mächler (1997)
+- Theil-Sen estimator for multiple regression
 - Summary
 
 
 ## Unimplemented Methods
 - Depth based estimators (Regression depth, deepest regression, etc.) See [#13](https://github.com/jbytecode/LinRegOutliers/issues/13) for the related issue.
 - Pena & Yohai (1999). See [#25](https://github.com/jbytecode/LinRegOutliers/issues/25) for the related issue.
-- Theil & Sen estimator for multiple regression
+
 
 
 ## Installation
