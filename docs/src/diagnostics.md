@@ -52,6 +52,11 @@ LinRegOutliers.mahalanobisSquaredMatrix
 LinRegOutliers.dfbeta
 ```
 
+## dfbetas
+```@docs
+LinRegOutliers.dfbetas
+```
+
 ## covratio
 ```@docs
 LinRegOutliers.covratio

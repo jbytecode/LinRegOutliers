@@ -3,6 +3,7 @@ module Diagnostics
 
 export dffit, 
     dfbeta,
+    dfbetas,
     hatmatrix,
     studentizedResiduals,
     adjustedResiduals,
@@ -579,7 +580,30 @@ function mahalanobisSquaredMatrix(
     end
 end
 
+"""
+    dfbetas(setting)
 
+Apply DFBETA diagnostic of all of the observations for a given regression setting.
+
+# Arguments
+- `setting::RegressionSetting`: A regression setting object.
+
+See also: [`dfbeta`](@ref)
+
+"""
+function dfbetas(setting)
+    y = responseVector(setting)
+    results =  map(i -> dfbeta(setting, i), 1:length(y))
+    return mapreduce(permutedims, vcat, results)
+end
+
+function dfbetas(
+    X::Array{Float64,2},
+    y::Array{Float64,1}
+)
+    results = map(i -> dfbeta(X, y, i), 1:length(y))
+    return mapreduce(permutedims, vcat, results)
+end
 
 
 """

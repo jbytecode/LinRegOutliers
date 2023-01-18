@@ -180,7 +180,7 @@
 
 
 
-    @testset "dfbeta - phone data" begin
+    @testset "dfbeta and dfbetas - phone data" begin
         eps = 0.00001
         reg = createRegressionSetting(@formula(calls ~ year), phones)
         n, p = size(phones)
@@ -213,7 +213,15 @@
         for i = 1:n
             for j = 1:p
                 dfbetaresult = dfbeta(reg, i)
-                @test abs(dfbetaresult[j] - knownvalues[i, j]) < eps
+                @test isapprox(dfbetaresult[j], knownvalues[i, j], atol = eps) 
+            end
+        end
+
+        # DFBETAS
+        allresults = dfbetas(reg)
+        for i = 1:n
+            for j = 1:p
+                @test isapprox(allresults[i, j], knownvalues[i, j], atol = eps) 
             end
         end
     end

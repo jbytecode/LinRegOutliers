@@ -1,6 +1,7 @@
 # Upcoming Release 
 
 - ga() is now faster.
+- implement dfbetas().
 
 
 # v0.9.2

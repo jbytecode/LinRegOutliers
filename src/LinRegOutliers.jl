@@ -70,6 +70,7 @@ include("diagnostics.jl")
 import .Diagnostics:
     dffit,
     dfbeta,
+    dfbetas,
     hatmatrix,
     studentizedResiduals,
     adjustedResiduals,
@@ -225,7 +226,7 @@ export weightloss, hs93randomdata, woodgravity
 export hills, softdrinkdelivery
 
 # Diagnostics
-export dffit, dfbeta
+export dffit, dfbeta, dfbetas
 export hatmatrix
 export studentizedResiduals
 export adjustedResiduals
