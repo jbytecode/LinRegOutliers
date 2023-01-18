@@ -1,13 +1,22 @@
 using LinRegOutliers
-using DataFrames 
 
-# setting = createRegressionSetting(@formula(y ~ x1 + x2 + x3), hbk)
-# setting = createRegressionSetting(@formula(calls ~ year), phones)
+import LinRegOutliers.GA: ga
 
-x = [1.0, 2, 3, 4, 5, 6, 7, 8, 9, 100]
-y = [2.0, 4, 6, 8, 10, 12, 14, 16, 18, 20]
-mydata = DataFrame("x" => x,"y" => y)
-setting = createRegressionSetting(@formula(y ~ x), mydata)
 
-result= theilsen(setting, 2, nsamples = 1000)
-result |> display
+const e = exp(1)
+
+function f(x)
+    return (x[1] - pi)^2 + (x[2] - e)^2
+end 
+
+
+@time result = ga(100, 
+2, f, 
+[-500.0, -500.0], 
+[500.0, 500.0], 
+1.0, 
+0.1, 
+2, 
+10000)
+
+println(result[1])

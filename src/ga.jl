@@ -9,6 +9,8 @@ mutable struct RealChromosome <: Chromosome
     cost::Float64
 end
 
+RealChromosome() = RealChromosome(Float64[], Inf64)
+
 function Base.:*(c1::RealChromosome, num::Float64)::RealChromosome
     RealChromosome(c1.genes * num, Inf64)
 end
@@ -50,8 +52,8 @@ end
 function Mutate(c::RealChromosome, prob::Float64)::RealChromosome
     genes = copy(c.genes)
     @inbounds for i in eachindex(genes)
-        if rand(1)[1] < prob
-            genes[i] += randn(1)[1]
+        if rand() < prob
+            genes[i] += randn()
         end
     end
     return RealChromosome(genes, Inf64)
@@ -61,9 +63,9 @@ function TournamentSelection(
     pop::Array{RealChromosome,1},
 )::Tuple{RealChromosome,RealChromosome}
     n = length(pop)
-    indices = sample(collect(1:n), 4, replace = false)
-    lucky1 = nothing
-    lucky2 = nothing
+    indices = sample(1:n, 4, replace = false)
+    lucky1 :: Chromosome = RealChromosome()
+    lucky2 :: Chromosome = RealChromosome()
     if pop[indices[1]].cost < pop[indices[2]].cost
         lucky1 = pop[indices[1]]
     else
@@ -93,8 +95,8 @@ function createPopulation(
 end
 
 function Evaluate(pop::Array{RealChromosome,1}, fcost::Function)::Array{RealChromosome,1}
-    for i in eachindex(pop)
-        @inbounds pop[i].cost = fcost(pop[i].genes)
+    @inbounds for i in eachindex(pop)
+        pop[i].cost = fcost(pop[i].genes)
     end
     return pop
 end
@@ -107,29 +109,35 @@ function Generation(
     pmutate::Float64,
 )::Array{RealChromosome,1}
     popsize = length(pop)
-    newpop = []
+    newpop = Array{Chromosome, 1}(undef, popsize)
     pop = sort(Evaluate(pop, fcost))
+    csize :: Int = 0
     @inbounds for i = 1:elitism
-        push!(newpop, pop[i])
+        csize += 1
+        newpop[csize] = pop[i]
     end
-    @inbounds while length(newpop) != popsize
+
+    winner1 = RealChromosome()
+    winner2 = RealChromosome()
+
+    @inbounds while csize < popsize
         parent1, parent2 = TournamentSelection(pop)
-        winner1 = nothing
-        winner2 = nothing
-        if rand(1)[1] < pcross
+        if rand() < pcross
             offspring1, offspring2, offspring3 = LinearCrossover(parent1, parent2)
             offpop = sort(Evaluate([offspring1, offspring2, offspring3], fcost))
             winner1 = Mutate(offpop[1], pmutate)
             winner2 = Mutate(offpop[2], pmutate)
-            Evaluate([winner1, winner2], fcost)
+            Evaluate(RealChromosome[winner1, winner2], fcost)
         else
             winner1, winner2 = parent1, parent2
         end
-        if (length(newpop) < popsize)
-            push!(newpop, winner1)
+        if (csize + 1 <= popsize)
+            csize += 1
+            newpop[csize] =  winner1
         end
-        if (length(newpop) < popsize)
-            push!(newpop, winner2)
+        if (csize + 1 <= popsize)
+            csize += 1
+            newpop[csize] =  winner2
         end
     end
     return sort(newpop)
@@ -148,7 +156,7 @@ function ga(
     iterations::Int,
 )::Array{RealChromosome,1}
     pop = createPopulation(popsize, chsize, mins, maxs)
-    for i = 1:iterations
+    for _ = 1:iterations
         pop = Generation(pop, fcost, elitisim, pcross, pmutate)
     end
     return pop

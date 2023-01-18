@@ -1,5 +1,7 @@
 # Upcoming Release 
 
+- ga() is now faster.
+
 
 # v0.9.2
 
