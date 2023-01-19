@@ -7,7 +7,7 @@ export hs93
 import ..Basis:
     RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
 import ..OrdinaryLeastSquares: ols, predict, residuals, coef
-import ..Diagnostics: dffit
+import ..Diagnostics: dffits
 
 import Distributions: TDist, quantile
 
@@ -45,7 +45,7 @@ end
 function hs93initialset(X::Array{Float64,2}, y::Array{Float64,1})::Array{Int,1}
     _, p = size(X)
     s = p + 1
-    dfs = abs.(dffit(X, y))
+    dfs = abs.(dffits(X, y))
     sortedindices = sortperm(dfs)
     basicsetindices = sortedindices[1:s]
     return basicsetindices

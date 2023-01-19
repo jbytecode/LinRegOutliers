@@ -12,6 +12,11 @@ LinRegOutliers.wls
 LinRegOutliers.dffit
 ```
 
+## dffits
+```@docs
+LinRegOutliers.dffits
+```
+
 ## hatmatrix
 ```@docs
 LinRegOutliers.hatmatrix

@@ -14,14 +14,14 @@
         end
     end
 
-    @testset "dffit - for all observations" begin
+    @testset "dffits - for all observations" begin
         # Since this regression setting is deterministic,
         # omission of a single observation has not an effect on
         # the predicted response.
         myeps = 10.0^(-6.0)
         dataset = DataFrame(x = [1.0, 2, 3, 4, 5], y = [2.0, 4, 6, 8, 10])
         setting = createRegressionSetting(@formula(y ~ x), dataset)
-        stats = dffit(setting)
+        stats = dffits(setting)
         for element in stats
             @test abs(element) < myeps
         end

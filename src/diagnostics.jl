@@ -2,6 +2,7 @@ module Diagnostics
 
 
 export dffit, 
+    dffits,
     dfbeta,
     dfbetas,
     hatmatrix,
@@ -207,7 +208,7 @@ end
 
 
 """
-    dffit(setting)
+    dffits(setting)
 
 Calculate `dffit` for all observations.
 
@@ -218,7 +219,7 @@ Calculate `dffit` for all observations.
 ```julia-repl
 julia> reg = createRegressionSetting(@formula(calls ~ year), phones);
 
-julia> dffit(reg)
+julia> dffits(reg)
 24-element Array{Float64,1}:
    2.3008326745719785
    1.2189579001467337
@@ -250,13 +251,13 @@ julia> dffit(reg)
 Belsley, David A., Edwin Kuh, and Roy E. Welsch. Regression diagnostics: 
 Identifying influential data and sources of collinearity. Vol. 571. John Wiley & Sons, 2005.
 """
-function dffit(setting::RegressionSetting)::Array{Float64,1}
+function dffits(setting::RegressionSetting)::Array{Float64,1}
     n, _ = size(setting.data)
     result = [dffit(setting, i) for i = 1:n]
     return result
 end
 
-function dffit(X::Array{Float64,2}, y::Array{Float64,1})::Array{Float64,1}
+function dffits(X::Array{Float64,2}, y::Array{Float64,1})::Array{Float64,1}
     n, _ = size(X)
     result = [dffit(X, y, i) for i = 1:n]
     return result

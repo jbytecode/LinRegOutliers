@@ -69,6 +69,7 @@ import .OrdinaryLeastSquares: OLS, ols, wls, residuals, predict, coef
 include("diagnostics.jl")
 import .Diagnostics:
     dffit,
+    dffits,
     dfbeta,
     dfbetas,
     hatmatrix,
@@ -226,7 +227,7 @@ export weightloss, hs93randomdata, woodgravity
 export hills, softdrinkdelivery
 
 # Diagnostics
-export dffit, dfbeta, dfbetas
+export dffit, dffits, dfbeta, dfbetas
 export hatmatrix
 export studentizedResiduals
 export adjustedResiduals
