@@ -72,3 +72,7 @@ LinRegOutliers.covratio
 LinRegOutliers.hadimeasure
 ```
 
+## diagnose
+```@docs
+LinRegOutliers.diagnose
+```

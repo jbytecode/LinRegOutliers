@@ -80,7 +80,8 @@ import .Diagnostics:
     cooksoutliers,
     mahalanobisSquaredMatrix,
     covratio,
-    hadimeasure
+    hadimeasure,
+    diagnose
 
 
 # Hadi & Simonoff (1993) algorithm
@@ -237,6 +238,8 @@ export cooksoutliers
 export mahalanobisSquaredMatrix
 export covratio
 export hadimeasure
+export diagnose
+
 
 # Ordinary least squares
 export OLS, ols, wls, residuals, predict, coef

@@ -12,7 +12,9 @@ export dffit,
     cooks, cooksoutliers,
     mahalanobisSquaredMatrix,
     covratio,
-    hadimeasure
+    hadimeasure,
+    diagnose 
+
 export coordinatwisemedians, mahalanobisBetweenPairs, euclideanDistances
 
 import ..Basis:
@@ -262,6 +264,7 @@ function dffits(X::Array{Float64,2}, y::Array{Float64,1})::Array{Float64,1}
     result = [dffit(X, y, i) for i = 1:n]
     return result
 end
+
 
 """
     hatmatrix(setting)
@@ -524,7 +527,7 @@ end
 function cooksoutliers(X::Array{Float64, 2}, y::Array{Float64, 1}; alpha::Float64 = 0.5)::Dict 
     n, p = size(X)
     d = cooks(X, y)
-    cutoff = quantile(FDist(p, n-p), alpha)
+    cutoff = cookscritical(n, p)
     potentials = filter(i -> d[i] >= cutoff, 1:n)
     return Dict(
         "distance" => d, 
@@ -729,5 +732,72 @@ function hadimeasure(X::Array{Float64,2}, y::Array{Float64,1}; c::Float64 = 2.0)
     potentials = filter(i -> abs(H[i]) > crit1, 1:n)
     return Dict("measure" => H, "crit1" => crit1, "potentials" => potentials)
 end
+
+
+function dffitcritical(n::Int, p::Int)::Float64
+    return 2.0 * sqrt((p + 1) / (n - p - 1))
+end 
+
+function dfbetacritical(n::Int)::Float64
+    return 2.0 / sqrt(n)
+end 
+
+function covratiocritical(n::Int, p::Int)::Tuple{Float64, Float64}
+    c = 3.0 * p / n
+    return (1.0 - c, 1.0 + c)
+end 
+
+function hatcritical(n::Int, p::Int)::Float64 
+    return 2.0 * sqrt(p / n)
+end 
+
+function cookscritical(n::Int, p::Int; alpha = 0.5)::Float64 
+    return quantile(FDist(p, n-p), alpha)
+end
+
+
+
+"""
+    diagnose(setting; alpha = 0.5)
+
+Diagnose a regression setting and report potential outliers using [`dffits`](@ref), [`dfbetas`](@ref)
+[`cooks`](@ref), and [`hatmatrix`](@ref)
+
+# Arguments
+- `setting::RegressionSetting`: A regression setting object.
+- `alpha`: Alpha value for Cooks distance cutoff. See [`cooksoutliers`](@ref).
+
+
+"""
+function diagnose(setting::RegressionSetting; alpha = 0.5)
+    X, y = @extractRegressionSetting setting
+    return diagnose(X, y, alpha = 0.5)
+end 
+
+
+function diagnose(X::Array{Float64, 2}, y::Array{Float64, 1}; alpha = 0.5)
+    n, p = size(X)
+    resultdffits   = dffits(X, y)
+    resultdfbetas  = dfbetas(X, y)
+    resultcook     = cooks(X, y)
+    hatresult      = hatmatrix(X)
+
+    dffitcrit      = dffitcritical(n, p)
+    dfbetacrit     = dfbetacritical(n)
+    hatcrit        = hatcritical(n, p)
+    cookscrit      = cookscritical(n, p, alpha = alpha)
+
+    dffitpotential   = filter(i -> abs(resultdffits[i]) >= dffitcrit, 1:n)
+    dfbetaspotential = filter(i -> any(x -> (abs(x) > dfbetacrit), resultdfbetas), 1:n)
+    hatpotential     = filter(i -> abs(hatresult[i]) > hatcrit, 1:n)
+    cookpotential    = filter(i -> abs(resultcook[i]) > cookscrit, 1:n)
+
+    return Dict(
+        "dffit_potentials" => dffitpotential,
+        "dfbeta_potentials" => dfbetaspotential,
+        "hat_potentials" => hatpotential,
+        "cooks_potentials" => cookpotential
+    )
+end 
 
 end # end of module Diagnostics 

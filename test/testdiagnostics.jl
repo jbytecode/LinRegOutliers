@@ -261,5 +261,14 @@
         @test map((x, y) -> abs(x - y) < eps, hm, knowncooks) == trues(24)
     end
 
+    @testset "diagnose()" begin 
+        sett = createRegressionSetting(@formula(y ~ x1 + x2 + x3), hbk)
+        result = diagnose(sett)
+        @test result["dffit_potentials"]  == [11, 12, 13, 14]
+        @test result["dfbeta_potentials"] == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75]
+        @test result["cooks_potentials"]  == [12, 14]
+        @test isempty(result["hat_potentials"])
+    end 
+
 
 end
