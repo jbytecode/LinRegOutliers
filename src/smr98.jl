@@ -115,7 +115,8 @@ function smr98(X::Array{Float64,2}, y::Array{Float64,1})
                 )
         end
     end
-    return Dict("outliers" => [])
+
+    return Dict("outliers" => [], "betas" => coef(olsreg))
 end
 
 end # end of module SMR98
