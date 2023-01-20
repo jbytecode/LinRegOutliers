@@ -3,7 +3,7 @@ module LAD
 export lad
 
 using JuMP
-using GLPK
+using HiGHS
 
 import ..Basis:
     RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
@@ -103,7 +103,8 @@ end
 function lad_exact(X::Array{Float64,2}, y::Array{Float64,1})
     n, p = size(X)
 
-    m = JuMP.Model(GLPK.Optimizer)
+    m = JuMP.Model(HiGHS.Optimizer)
+    set_silent(m)
 
     JuMP.@variable(m, d[1:(2n)])
     JuMP.@variable(m, beta[1:p])

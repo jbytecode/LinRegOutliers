@@ -4,9 +4,10 @@
 - Implement dfbetas().
 - Separate implementations of dffit() and dffits()
 - Implement diagnose()
+- Replace GLPK with HiGHS. When n > 10000, HiGHS based lad() is now approximately 6x faster.
 
 
-# v0.9.2
+# v0.9.2
 
 - Increase test coverage 
 - Add ols(setting) and wls(setting, weights = w) type method call where setting is a regression setting 

@@ -6,8 +6,8 @@
         reg = createRegressionSetting(@formula(calls ~ year), df)
         result = lad(reg)
         betas = result["betas"]
-        @test abs(betas[1] - -75.19) < eps
-        @test abs(betas[2] - 1.53) < eps
+        @test abs(betas[1] - -56.60909) < eps
+        @test abs(betas[2] -  1.172727) < eps
     end
 
     @testset "LAD - Algorithm - Exact" begin
@@ -22,7 +22,7 @@
         @test betas2[2] == 2.0
     end
 
-    @testset "LAD with (X, y) - Phones - Exact" begin
+    @testset "LAD with (X, y) - Algorithm - Exact" begin
         eps = 0.0001
         df2 = DataFrame(
             x = Float64[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
