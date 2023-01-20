@@ -121,7 +121,7 @@ function galts(X::Array{Float64,2}, y::Array{Float64,1})
     h = Int(floor((n + p + 1.0) / 2.0))
 
     function fcost(genes::Array{Float64,1})
-        objective, indices = iterateCSteps(X, y, genes, h)
+        objective, _ = iterateCSteps(X, y, genes, h)
         return objective
     end
 
@@ -130,6 +130,7 @@ function galts(X::Array{Float64,2}, y::Array{Float64,1})
     popsize = 30
 
     garesult = ga(popsize, p, fcost, mins, maxs, 0.90, 0.05, 1, 100)
+
     best = garesult[1]
 
     objective, subsetindices = iterateCSteps(X, y, best.genes, h)

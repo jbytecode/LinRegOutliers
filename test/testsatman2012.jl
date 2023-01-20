@@ -1,4 +1,4 @@
-@testset "Satman(2012)" begin
+
 
     @testset "Satman(2012) (Csteps and GA based LTS) Algorithm - Phones data" begin
         Random.seed!(12345)
@@ -22,4 +22,4 @@
         end
     end
 
-end
+

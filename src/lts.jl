@@ -41,10 +41,11 @@ function iterateCSteps(
     h::Int,
 )
     starterset = copy(subsetindices)
-    oldobjective = Inf
-    objective = Inf
-    iter = 0
-    maxiter = 10000
+    oldobjective :: Float64 = Inf64
+    objective :: Float64 = Inf64
+    iter :: Int = 0
+    maxiter :: Int = 10000
+    eps :: Float64 = 0.001
     n, _ = size(X)
     while iter < maxiter
         try
@@ -56,7 +57,7 @@ function iterateCSteps(
             sortedresindices = sortperm(abs.(res))
             subsetindices = sortedresindices[1:h]
             objective = sum(sort(res .^ 2.0)[1:h])
-            if oldobjective == objective
+            if isapprox(oldobjective, objective, atol = eps)
                 break
             end
             oldobjective = objective
