@@ -12,6 +12,7 @@ import ..Basis:
 import ..Diagnostics: mahalanobisSquaredBetweenPairs
 import ..LTS: lts
 import ..SMR98: majona
+import ..OrdinaryLeastSquares: ols, coef
 
 
 
@@ -32,13 +33,15 @@ relatively small number of observations are declared to be outliers.
 
 # Output
 - `["outliers"]`: Vector of indices of outliers.
+- `["betas"]`: Vector of regression coefficients.
 
 
 # Examples
 ```julia-repl
 julia> reg0001 = createRegressionSetting(@formula(calls ~ year), phones);
 julia> asm2000(reg0001)
-Dict{Any,Any} with 1 entry:
+Dict{Any, Any} with 2 entries:
+  "betas"    => [-63.4816, 1.30406]
   "outliers" => [15, 16, 17, 18, 19, 20]
 ```
 
@@ -87,8 +90,13 @@ function asm2000(X::Array{Float64,2}, y::Array{Float64,1})::Dict
         end
     end
 
+    inlierset = setdiff(1:n, outlierset)
+    cleanols = ols(X[inlierset, :], y[inlierset])
+    cleanbetas = coef(cleanols)
+
     result = Dict()
     result["outliers"] = outlierset
+    result["betas"] = cleanbetas
     return result
 end
 

@@ -8,7 +8,7 @@ import Clustering: Hclust, hclust, cutree
 import ..Basis:
     RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, zstandardize
 import Distributions: mean, std
-import ..OrdinaryLeastSquares: ols, residuals, predict
+import ..OrdinaryLeastSquares: ols, residuals, predict, coef
 
 function distances(resids::Array{Float64,1}, fitteds::Array{Float64})::Array{Float64,2}
     n = length(resids)
@@ -50,12 +50,14 @@ the subtrees with relatively small number of observations are declared to be clu
 
 # Output
 - `["outliers"]`: Array of indices of outliers.
+- `["betas"]`: Vector of regression coefficients.
 
 # Examples
 ```julia-repl
 julia> reg0001 = createRegressionSetting(@formula(calls ~ year), phones);
 julia> smr98(reg0001)
-Dict{String,Array{Int64,1}} with 1 entry:
+Dict{String, Vector} with 2 entries:
+  "betas"    => [-55.4519, 1.15692]
   "outliers" => [15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
 ```
 
@@ -103,7 +105,14 @@ function smr98(X::Array{Float64,2}, y::Array{Float64,1})
     for clustid in uniquemappings
         cnt = count(x -> x == clustid, clustermappings)
         if cnt >= h
-            return Dict("outliers" => filter(i -> clustermappings[i] != clustid, 1:n))
+            outlierset = filter(i -> clustermappings[i] != clustid, 1:n)
+            inlierset = setdiff(1:n, outlierset)
+            cleanols = ols(X[inlierset, :], y[inlierset])
+            cleanbetas = coef(cleanols)
+            return Dict(
+                "outliers" => outlierset,
+                "betas" => cleanbetas
+                )
         end
     end
     return Dict("outliers" => [])

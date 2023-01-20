@@ -220,12 +220,14 @@ studendized residuals are reported as outliers.
 
 # Output 
 - `["outliers"]`: Array of indices of outliers.
+- `["betas"]`: Array of estimated coefficients.
 
 # Examples
 ```julia-repl
 julia> reg = createRegressionSetting(@formula(stackloss ~ airflow + watertemp + acidcond), stackloss)
 julia> bacon(reg, m=12)
-Dict{String,Array{Int64,1}} with 1 entry:
+Dict{String, Vector} with 2 entries:
+  "betas"    => [-37.6525, 0.797686, 0.57734, -0.0670602]
   "outliers" => [1, 3, 4, 21]
 ```
 # References
@@ -251,7 +253,16 @@ function bacon(
         r_prev = r
         r = length(subset)
     end
-    result = Dict("outliers" => setdiff(1:n, subset))
+
+    outlierindices = setdiff(1:n, subset)
+    inlierindices = subset 
+    cleanols = ols(X[inlierindices, :], y[inlierindices])
+    cleanbetas = coef(cleanols)
+
+    result = Dict(
+        "outliers" => outlierindices,
+        "betas" => cleanbetas
+    )
     return result
 end
 

@@ -67,12 +67,14 @@ using recursive residuals. When the calculated statistics exceeds a threshold it
 
 # Output
 - `["outliers]`: Array of indices of outliers.
+- `["betas"]`: Vector of regression coefficients.
 
 # Examples
 ```julia-repl
 julia> reg0001 = createRegressionSetting(@formula(stackloss ~ airflow + watertemp + acidcond), stackloss)
 julia> ks89(reg0001)
-Dict{String,Array{Int64,1}} with 1 entry:
+Dict{String, Vector} with 2 entries:
+  "betas"    => [-42.4531, 0.956605, 0.555571, -0.108766]
   "outliers" => [4, 21]
 ```
 # References
@@ -104,8 +106,17 @@ function ks89(X::Array{Float64,2}, y::Array{Float64,1}; alpha = 0.05)::Dict
     end
     td = TDist(n - p - 1)
     q = quantile(td, alpha)
-    result = filter(i -> abs.(ws[i]) > abs(q), 1:n)
-    result = Dict("outliers" => result)
+
+    outlierindices = filter(i -> abs.(ws[i]) > abs(q), 1:n)
+    inlierindices = setdiff(1:n, outlierindices)
+    cleanols = ols(X[inlierindices, :], y[inlierindices])
+    cleanbetas = coef(cleanols)
+
+    result = Dict(
+        "outliers" => outlierindices,
+        "betas" => cleanbetas
+    )
+    
     return result
 end
 

@@ -5,7 +5,7 @@
 - Separate implementations of dffit() and dffits()
 - Implement diagnose()
 - Replace GLPK with HiGHS. When n > 10000, HiGHS based lad() is now approximately 6x faster.
-
+- asm2000(), imon2005(), ks89(), bacon(), and smr98() now return regression coefficients calculated using the clean set of observations.
 
 # v0.9.2
 

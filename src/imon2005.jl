@@ -24,6 +24,7 @@ one was used for detecting single outliers.
 - `["crit"]`: The critical value used
 - `["gdffits"]`: Array of GDFFITS diagnostic calculated for observations
 - `["outliers"]`: Array of indices of outliers.
+- `["betas"]`: Vector of regression coefficients.
 
 # Notes
 The implementation uses LTS rather than LMS as suggested in the paper. 
@@ -87,11 +88,17 @@ function imon2005(X::Array{Float64,2}, y::Array{Float64,1})
         GDFFITS[i] = sqrt(wiiRAsterix[i]) * tAsterix[i]
     end
     crit = 3.0 * sqrt(p / length(R))
+    
     outlyingindex = filter(i -> abs(GDFFITS[i]) >= crit, allindex)
+    inlierindex = setdiff(1:n, outlyingindex)
+    cleanols = ols(X[inlierindex, :], y[inlierindex])
+    cleanbeta = coef(cleanols)
+
     result::Dict{String,Any} = Dict()
     result["crit"] = crit
     result["gdffits"] = GDFFITS
     result["outliers"] = outlyingindex
+    result["betas"] = cleanbeta
     return result
 end
 
