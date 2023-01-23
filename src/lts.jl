@@ -41,24 +41,24 @@ function iterateCSteps(
     h::Int,
 )
     #starterset = subsetindices
-    oldobjective :: Float64 = Inf64
-    objective :: Float64 = Inf64
-    iter :: Int = 0
-    maxiter :: Int = 10000
-    eps :: Float64 = 0.1
+    oldobjective::Float64 = Inf64
+    objective::Float64 = Inf64
+    iter::Int = 0
+    maxiter::Int = 10000
+    eps::Float64 = 0.1
     while iter < maxiter
         #try
-            olsreg = ols(X[subsetindices, :], y[subsetindices])
-            betas = coef(olsreg)
-            res = y - X * betas
-            sortedresindices = sortperm(abs.(res))
-            subsetindices = sortedresindices[1:h]
-            objective = sum(sort(res .^ 2.0)[1:h])
-            if isapprox(oldobjective, objective, atol = eps)
-                break
-            end
-            oldobjective = objective
-            iter += 1
+        olsreg = ols(X[subsetindices, :], y[subsetindices])
+        betas = coef(olsreg)
+        res = y - X * betas
+        sortedresindices = sortperm(abs.(res))
+        subsetindices = sortedresindices[1:h]
+        objective = sum(sort(res .^ 2.0)[1:h])
+        if isapprox(oldobjective, objective, atol=eps)
+            break
+        end
+        oldobjective = objective
+        iter += 1
         #catch er
         #    @warn er
         #    return (objective, subsetindices)
@@ -95,7 +95,7 @@ end
 
 """
 
-    lts(setting; iters, crit)
+    lts(setting; iters = nothing, crit = 2.5, earlystop = true)
 
 Perform the Fast-LTS (Least Trimmed Squares) algorithm for a given regression setting. 
 
@@ -103,6 +103,7 @@ Perform the Fast-LTS (Least Trimmed Squares) algorithm for a given regression se
 - `setting::RegressionSetting`: RegressionSetting object with a formula and dataset.
 - `iters::Int`: Number of iterations.
 - `crit::Float64`: Critical value.
+- `earlystop::Bool`: Early stop if the best objective does not change in iters / 2 iterations.
 
 # Description 
 The algorithm searches for estimations of regression parameters which minimize the sum of first h 
@@ -138,50 +139,60 @@ Rousseeuw, Peter J., and Katrien Van Driessen. "An algorithm for positive-breakd
 regression based on concentration steps." Data Analysis. 
 Springer, Berlin, Heidelberg, 2000. 335-346.
 """
-function lts(setting::RegressionSetting; iters = nothing, crit = 2.5)
+function lts(setting::RegressionSetting; iters=nothing, crit=2.5, earlystop = true)
     X = designMatrix(setting)
     y = responseVector(setting)
-    return lts(X, y, iters = iters, crit = crit)
+    return lts(X, y, iters=iters, crit=crit, earlystop = earlystop)
 end
 
-function lts(X::Array{Float64,2}, y::Array{Float64,1}; iters = nothing, crit = 2.5)
-    
+function lts(X::Array{Float64,2}, y::Array{Float64,1}; iters=nothing, crit=2.5, earlystop = true)
+
     n, p = size(X)
     h = Int(floor((n + p + 1.0) / 2.0))
-    
+
     if isnothing(iters)
         iters = minimum([500 * p, 3000])
     end
-    
+
     allindices = collect(1:n)
     bestobjective = Inf
     besthsubset = []
 
+    bestobjectiveunchanged = 0
+
     for _ = 1:iters
-        subsetindices = sample(allindices, p, replace = false)
+        subsetindices = sample(allindices, p, replace=false)
         objective, hsubsetindices = iterateCSteps(X, y, subsetindices, h)
         if objective < bestobjective
             bestobjective = objective
             besthsubset = hsubsetindices
+            bestobjectiveunchanged = 0
+        else
+            bestobjectiveunchanged += 1
+            if earlystop && bestobjectiveunchanged >= 100
+                break
+            end
         end
     end
+
 
     ltsreg = ols(X[besthsubset, :], y[besthsubset])
     ltsbetas = coef(ltsreg)
     #ltsres = [y[i] - sum(X[i, :] .* ltsbetas) for i = 1:n]
-    ltsres = y - X * ltsbetas 
+    ltsres = y - X * ltsbetas
     ltsS = sqrt(sum((ltsres .^ 2.0)[1:h]) / (h - p))
     ltsresmean = mean(ltsres[besthsubset])
     ltsScaledRes = (ltsres .- ltsresmean) / ltsS
     outlierindices = filter(i -> abs(ltsScaledRes[i]) > crit, 1:n)
-    
-    result = Dict()
-    result["objective"] = bestobjective
-    result["hsubset"] = besthsubset
-    result["betas"] = ltsbetas
-    result["S"] = ltsS
-    result["outliers"] = outlierindices
-    result["scaled.residuals"] = ltsScaledRes
+
+    result = Dict(
+        "objective" => bestobjective,
+        "hsubset" => besthsubset,
+        "betas" => ltsbetas,
+        "S" => ltsS,
+        "outliers" => outlierindices,
+        "scaled.residuals" => ltsScaledRes
+    )
     return result
 end
 

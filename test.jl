@@ -11,6 +11,11 @@ betas = [5.0 for i in 1:p]
 x = rand(n, p)
 e = randn(n)
 y = x * betas + e
+range = collect(701:1000)
+no = length(range)
 
-
+y[range] .= rand(no)
+for i in 1:25
+    x[range, i] .= rand(no)
+end
 result = lts(x, y)
