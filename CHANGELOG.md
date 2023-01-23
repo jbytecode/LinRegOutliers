@@ -6,6 +6,7 @@
 - Implement diagnose()
 - Replace GLPK with HiGHS. When n > 10000, HiGHS based lad() is now approximately 6x faster.
 - asm2000(), imon2005(), ks89(), bacon(), and smr98() now return regression coefficients calculated using the clean set of observations.
+- lts() has a new optional parameter called earlystop and it is true by default. If the objective function does not change in a predefined number of iterations, the search is stopped.
 
 # v0.9.2
 
