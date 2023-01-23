@@ -40,17 +40,16 @@ function iterateCSteps(
     subsetindices::Array{Int,1},
     h::Int,
 )
-    starterset = copy(subsetindices)
+    #starterset = subsetindices
     oldobjective :: Float64 = Inf64
     objective :: Float64 = Inf64
     iter :: Int = 0
     maxiter :: Int = 10000
     eps :: Float64 = 0.1
     while iter < maxiter
-        try
+        #try
             olsreg = ols(X[subsetindices, :], y[subsetindices])
             betas = coef(olsreg)
-            #res = [y[i] - sum(X[i, :] .* betas) for i = 1:n]
             res = y - X * betas
             sortedresindices = sortperm(abs.(res))
             subsetindices = sortedresindices[1:h]
@@ -60,14 +59,14 @@ function iterateCSteps(
             end
             oldobjective = objective
             iter += 1
-        catch er
-            @warn er
-            return (objective, subsetindices)
-        end
+        #catch er
+        #    @warn er
+        #    return (objective, subsetindices)
+        #end
     end
-    if iter >= maxiter
-        @warn "in c-step stage of LTS, a h-subset is not converged for starting indices " starterset
-    end
+    #if iter >= maxiter
+    #    @warn "in c-step stage of LTS, a h-subset is not converged for starting indices " starterset
+    #end
     return (objective, subsetindices)
 end
 
@@ -158,7 +157,7 @@ function lts(X::Array{Float64,2}, y::Array{Float64,1}; iters = nothing, crit = 2
     bestobjective = Inf
     besthsubset = []
 
-    for iter = 1:iters
+    for _ = 1:iters
         subsetindices = sample(allindices, p, replace = false)
         objective, hsubsetindices = iterateCSteps(X, y, subsetindices, h)
         if objective < bestobjective
