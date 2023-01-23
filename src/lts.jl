@@ -45,15 +45,13 @@ function iterateCSteps(
     objective :: Float64 = Inf64
     iter :: Int = 0
     maxiter :: Int = 10000
-    eps :: Float64 = 0.001
-    n, _ = size(X)
+    eps :: Float64 = 0.1
     while iter < maxiter
         try
-            Xsub = X[subsetindices, :]
-            ysub = y[subsetindices]
-            olsreg = ols(Xsub, ysub)
+            olsreg = ols(X[subsetindices, :], y[subsetindices])
             betas = coef(olsreg)
-            res = [y[i] - sum(X[i, :] .* betas) for i = 1:n]
+            #res = [y[i] - sum(X[i, :] .* betas) for i = 1:n]
+            res = y - X * betas
             sortedresindices = sortperm(abs.(res))
             subsetindices = sortedresindices[1:h]
             objective = sum(sort(res .^ 2.0)[1:h])
@@ -87,7 +85,8 @@ function iterateCSteps(
     h::Int,
 )
     n, p = size(X)
-    res = [y[i] - sum(X[i, :] .* initialBetas) for i = 1:n]
+    #res = [y[i] - sum(X[i, :] .* initialBetas) for i = 1:n]
+    res = y - X * initialBetas
     sortedresindices = sortperm(abs.(res))
     subsetindices = sortedresindices[1:p]
     return iterateCSteps(X, y, subsetindices, h)
@@ -147,14 +146,18 @@ function lts(setting::RegressionSetting; iters = nothing, crit = 2.5)
 end
 
 function lts(X::Array{Float64,2}, y::Array{Float64,1}; iters = nothing, crit = 2.5)
+    
     n, p = size(X)
     h = Int(floor((n + p + 1.0) / 2.0))
+    
     if isnothing(iters)
         iters = minimum([500 * p, 3000])
     end
+    
     allindices = collect(1:n)
     bestobjective = Inf
     besthsubset = []
+
     for iter = 1:iters
         subsetindices = sample(allindices, p, replace = false)
         objective, hsubsetindices = iterateCSteps(X, y, subsetindices, h)
@@ -163,13 +166,16 @@ function lts(X::Array{Float64,2}, y::Array{Float64,1}; iters = nothing, crit = 2
             besthsubset = hsubsetindices
         end
     end
+
     ltsreg = ols(X[besthsubset, :], y[besthsubset])
     ltsbetas = coef(ltsreg)
-    ltsres = [y[i] - sum(X[i, :] .* ltsbetas) for i = 1:n]
+    #ltsres = [y[i] - sum(X[i, :] .* ltsbetas) for i = 1:n]
+    ltsres = y - X * ltsbetas 
     ltsS = sqrt(sum((ltsres .^ 2.0)[1:h]) / (h - p))
     ltsresmean = mean(ltsres[besthsubset])
     ltsScaledRes = (ltsres .- ltsresmean) / ltsS
     outlierindices = filter(i -> abs(ltsScaledRes[i]) > crit, 1:n)
+    
     result = Dict()
     result["objective"] = bestobjective
     result["hsubset"] = besthsubset

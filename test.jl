@@ -6,8 +6,9 @@ using LinRegOutliers
 #sett = createRegressionSetting(@formula(y ~ x1 + x2 + x3), hbk)
 
 n = 1000
-betas = [5.0 for i in 1:10]
-x = rand(n, 10)
+p = 25
+betas = [5.0 for i in 1:p]
+x = rand(n, p)
 e = randn(n)
 y = x * betas + e
 

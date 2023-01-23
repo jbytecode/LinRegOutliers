@@ -55,7 +55,9 @@ function imon2005(X::Array{Float64,2}, y::Array{Float64,1})
 
     n, p = size(X)
     allindex = collect(1:n)
+
     ltsreg = lts(X, y)
+
     R::Array{Int,1} = ltsreg["hsubset"]
     XR = X[R, :]
     yR = y[R]
