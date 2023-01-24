@@ -174,7 +174,7 @@ the eigen structure of the influence matrix is examined for detecting suspected 
 # Output 
 - `["outliers"]`: Array of indices of outliers
 - `["suspected.sets"]`: Arrays of indices of observations for corresponding eigen value of the influence matrix.
-
+- `["betas]`: Vector of estimated regression coefficients using the clean observations.
 
 # Examples
 ```julia-repl
@@ -214,9 +214,15 @@ function py95(X::Array{Float64,2}, y::Array{Float64,1})
             push!(outlierset, element)
         end
     end
+    
+    inlierset = setdiff(1:n, outlierset)
+    cleanols = ols(X[inlierset, :], y[inlierset])
+    cleanbetas = coef(cleanols)
+    
     result = Dict()
     result["suspected.sets"] = suspicious_sets
     result["outliers"] = sort(collect(outlierset))
+    result["betas"] = cleanbetas
     return result
 end
 
