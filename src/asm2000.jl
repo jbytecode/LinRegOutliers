@@ -46,8 +46,10 @@ Dict{Any, Any} with 2 entries:
 ```
 
 # References
-Setan, Halim, and Mohd Nor Mohamad. "Identifying multiple outliers in 
-linear regression: Robust fit and clustering approach." (2000).
+Robiah Adnan, Mohd Nor Mohamad, & Halim Setan (2001). 
+Identifying multiple outliers in linear regression: robust fit and clustering approach. 
+Proceedings of the Malaysian Science and Technology Congress 2000: Symposium C, Vol VI, (p. 400). 
+Malaysia: Confederation of Scientific and Technological Associations in Malaysia COSTAM.
 """
 function asm2000(setting::RegressionSetting)::Dict
     X, y = @extractRegressionSetting setting
