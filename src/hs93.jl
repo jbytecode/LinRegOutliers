@@ -152,6 +152,7 @@ iterates until scaled residuals exceeds a threshold.
 - `["outliers"]`: Array of indices of outliers
 - `["t"]`: Threshold, specifically, calculated quantile of a Student-T distribution
 - `["d"]`: Internal and external scaled residuals. 
+- `["betas"]: Vector of estimated regression coefficients.
 
 
 # Examples
@@ -208,11 +209,19 @@ function hs93(
         orderingd = sortperm(abs.(d))
         tdist = TDist(s - p)
         tcalc = quantile(tdist, alpha / (2 * (s + 1)))
+
+
+        outlierset = filter(x -> abs(d[x]) > abs(tcalc), 1:n)
+        inlierset = setdiff(1:n, outlierset)
+        cleanols = ols(X[inlierset, :], y[inlierset])
+        cleanbetas = coef(cleanols)
+
         if abs(d[orderingd][s+1]) > abs(tcalc)
             result = Dict()
             result["d"] = d
             result["t"] = tcalc
-            result["outliers"] = filter(x -> abs(d[x]) > abs(tcalc), 1:n)
+            result["outliers"] = outlierset
+            result["betas"] = cleanbetas
             return result
         end
         s += 1
