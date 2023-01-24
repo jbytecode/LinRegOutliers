@@ -91,20 +91,20 @@ function bch(
 
     cnp = 1 + ((p + 1) / (n - p)) + (2 / (n - 1 - (3 * p)))
     chidist = Chisq(p)
-    chicrit = quantile(chidist, 1 - alpha / n)
+    chicrit = quantile(chidist, 1.0 - alpha / n)
     crit = cnp * chicrit
 
-    c = (2 * (n + 2 * p)) / (n - 2 * p)
+    c = (2.0 * (n + 2.0 * p)) / (n - 2.0 * p)
 
     estimatedvariance = 0.0
     estimatedvariances = Array{Float64,1}(undef, 0)
 
     # Algorithm 2 - Step 0.a
     coordmeds = coordinatwisemedians(X)
-    A = ((X .- coordmeds')' * (X .- coordmeds')) / (n - 1)
+    A = ((X .- coordmeds')' * (X .- coordmeds')) / (n - 1.0)
     dsquared = diag(
         mahalanobisSquaredMatrix(
-            DataFrame(X, :auto),
+            X,
             meanvector = coordmeds,
             covmatrix = A,
         ),
@@ -117,7 +117,7 @@ function bch(
     covmatofh = cov(X[bestindicesofd, :])
     newdsquared = diag(
         mahalanobisSquaredMatrix(
-            DataFrame(X, :auto),
+            X,
             meanvector = colmeansofh,
             covmatrix = covmatofh,
         ),
@@ -131,7 +131,7 @@ function bch(
         covmatofbasicsubset = cov(X[basicsubsetindices, :])
         newdsquared = diag(
             mahalanobisSquaredMatrix(
-                DataFrame(X, :auto),
+                X,
                 meanvector = colmeanofbasicsubset,
                 covmatrix = covmatofbasicsubset,
             ),
@@ -147,31 +147,34 @@ function bch(
         covmatofbasicsubset = cov(X[basicsubsetindices, :])
         newdsquared = diag(
             mahalanobisSquaredMatrix(
-                DataFrame(X, :auto),
+                X,
                 meanvector = colmeanofbasicsubset,
                 covmatrix = covmatofbasicsubset,
             ),
         )
         newd = sqrt.(newdsquared)
         sortednewdsquared = sort(newdsquared)
-        if sortednewdsquared[r+1] >= crit
+        if sortednewdsquared[r + 1] >= crit
             break
         end
         basicsubsetindices = sortperm(newd)[1:(r+1)]
     end
 
     # Algorithm 3 - Fitting
-    squared_normalized_robust_distances = newd .^ 2.0 / sum(newd .^ 2.0)
+    squared_normalized_robust_distances = (newd .^ 2.0) / sum(newd .^ 2.0)
     md = median(newd)
-    newdmd = [newd[i] / maximum([newd[i], md]) for i = 1:n]
+    newdmd = Array{Float64, 1}(undef, n)
+    for i in 1:n
+        newdmd[i] = newd[i] / maximum([newd[i], md])
+    end 
     newdmd2 = newdmd .^ 2.0
     sumnewdmd2 = sum(newdmd2)
     weights = newdmd2 / sumnewdmd2
 
     # Algorithm 3 - Step j
-    betas = []
-    squared_normalized_resids = []
-    resids = []
+    betas = Float64[]
+    squared_normalized_resids = Float64[]
+    resids = Float64[]
     for i = 1:maxiter
         wols = wls(Xdesign, y, weights)
         betas = coef(wols)
@@ -186,20 +189,21 @@ function bch(
         if length(estimatedvariances) > 2
             if abs(estimatedvariance - estimatedvariances[end-1]) < epsilon ||
                abs(estimatedvariance - estimatedvariances[end-2]) < epsilon
-                break
+               break
             end
         end
     end
 
     # Report 
-    result = Dict()
-    result["weights"] = weights
-    result["betas"] = betas
-    result["squared.normalized.residuals"] = squared_normalized_resids
-    result["squared.normalized.robust.distances"] = squared_normalized_robust_distances
-    result["residuals"] = resids
-    result["outliers"] = filter(i -> abs(resids[i]) > 2.5, 1:n)
-    result["basic.subset"] = sort(basicsubsetindices)
+    result = Dict(
+        "weights" => weights,
+        "betas" => betas,
+        "squared.normalized.residuals" => squared_normalized_resids,
+        "squared.normalized.robust.distances" => squared_normalized_robust_distances,
+        "residuals" => resids,
+        "outliers" => filter(i -> abs(resids[i]) > 2.5, 1:n),
+        "basic.subset" => sort(basicsubsetindices)
+    )
     return result
 end
 
