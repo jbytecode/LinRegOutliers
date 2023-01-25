@@ -1,5 +1,6 @@
 # Upcoming Release 
 
+- Convergency check for hs93()
 
 
 # v0.9.3

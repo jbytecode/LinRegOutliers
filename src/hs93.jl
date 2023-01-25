@@ -11,6 +11,8 @@ import ..Diagnostics: dffits
 
 import Distributions: TDist, quantile
 
+import LinearAlgebra: det
+
 """
 
     hs93initialset(setting)
@@ -119,11 +121,18 @@ function hs93basicsubset(
         d = zeros(Float64, n)
         XM = X[indices, :]
         for j = 1:n
-            xxxx = X[j, :]' * inv(XM'XM) * X[j, :]
-            if j in indices
-                @inbounds d[j] = abs.(y[j] - sum(X[j, :] .* betas)) / sqrt(1 - xxxx)
+            if det(XM'XM) > 0
+                xxxx = X[j, :]' * inv(XM'XM) * X[j, :]
+                if j in indices
+                    @inbounds d[j] =
+                        abs.(y[j] - sum(X[j, :] .* betas)) / sqrt(abs(1 - xxxx))
+                else
+                    @inbounds d[j] =
+                        abs.(y[j] - sum(X[j, :] .* betas)) / sqrt(abs(1 + xxxx))
+                end
             else
-                @inbounds d[j] = abs.(y[j] - sum(X[j, :] .* betas)) / sqrt(1 + xxxx)
+                # When XM'XM is singular, the corresponding d[j] is set to the maximum of y.
+                d[j] = maximum(y)
             end
         end
         orderingd = sortperm(abs.(d))
@@ -153,7 +162,7 @@ iterates until scaled residuals exceeds a threshold.
 - `["t"]`: Threshold, specifically, calculated quantile of a Student-T distribution
 - `["d"]`: Internal and external scaled residuals. 
 - `["betas"]: Vector of estimated regression coefficients.
-
+- `["converged"]: Boolean value indicating whether the algorithm converged or not.
 
 # Examples
 ```julia-repl
@@ -163,6 +172,7 @@ Dict{Any,Any} with 3 entries:
   "outliers" => [14, 15, 16, 17, 18, 19, 20, 21]
   "t"        => -3.59263
   "d"        => [2.04474, 1.14495, -0.0633255, 0.0632934, -0.354349, -0.766818, -1.06862, -1.47638, -0.7…
+  "converged"=> true
 ```
 
 # References
@@ -183,13 +193,18 @@ function hs93(
     alpha = 0.05,
     basicsubsetindices = nothing,
 )
+
+
     if isnothing(basicsubsetindices)
         initialsetindices = hs93initialset(X, y)
         basicsubsetindices = hs93basicsubset(X, y, initialsetindices)
     end
+
     indices = basicsubsetindices
     n, p = size(X)
     s = length(indices)
+    betas = []
+
     while s < n
         olsreg = ols(X[indices, :], y[indices])
         betas = coef(olsreg)
@@ -197,13 +212,26 @@ function hs93(
         sigma = sqrt(sum(resids .^ 2.0) / (length(resids) - p))
         d = zeros(Float64, n)
         XM = @inbounds X[indices, :]
+
+        if det(XM'XM) <= 0
+            return Dict(
+                "d" => [],
+                "t" => [],
+                "outliers" => [],
+                "betas" => betas,
+                "converged" => false,
+            )
+        end
+
         iXmXm = inv(XM'XM)
         for j = 1:n
             @inbounds xMMx = X[j, :]' * iXmXm * X[j, :]
             if j in indices
-                @inbounds d[j] = (y[j] - sum(X[j, :] .* betas)) / (sigma * sqrt(1.0 - xMMx))
+                @inbounds d[j] =
+                    (y[j] - sum(X[j, :] .* betas)) / (sigma * sqrt(abs(1.0 - xMMx)))
             else
-                @inbounds d[j] = (y[j] - sum(X[j, :] .* betas)) / (sigma * sqrt(1.0 + xMMx))
+                @inbounds d[j] =
+                    (y[j] - sum(X[j, :] .* betas)) / (sigma * sqrt(abs(1.0 + xMMx)))
             end
         end
         orderingd = sortperm(abs.(d))
@@ -217,17 +245,26 @@ function hs93(
         cleanbetas = coef(cleanols)
 
         if abs(d[orderingd][s+1]) > abs(tcalc)
-            result = Dict()
-            result["d"] = d
-            result["t"] = tcalc
-            result["outliers"] = outlierset
-            result["betas"] = cleanbetas
+            result = Dict(
+                "d" => d,
+                "t" => tcalc,
+                "outliers" => outlierset,
+                "betas" => cleanbetas,
+                "converged" => true,
+            )
             return result
         end
         s += 1
         indices = orderingd[1:s]
     end
-    return []
+
+    return Dict(
+        "d" => [],
+        "t" => [],
+        "outliers" => [],
+        "betas" => betas,
+        "converged" => false,
+    )
 end
 
 
