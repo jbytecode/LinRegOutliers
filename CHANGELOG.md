@@ -1,6 +1,7 @@
 # Upcoming Release 
 
 - Convergency check for hs93()
+- Add earlystop option for inexact version of lta().
 
 
 # v0.9.3
