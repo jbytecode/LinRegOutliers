@@ -125,19 +125,24 @@ function bch(
     newd = sqrt.(newdsquared)
 
     # Algorithm 2 - Steps 1, 2, 3
-    basicsubsetindices = sortperm(newd)[1:(p+1)]
+    lenbassub = 1
+    basicsubsetindices = sortperm(newd)[1:(p+lenbassub)]
     while length(basicsubsetindices) < h
         colmeanofbasicsubset = map(i -> mean(X[basicsubsetindices, i]), 1:p)
         covmatofbasicsubset = cov(X[basicsubsetindices, :])
-        newdsquared = diag(
-            mahalanobisSquaredMatrix(
+        msqdist = mahalanobisSquaredMatrix(
                 X,
                 meanvector = colmeanofbasicsubset,
                 covmatrix = covmatofbasicsubset,
-            ),
         )
-        newd = sqrt.(newdsquared)
-        basicsubsetindices = sortperm(newd)[1:(length(basicsubsetindices)+1)]
+        if !isnothing(msqdist)
+            newdsquared = diag(msqdist)
+            newd = sqrt.(abs.(newdsquared))
+            basicsubsetindices = sortperm(newd)[1:(length(basicsubsetindices)+1)]
+        else
+            lenbassub += 1
+            basicsubsetindices = sortperm(newd)[1:(p+lenbassub)]
+        end 
     end
 
     # Algorithm 2 - Steps 4

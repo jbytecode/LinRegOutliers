@@ -577,9 +577,9 @@ function mahalanobisSquaredMatrix(
         MD2 = (datamat .- meanvector') * invm * (datamat .- meanvector')'
         return MD2
     catch e
-        if det(covmatrix) == 0
-            @warn "singular covariance matrix, mahalanobis distances can not be calculated"
-        end
+        #if det(covmatrix) == 0
+        #    @warn "singular covariance matrix, mahalanobis distances can not be calculated"
+        #end
         return nothing
     end
 end
