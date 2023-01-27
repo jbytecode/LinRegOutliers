@@ -1,16 +1,5 @@
 @testset "GA optimizers" begin
 
-    @testset "Compact Genetic Algorithm" begin
-        Random.seed!(12345)
-        function fcost(bits)
-            return sum(bits)
-        end
-        result = cga(chsize = 10, costfunction = fcost, popsize = 100)
-        for element in result
-            @test (element == 0) || (element == 1)
-        end
-    end
-
     @testset "Floating-point Genetic Algorithm" begin
         Random.seed!(12345)
         fcost(genes) = (genes[1] - 3.14159265)^2 + (genes[2] - 2.71828)^2

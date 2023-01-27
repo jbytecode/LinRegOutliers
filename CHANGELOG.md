@@ -2,6 +2,7 @@
 
 - Convergency check for hs93()
 - Add earlystop option for inexact version of lta().
+- Remove cga() and cga based experimental algorithm.
 
 
 # v0.9.3

@@ -41,9 +41,6 @@ export find_minimum_nonzero
 export @extractRegressionSetting
 
 
-# Compact genetic algorithm
-include("cga.jl")
-import .CGA: cga
 
 # Hooke-Jeeves algorithm
 include("hj.jl")
@@ -172,7 +169,7 @@ import .Hadi94: hadi1994
 
 # Modified and original Satman (2012) algorithms
 include("gwlts.jl")
-import .GALTS: gwcga, galts
+import .GALTS: galts
 
 # RANSAC Algorithm
 include("ransac.jl")
@@ -261,7 +258,7 @@ export quantileregression
 export lta
 export hadi1992
 export hadi1994
-export gwcga, galts, ga, cga, RealChromosome
+export galts, ga, RealChromosome
 export detectOutliers
 export ransac
 export ccf

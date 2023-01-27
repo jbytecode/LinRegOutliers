@@ -12,14 +12,6 @@
     end
 
 
-    @testset "gwcga -  Modified (Satman, 2012) - Algorithm - phone data" begin
-        df = phones
-        reg = createRegressionSetting(@formula(calls ~ year), df)
-        result = gwcga(reg)
-        clean_indices = result["clean.subset"]
-        for i = 15:20
-            @test !(i in clean_indices)
-        end
-    end
+
 
 
