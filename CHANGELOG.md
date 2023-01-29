@@ -1,5 +1,7 @@
 # Upcoming Release 
 
+# v0.9.4
+
 - Convergency check for hs93()
 - Add earlystop option for inexact version of lta().
 - Remove cga() and cga based experimental algorithm.
