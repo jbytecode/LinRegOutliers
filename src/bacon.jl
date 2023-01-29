@@ -61,11 +61,16 @@ function select_subset(X::Array{Float64,2}, m::Int, distances::Array{Float64})
     cov_matrix = X[subset, :]'X[subset, :]
     rank_cov_matrix = rank(cov_matrix)
     computed_m = m
+    iter = 0
     while (rank_cov_matrix < rank_x)
         computed_m = computed_m + 1
         subset = sorted_distances[1:computed_m]
         cov_matrix = X[subset, :]'X[subset, :]
         rank_cov_matrix = rank(cov_matrix)
+        iter += 1
+        if iter > m
+            break
+        end
     end
     return subset
 end
@@ -99,6 +104,7 @@ function bacon_multivariate_outlier_detection(
     distances = zeros(Float64, n)
 
     # iterate until the size of the subset no longer changes
+    iter = 0
     while (r_prev != r)
         mean_basic_subset = mean(X[subset], dims = 1)
         cov_basic_subset = X[subset]'X[subset]
@@ -121,6 +127,11 @@ function bacon_multivariate_outlier_detection(
         # update r
         r_prev = r
         r = length(subset)
+
+        iter += 1
+        if iter > n
+            break
+        end
     end
     d = Dict()
     d["outliers"] = setdiff(1:n, subset)
@@ -175,7 +186,7 @@ function bacon_regression_initial_subset(
     method::String = "mahalanobis",
     alpha = 0.025,
 )
-    _, p = size(X)
+    n, p = size(X)
 
     # remove the constant column and apply bacon_multivariate algorithm
     distances = bacon_multivariate_outlier_detection(
@@ -190,10 +201,15 @@ function bacon_regression_initial_subset(
     basic_subset = select_subset(X, p + 1, t)
 
     r = length(basic_subset)
+    iter = 0
     while (r < m)
         t = compute_t_distance(X, y, basic_subset)
         basic_subset = select_subset(X, r + 1, t)
         r = length(basic_subset)
+        iter += 1
+        if iter > n 
+            break
+        end
     end
 
     return basic_subset
@@ -245,6 +261,8 @@ function bacon(
     subset = bacon_regression_initial_subset(X, y, m, method = method, alpha = alpha)
     r_prev = 0
     r = length(subset)
+
+    iter = 0
     while (r != r_prev)
         t = compute_t_distance(X, y, subset)
         tdist = TDist(r - p)
@@ -252,6 +270,10 @@ function bacon(
         subset = filter(x -> t[x] < cutoff, 1:n)
         r_prev = r
         r = length(subset)
+        iter += 1
+        if iter > n 
+            break
+        end
     end
 
     outlierindices = setdiff(1:n, subset)
