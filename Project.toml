@@ -1,7 +1,7 @@
 name = "LinRegOutliers"
 uuid = "6d4de0fb-32d9-4c65-aac1-cc9ed8b94b1a"
 authors = ["Mehmet Hakan Satman <mhsatman@gmail.com>", "Shreesh Adiga <16567adigashreesh@gmail.com>", "Guillermo Angeris <angeris@stanford.edu>", "Emre Akadal <emre.akadal@istanbul.edu.tr>"]
-version = "0.9.4"
+version = "0.9.5"
 
 [deps]
 Clustering = "aaaa29a8-35af-508c-8bc3-b662a17a0fe5"
