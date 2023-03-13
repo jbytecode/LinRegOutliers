@@ -55,7 +55,7 @@ import .GA: ga, RealChromosome
 include("data.jl")
 import .DataSets: phones, hbk, stackloss
 import .DataSets: weightloss, hs93randomdata, woodgravity
-import .DataSets: hills, softdrinkdelivery
+import .DataSets: hills, softdrinkdelivery, animals
 
 # Ordinary least squares type and functions
 # for fast regression tasks in outlier detection algorithms
@@ -222,7 +222,7 @@ export mean, quantile
 # Data
 export phones, hbk, stackloss
 export weightloss, hs93randomdata, woodgravity
-export hills, softdrinkdelivery
+export hills, softdrinkdelivery, animals
 
 # Diagnostics
 export dffit, dffits, dfbeta, dfbetas
