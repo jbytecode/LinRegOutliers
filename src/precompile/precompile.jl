@@ -20,6 +20,7 @@ using SnoopPrecompile
         lta(reg)
         lts(reg)
         quantileregression(reg)
+        py95(reg)
         satman2013(reg)
         satman2015(reg)
         smr98(reg)

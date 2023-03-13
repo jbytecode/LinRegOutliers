@@ -1,4 +1,8 @@
-# Upcoming Release 
+# v0.9.5 (Upcoming release)
+
+- Adopt to SnoopPrecompile for better first-time-use experiment
+  
+
 
 # v0.9.4
 
