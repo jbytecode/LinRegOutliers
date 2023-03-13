@@ -268,4 +268,9 @@ export bacon
 export cm97
 export theilsen
 
+
+# Snoop-Precompile 
+include("precompile/precompile.jl")
+
+
 end # module
