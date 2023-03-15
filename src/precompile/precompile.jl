@@ -24,5 +24,7 @@ using SnoopPrecompile
         satman2013(reg)
         satman2015(reg)
         smr98(reg)
+        ransac(reg, t = 0.8, w = 0.85)
+        theilsen(reg, 2, nsamples = 10)
     end
 end

@@ -13,7 +13,7 @@ import ..OrdinaryLeastSquares: ols, residuals, predict, coef
 function distances(resids::Array{Float64,1}, fitteds::Array{Float64})::Array{Float64,2}
     n = length(resids)
     d = zeros(Float64, n, n)
-    @inbounds for i = 1:n
+    for i = 1:n
         for j = i:n
             if i != j
                 p1 = [resids[i], fitteds[i]]
@@ -109,10 +109,7 @@ function smr98(X::Array{Float64,2}, y::Array{Float64,1})
             inlierset = setdiff(1:n, outlierset)
             cleanols = ols(X[inlierset, :], y[inlierset])
             cleanbetas = coef(cleanols)
-            return Dict(
-                "outliers" => outlierset,
-                "betas" => cleanbetas
-                )
+            return Dict("outliers" => outlierset, "betas" => cleanbetas)
         end
     end
 

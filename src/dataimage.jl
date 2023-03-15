@@ -5,7 +5,7 @@ export dataimage
 import ..Diagnostics:
     mahalanobisSquaredMatrix, euclideanDistances, mahalanobisSquaredBetweenPairs
 
-import ..RGB 
+import ..RGB
 
 """
 
@@ -62,7 +62,7 @@ function dataimage(
     colormatrix = Array{RGB{Float64},2}(undef, n, n)
     for i = 1:n
         for j = 1:n
-            @inbounds colormatrix[i, j] = RGB(colours[i, j])
+            colormatrix[i, j] = RGB(colours[i, j])
         end
     end
     return colormatrix

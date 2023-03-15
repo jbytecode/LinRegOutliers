@@ -63,7 +63,7 @@ function cm97(X::Array{Float64,2}, y::Array{Float64,1}; maxiter::Int = 1000)::Di
     iter::Int = 0
 
     # initial weights
-    @inbounds for i = 1:n
+    for i = 1:n
         w_is[i] = 1.0 / max(hat[i, i], pbar)
     end
 
@@ -75,7 +75,7 @@ function cm97(X::Array{Float64,2}, y::Array{Float64,1}; maxiter::Int = 1000)::Di
         r = y - X * betas
         medi = median(abs.(r))
 
-        @inbounds for i = 1:n
+        for i = 1:n
             w_is[i] = (1.0 - hat[i, i])^2.0 / max(abs(r[i]), medi)
         end
 

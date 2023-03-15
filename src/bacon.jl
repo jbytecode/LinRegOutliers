@@ -160,9 +160,9 @@ function compute_t_distance(X::Array{Float64,2}, y::Array{Float64}, subset::Arra
         scale_factor = (X[i, :]') * (covmatrix_inv * X[i, :])
         residual = (y[i] - X[i, :]' * betas)
         if i in subset
-            @inbounds t[i] = residual / (sigma * sqrt(1 - scale_factor))
+            t[i] = residual / (sigma * sqrt(1 - scale_factor))
         else
-            @inbounds t[i] = residual / (sigma * sqrt(1 + scale_factor))
+            t[i] = residual / (sigma * sqrt(1 + scale_factor))
         end
     end
     return abs.(t)
@@ -207,7 +207,7 @@ function bacon_regression_initial_subset(
         basic_subset = select_subset(X, r + 1, t)
         r = length(basic_subset)
         iter += 1
-        if iter > n 
+        if iter > n
             break
         end
     end
@@ -271,20 +271,17 @@ function bacon(
         r_prev = r
         r = length(subset)
         iter += 1
-        if iter > n 
+        if iter > n
             break
         end
     end
 
     outlierindices = setdiff(1:n, subset)
-    inlierindices = subset 
+    inlierindices = subset
     cleanols = ols(X[inlierindices, :], y[inlierindices])
     cleanbetas = coef(cleanols)
 
-    result = Dict(
-        "outliers" => outlierindices,
-        "betas" => cleanbetas
-    )
+    result = Dict("outliers" => outlierindices, "betas" => cleanbetas)
     return result
 end
 

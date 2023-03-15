@@ -51,7 +51,7 @@ end
 
 function Mutate(c::RealChromosome, prob::Float64)::RealChromosome
     genes = copy(c.genes)
-    @inbounds for i in eachindex(genes)
+    for i in eachindex(genes)
         if rand() < prob
             genes[i] += randn()
         end
@@ -64,8 +64,8 @@ function TournamentSelection(
 )::Tuple{RealChromosome,RealChromosome}
     n = length(pop)
     indices = sample(1:n, 4, replace = false)
-    lucky1 :: Chromosome = RealChromosome()
-    lucky2 :: Chromosome = RealChromosome()
+    lucky1::Chromosome = RealChromosome()
+    lucky2::Chromosome = RealChromosome()
     if pop[indices[1]].cost < pop[indices[2]].cost
         lucky1 = pop[indices[1]]
     else
@@ -87,7 +87,7 @@ function createPopulation(
     maxs::Array{Float64,1},
 )::Array{RealChromosome,1}
     pop = Array{RealChromosome,1}(undef, popsize)
-    @inbounds for i = 1:popsize
+    for i = 1:popsize
         c = RealChromosome(mins .+ rand(chsize) .* (maxs - mins), Inf64)
         pop[i] = c
     end
@@ -95,7 +95,7 @@ function createPopulation(
 end
 
 function Evaluate(pop::Array{RealChromosome,1}, fcost::Function)::Array{RealChromosome,1}
-    @inbounds for i in eachindex(pop)
+    for i in eachindex(pop)
         pop[i].cost = fcost(pop[i].genes)
     end
     return pop
@@ -109,10 +109,10 @@ function Generation(
     pmutate::Float64,
 )::Array{RealChromosome,1}
     popsize = length(pop)
-    newpop = Array{Chromosome, 1}(undef, popsize)
+    newpop = Array{Chromosome,1}(undef, popsize)
     pop = sort(Evaluate(pop, fcost))
-    csize :: Int = 0
-    @inbounds for i = 1:elitism
+    csize::Int = 0
+    for i = 1:elitism
         csize += 1
         newpop[csize] = pop[i]
     end
@@ -120,7 +120,7 @@ function Generation(
     winner1 = RealChromosome()
     winner2 = RealChromosome()
 
-    @inbounds while csize < popsize
+    while csize < popsize
         parent1, parent2 = TournamentSelection(pop)
         if rand() < pcross
             offspring1, offspring2, offspring3 = LinearCrossover(parent1, parent2)
@@ -133,11 +133,11 @@ function Generation(
         end
         if (csize + 1 <= popsize)
             csize += 1
-            newpop[csize] =  winner1
+            newpop[csize] = winner1
         end
         if (csize + 1 <= popsize)
             csize += 1
-            newpop[csize] =  winner2
+            newpop[csize] = winner2
         end
     end
     return sort(newpop)

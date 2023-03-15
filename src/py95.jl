@@ -35,10 +35,10 @@ function py95ProcessEigenVector(v::Array{Float64,1})
     ordered_coordinates = sortperm(v)
     a = zeros(Float64, n)
     b = zeros(Float64, n)
-    @inbounds for i = n:(-1):(n-c1)
+    for i = n:(-1):(n-c1)
         a[i] = v[i] / v[i-1]
     end
-    @inbounds for i = 1:c2
+    for i = 1:c2
         b[i] = v[i] / v[i+1]
     end
     set_of_a = filter(i -> abs(a[i]) > k, ordered_coordinates)
@@ -90,7 +90,7 @@ function py95SuspectedObservations(X::Array{Float64,2}, y::Array{Float64,1})
     s2 = sum(resids .^ 2.0) / (n - p)
     D = zeros(Float64, (n, n))
     E = zeros(Float64, (n, n))
-    @inbounds for i = 1:n
+    for i = 1:n
         D[i, i] = 1 / (1 - H[i, i])
         E[i, i] = resids[i]
     end
@@ -214,11 +214,11 @@ function py95(X::Array{Float64,2}, y::Array{Float64,1})
             push!(outlierset, element)
         end
     end
-    
+
     inlierset = setdiff(1:n, outlierset)
     cleanols = ols(X[inlierset, :], y[inlierset])
     cleanbetas = coef(cleanols)
-    
+
     result = Dict()
     result["suspected.sets"] = suspicious_sets
     result["outliers"] = sort(collect(outlierset))

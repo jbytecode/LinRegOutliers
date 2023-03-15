@@ -124,11 +124,9 @@ function hs93basicsubset(
             if det(XM'XM) > 0
                 xxxx = X[j, :]' * inv(XM'XM) * X[j, :]
                 if j in indices
-                    @inbounds d[j] =
-                        abs.(y[j] - sum(X[j, :] .* betas)) / sqrt(abs(1 - xxxx))
+                    d[j] = abs.(y[j] - sum(X[j, :] .* betas)) / sqrt(abs(1 - xxxx))
                 else
-                    @inbounds d[j] =
-                        abs.(y[j] - sum(X[j, :] .* betas)) / sqrt(abs(1 + xxxx))
+                    d[j] = abs.(y[j] - sum(X[j, :] .* betas)) / sqrt(abs(1 + xxxx))
                 end
             else
                 # When XM'XM is singular, the corresponding d[j] is set to the maximum of y.
@@ -211,7 +209,7 @@ function hs93(
         resids = residuals(olsreg)
         sigma = sqrt(sum(resids .^ 2.0) / (length(resids) - p))
         d = zeros(Float64, n)
-        XM = @inbounds X[indices, :]
+        XM = X[indices, :]
 
         if det(XM'XM) <= 0
             return Dict(
@@ -225,13 +223,11 @@ function hs93(
 
         iXmXm = inv(XM'XM)
         for j = 1:n
-            @inbounds xMMx = X[j, :]' * iXmXm * X[j, :]
+            xMMx = X[j, :]' * iXmXm * X[j, :]
             if j in indices
-                @inbounds d[j] =
-                    (y[j] - sum(X[j, :] .* betas)) / (sigma * sqrt(abs(1.0 - xMMx)))
+                d[j] = (y[j] - sum(X[j, :] .* betas)) / (sigma * sqrt(abs(1.0 - xMMx)))
             else
-                @inbounds d[j] =
-                    (y[j] - sum(X[j, :] .* betas)) / (sigma * sqrt(abs(1.0 + xMMx)))
+                d[j] = (y[j] - sum(X[j, :] .* betas)) / (sigma * sqrt(abs(1.0 + xMMx)))
             end
         end
         orderingd = sortperm(abs.(d))

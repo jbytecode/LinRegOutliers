@@ -92,7 +92,7 @@ function atkinson94(
         studentized_residuals = zeros(Float64, n, n)
         copy_parameters = false
 
-        @inbounds for m = p:n
+        for m = p:n
             olsreg = ols(X[m_subset_indices, :], y[m_subset_indices])
             betas = coef(olsreg)
             e = (y .- X * betas)
@@ -103,7 +103,7 @@ function atkinson94(
             XXinv = pinv(X[m_subset_indices, :]'X[m_subset_indices, :])
 
             # scale the residual according to whether it belongs to m_subset_indices or not
-            @inbounds for index = 1:n
+            for index = 1:n
                 if index in m_subset_indices
                     h_i = X[index, :]' * XXinv * X[index, :]
                     studentized_residuals[m, index] =
