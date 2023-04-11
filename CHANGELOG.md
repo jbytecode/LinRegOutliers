@@ -1,5 +1,6 @@
-# v0.9.6 (Upcoming Release)
+# v0.10.0 (Upcoming Release)
 
+- LMS returns betas rather than coefs
 
 
 # v0.9.5 

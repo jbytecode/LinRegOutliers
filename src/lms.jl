@@ -94,7 +94,7 @@ function lms(X::Array{Float64,2}, y::Array{Float64,1}; iters = nothing, crit = 2
     s = 1.4826 * sqrt((1.0 + (5.0 / (n - p))) * bestobjective)
     standardizedres = bestres / s
     d = Dict()
-    d["coef"] = bestparamaters
+    d["betas"] = bestparamaters
     d["objective"] = bestobjective
     d["S"] = s
     d["stdres"] = standardizedres
