@@ -33,7 +33,7 @@ searches for regression coefficients which minimize (h)th ordered squared residu
 - `["S"]`: Standard error of regression
 - `["outliers"]`: Array of indices of outliers
 - `["objective"]`: LMS objective value
-- `["coef"]`: Estimated regression coefficients
+- `["betas"]`: Estimated regression coefficients
 - `["crit"]`: Threshold value.
 
 
@@ -48,7 +48,7 @@ Dict{Any,Any} with 6 entries:
   "S"         => 1.17908
   "outliers"  => [14, 15, 16, 17, 18, 19, 20, 21]
   "objective" => 0.515348
-  "coef"      => [-56.1972, 1.1581]
+  "betas"      => [-56.1972, 1.1581]
   "crit"      => 2.5
 ```
 
