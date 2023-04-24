@@ -1,10 +1,10 @@
-using SnoopPrecompile
+using PrecompileTools
 
-@precompile_setup begin
+@setup_workload begin
     
     reg = createRegressionSetting(@formula(calls ~ year), phones)
     
-    @precompile_all_calls begin
+    @compile_workload begin
         ols(reg)
         asm2000(reg)
         atkinson94(reg)
