@@ -1,7 +1,10 @@
-# v0.10.0 (Upcoming Release)
+# v0.10.1 (Upcoming Release)
+
+
+# v0.10.0
 
 - LMS returns betas rather than coefs
-
+- PrecompileTools integration for faster loading of package
 
 # v0.9.5 
 
