@@ -4,7 +4,7 @@ using Random
 using LinearAlgebra
 
 using LinRegOutliers
-import Plots: RGB
+import Plots: RGBX
 
 include("testdiagnostics.jl")
 include("testbasis.jl")

@@ -5,6 +5,7 @@
 
 - LMS returns betas rather than coefs
 - PrecompileTools integration for faster loading of package
+- Replace RGB{} to RGBX{} in plots
 
 # v0.9.5 
 

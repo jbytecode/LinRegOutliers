@@ -5,7 +5,7 @@ export dataimage
 import ..Diagnostics:
     mahalanobisSquaredMatrix, euclideanDistances, mahalanobisSquaredBetweenPairs
 
-import ..RGB
+import ..RGBX
 
 """
 
@@ -46,7 +46,7 @@ Computational Statistics & Data Analysis 43.4 (2003): 541-552.
 function dataimage(
     dataMatrix::Array{Float64,2};
     distance = :mahalanobis,
-)::Matrix{RGB{Float64}}
+)::Matrix{RGBX{Float64}}
     d = nothing
     if distance == :mahalanobis
         d = mahalanobisSquaredBetweenPairs(dataMatrix)
@@ -59,10 +59,10 @@ function dataimage(
     end
     colours = 1.0 .- d / maximum(d)
     n, _ = size(d)
-    colormatrix = Array{RGB{Float64},2}(undef, n, n)
+    colormatrix = Array{RGBX{Float64},2}(undef, n, n)
     for i = 1:n
         for j = 1:n
-            colormatrix[i, j] = RGB(colours[i, j])
+            colormatrix[i, j] = RGBX(colours[i, j])
         end
     end
     return colormatrix

@@ -7,7 +7,7 @@ using Requires
 function __init__()
     @require Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80" begin
   
-        import .Plots: RGB
+        import .Plots: RGBX
 
         include("mveltsplot.jl")
         include("dataimage.jl")
@@ -17,7 +17,7 @@ function __init__()
         import .DataImage: dataimage
         import .BCHPlot: bchplot
         
-        export mveltsplot, dataimage, bchplot, RGB
+        export mveltsplot, dataimage, bchplot, RGBX
 
     end
 end
