@@ -1,4 +1,8 @@
-# v0.10.1 (Upcoming Release)
+# v0.10.2 (Upcoming Release)
+
+
+# v0.10.1 
+- Update compatibility with Clustering and StatsModels
 
 
 # v0.10.0
