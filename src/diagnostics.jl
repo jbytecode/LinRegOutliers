@@ -569,16 +569,15 @@ function mahalanobisSquaredMatrix(
     if isnothing(covmatrix)
         covmatrix = cov(datamat)
     end
-    try
-        invm = inv(covmatrix)
-        MD2 = (datamat .- meanvector') * invm * (datamat .- meanvector')'
-        return MD2
-    catch e
-        #if det(covmatrix) == 0
-        #    @warn "singular covariance matrix, mahalanobis distances can not be calculated"
-        #end
+
+    if iszero(det(covmatrix))
         return nothing
-    end
+    end 
+
+    invm = inv(covmatrix)
+    MD2 = (datamat .- meanvector') * invm * (datamat .- meanvector')'
+    return MD2
+
 end
 
 """
