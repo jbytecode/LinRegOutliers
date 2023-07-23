@@ -133,7 +133,7 @@ end
 ```julia-repl
 julia> setting = createRegressionSetting(@formula(calls ~ year), phones);
 julia> designMatrix(setting)
-24×2 Array{Float64,2}:
+24×2 Matrix{Float64}:
  1.0  50.0
  1.0  51.0
  1.0  52.0
@@ -160,10 +160,10 @@ julia> designMatrix(setting)
  1.0  73.0
 ```
 """
-function designMatrix(setting::RegressionSetting)::Array{Float64,2}
+function designMatrix(setting::RegressionSetting)::Matrix{Float64}
     mf = ModelFrame(setting.formula, setting.data)
     mm = ModelMatrix(mf)
-    return convert(Array{Float64,2}, mm.m)
+    return convert(Matrix{Float64}, mm.m)
 end
 
 
@@ -182,7 +182,7 @@ end
 ```julia-repl
 julia> setting = createRegressionSetting(@formula(calls ~ year), phones);
 julia> responseVector(setting)
-24-element Array{Float64,1}:
+24-element Vector{Float64}:
    4.4
    4.7
    4.7
@@ -209,9 +209,9 @@ julia> responseVector(setting)
   29.0
 ```
 """
-function responseVector(setting::RegressionSetting)::Array{Float64,1}
+function responseVector(setting::RegressionSetting)::Vector{Float64}
     mf = ModelFrame(setting.formula, setting.data)
-    return convert(Array{Float64,1}, setting.data[:, mf.f.lhs.sym])
+    return convert(Vector{Float64}, setting.data[:, mf.f.lhs.sym])
 end
 
 
@@ -233,7 +233,7 @@ julia> X, y = @extractRegressionSetting setting;
 julia> size(X)
  (24,2)
 julia> y
-24-element Array{Float64,1}:
+24-element Vector{Float64}:
    4.4
    4.7
    4.7
@@ -313,7 +313,7 @@ julia> find_minimum_nonzero([0.0, 0.0, 5.0, 1.0])
 1.0
 ```
 """
-function find_minimum_nonzero(arr::Array{Float64,1})
+function find_minimum_nonzero(arr::Vector{Float64})
     return minimum(filter(x -> x > 0, arr))
 end
 

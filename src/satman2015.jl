@@ -85,7 +85,7 @@ Sort multidimensional data usin non-dominated sorting algorithm.
 # Examples
 ```julia-repl
 julia> datamat = convert(Matrix, hbk)
-75×4 Array{Float64,2}:
+75×4 Matrix{Float64}:
  10.1  19.6  28.3   9.7
   9.5  20.5  28.9  10.1
  10.7  20.2  31.0  10.3
@@ -256,7 +256,7 @@ function satman2015(setting::RegressionSetting)
 end
 
 
-function satman2015(X::Array{Float64,2}, y::Array{Float64,1})
+function satman2015(X::Matrix{Float64}, y::Vector{Float64})
     n, p = size(X)
     h = Int(floor((n + p + 1.0) / 2.0))
 

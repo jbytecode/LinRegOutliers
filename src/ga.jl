@@ -5,7 +5,7 @@ import Distributions: sample
 abstract type Chromosome end
 
 mutable struct RealChromosome <: Chromosome
-    genes::Array{Float64,1}
+    genes::Vector{Float64}
     cost::Float64
 end
 
@@ -83,8 +83,8 @@ end
 function createPopulation(
     popsize::Int,
     chsize::Int,
-    mins::Array{Float64,1},
-    maxs::Array{Float64,1},
+    mins::Vector{Float64},
+    maxs::Vector{Float64},
 )::Array{RealChromosome,1}
     pop = Array{RealChromosome,1}(undef, popsize)
     for i = 1:popsize
@@ -148,8 +148,8 @@ function ga(
     popsize::Int,
     chsize::Int,
     fcost::Function,
-    mins::Array{Float64,1},
-    maxs::Array{Float64,1},
+    mins::Vector{Float64},
+    maxs::Vector{Float64},
     pcross::Float64,
     pmutate::Float64,
     elitisim::Int,

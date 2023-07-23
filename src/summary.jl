@@ -43,7 +43,7 @@ function detectOutliers(setting::RegressionSetting; methods = [])
 end
 
 
-function detectOutliers(X::Array{Float64,2}, y::Array{Float64,1}; methods = [])
+function detectOutliers(X::Matrix{Float64}, y::Vector{Float64}; methods = [])
     if length(methods) == 0
         methods = [
             "hs93",

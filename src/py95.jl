@@ -26,7 +26,7 @@ Peña, Daniel, and Victor J. Yohai. "The detection of influential subsets in lin
 regression by using an influence matrix." Journal of the Royal Statistical Society: 
 Series B (Methodological) 57.1 (1995): 145-156.
 """
-function py95ProcessEigenVector(v::Array{Float64,1})
+function py95ProcessEigenVector(v::Vector{Float64})
     eps = 0.0001
     n = length(v)
     k = 2.5
@@ -81,7 +81,7 @@ end
 
 
 
-function py95SuspectedObservations(X::Array{Float64,2}, y::Array{Float64,1})
+function py95SuspectedObservations(X::Matrix{Float64}, y::Vector{Float64})
     n, p = size(X)
     nhalf = Int(floor(n / 2.0))
     olsreg = ols(X, y)
@@ -100,7 +100,7 @@ function py95SuspectedObservations(X::Array{Float64,2}, y::Array{Float64,1})
     eig_vectors = eig.vectors
     nonzero_eigen_indices = filter(i -> imag(eig_values[i]) == 0, 1:n)
     nonzero_eigen_vectors = eig_vectors[:, nonzero_eigen_indices]
-    real_vectors = convert(Array{Float64,2}, nonzero_eigen_vectors)
+    real_vectors = convert(Matrix{Float64}, nonzero_eigen_vectors)
     s1, s2 = size(real_vectors)
     suspected_observation_sets = Set{Array{Int,1}}()
     for i = 1:s2
@@ -143,8 +143,8 @@ function jacknifedS(setting::RegressionSetting, omittedIndices::Array{Int,1})::F
 end
 
 function jacknifedS(
-    X::Array{Float64,2},
-    y::Array{Float64,1},
+    X::Matrix{Float64},
+    y::Vector{Float64},
     omittedIndices::Array{Int,1},
 )::Float64
     n, p = size(X)
@@ -197,7 +197,7 @@ function py95(setting::RegressionSetting)
 end
 
 
-function py95(X::Array{Float64,2}, y::Array{Float64,1})
+function py95(X::Matrix{Float64}, y::Vector{Float64})
     n, _ = size(X)
     all_indices = collect(1:n)
     suspicious_sets = py95SuspectedObservations(X, y)

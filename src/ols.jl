@@ -9,9 +9,9 @@ import ..Basis:
 
 """
     struct OLS
-        X::Array{Float64,2}
-        y::Array{Float64,1}
-        betas::Array{Float64,1}
+        X::Matrix{Float64}
+        y::Vector{Float64}
+        betas::Vector{Float64}
     end 
     
     Immutable data structure that holds design matrix, response vector, and estimated regression parameters. 
@@ -23,9 +23,9 @@ import ..Basis:
 
 """
 struct OLS
-    X::Array{Float64,2}
-    y::Array{Float64,1}
-    betas::Array{Float64,1}
+    X::Matrix{Float64}
+    y::Vector{Float64}
+    betas::Vector{Float64}
 end
 
 
@@ -44,14 +44,14 @@ julia> X = hcat(ones(24), phones[:,"year"]);
 julia> y = phones[:,"calls"];
 julia> reg = ols(X, y)
 julia> reg.betas
-2-element Array{Float64,1}:
+2-element Vector{Float64}:
  -260.0592463768119
     5.04147826086957
 ```
 
 """
-ols(X::Array{Float64,2}, y::Array{Float64,1})::OLS = OLS(X, y, qr(X, ColumnNorm()) \ y)
-#ols(X::Array{Float64,2}, y::Array{Float64,1})::OLS = OLS(X, y, qr(X, Val(true)) \ y)
+ols(X::Matrix{Float64}, y::Vector{Float64})::OLS = OLS(X, y, qr(X, ColumnNorm()) \ y)
+#ols(X::Matrix{Float64}, y::Vector{Float64})::OLS = OLS(X, y, qr(X, Val(true)) \ y)
 
 
 function ols(setting::RegressionSetting)::OLS
@@ -80,14 +80,14 @@ julia> w = ones(24)
 julia> w[15:20] .= 0.0
 julia> reg = wls(X, y, w)
 julia> reg.betas
-2-element Array{Float64,1}:
+2-element Vector{Float64}:
  -63.481644325290425
    1.3040571939231453
 ```
 
 
 """
-function wls(X::Array{Float64,2}, y::Array{Float64,1}, wts::Array{Float64,1})::OLS
+function wls(X::Matrix{Float64}, y::Vector{Float64}, wts::Vector{Float64})::OLS
     W = Diagonal(sqrt.(wts))
     #  I commented this because passing weighted values of X and y to OLS 
     #  causes wrong calculations of residuals.
@@ -115,7 +115,7 @@ Estimate weighted least squares regression and create OLS object with estimated 
 - `ols::OLS`: OLS object, possible created using `ols` or `wls`.
 
 """
-residuals(ols::OLS)::Array{Float64,1} = ols.y .- ols.X * ols.betas
+residuals(ols::OLS)::Vector{Float64} = ols.y .- ols.X * ols.betas
 
 
 """
@@ -127,7 +127,7 @@ Extract regression coefficients from an `OLS` object.
 - `ols::OLS`: OLS object, possible created using `ols` or `wls`.
 
 """
-coef(ols::OLS)::Array{Float64,1} = ols.betas
+coef(ols::OLS)::Vector{Float64} = ols.betas
 
 
 """
@@ -139,9 +139,9 @@ Calculate estimated response using an `OLS` object.
 - `ols::OLS`: OLS object, possible created using `ols` or `wls`.
 
 """
-predict(ols::OLS)::Array{Float64,1} = ols.X * ols.betas
+predict(ols::OLS)::Vector{Float64} = ols.X * ols.betas
 
-predict(ols::OLS, X::Array{Float64,2})::Array{Float64,1} = X * ols.betas
+predict(ols::OLS, X::Matrix{Float64})::Vector{Float64} = X * ols.betas
 
 
 

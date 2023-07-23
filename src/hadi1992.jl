@@ -28,7 +28,7 @@ Perform the sub-algorithm of handling singularity defined in Hadi (1992).
 Hadi, Ali S. "Identifying multiple outliers in multivariate data." 
 Journal of the Royal Statistical Society: Series B (Methodological) 54.3 (1992): 761-771.
  """
-function hadi1992_handle_singularity(S::Array{Float64,2})::Array{Float64,2}
+function hadi1992_handle_singularity(S::Matrix{Float64})::Matrix{Float64}
     p, _ = size(S)
     eigen_structure = eigen(S)
     values = eigen_structure.values
@@ -75,7 +75,7 @@ Dict{Any,Any} with 3 entries:
 Hadi, Ali S. "Identifying multiple outliers in multivariate data." 
 Journal of the Royal Statistical Society: Series B (Methodological) 54.3 (1992): 761-771.
 """
-function hadi1992(multivariateData::Array{Float64,2}; alpha = 0.05)
+function hadi1992(multivariateData::Matrix{Float64}; alpha = 0.05)
     n, p = size(multivariateData)
     h = Int(floor((n + p + 1.0) / 2.0))
     chi_50_quantile = quantile(Chisq(p), 0.50)

@@ -42,8 +42,8 @@ function bchplot(
 end
 
 function bchplot(
-    Xdesign::Array{Float64,2},
-    y::Array{Float64,1};
+    Xdesign::Matrix{Float64},
+    y::Vector{Float64};
     alpha = 0.05,
     maxiter = 1000,
     epsilon = 0.00001,

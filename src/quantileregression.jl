@@ -80,7 +80,7 @@ julia> result = quantileregression(X, foodexp, tau = 0.25)
 
 
 """
-function quantileregression(X::Array{Float64,2}, y::Array{Float64,1}; tau::Float64 = 0.5)
+function quantileregression(X::Matrix{Float64}, y::Vector{Float64}; tau::Float64 = 0.5)
     n, p = size(X)
 
     m = JuMP.Model(HiGHS.Optimizer)

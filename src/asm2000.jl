@@ -57,7 +57,7 @@ function asm2000(setting::RegressionSetting)::Dict
 end
 
 
-function asm2000(X::Array{Float64,2}, y::Array{Float64,1})::Dict
+function asm2000(X::Matrix{Float64}, y::Vector{Float64})::Dict
     n, p = size(X)
     h = floor((n + p - 1) / 2)
     ltsreg = lts(X, y)

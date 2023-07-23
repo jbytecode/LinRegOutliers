@@ -44,7 +44,7 @@ Computational Statistics & Data Analysis 43.4 (2003): 541-552.
     
 """
 function dataimage(
-    dataMatrix::Array{Float64,2};
+    dataMatrix::Matrix{Float64};
     distance = :mahalanobis,
 )::Matrix{RGBX{Float64}}
     d = nothing

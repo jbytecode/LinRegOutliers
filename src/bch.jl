@@ -75,8 +75,8 @@ end
 
 
 function bch(
-    Xdesign::Array{Float64,2},
-    y::Array{Float64,1};
+    Xdesign::Matrix{Float64},
+    y::Vector{Float64};
     alpha = 0.05,
     maxiter = 1000,
     epsilon = 0.000001,
@@ -98,7 +98,7 @@ function bch(
     c = (2.0 * (n + 2.0 * p)) / (n - 2.0 * p)
 
     estimatedvariance = 0.0
-    estimatedvariances = Array{Float64,1}(undef, 0)
+    estimatedvariances = Vector{Float64}(undef, 0)
 
     # Algorithm 2 - Step 0.a
     coordmeds = coordinatwisemedians(X)

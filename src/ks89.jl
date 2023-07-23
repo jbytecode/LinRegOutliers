@@ -35,8 +35,8 @@ function ks89RecursiveResidual(setting::RegressionSetting, indices::Array{Int,1}
 end
 
 function ks89RecursiveResidual(
-    X::Array{Float64,2},
-    y::Array{Float64,1},
+    X::Matrix{Float64},
+    y::Vector{Float64},
     indices::Array{Int,1},
     k::Int,
 )
@@ -89,7 +89,7 @@ function ks89(setting::RegressionSetting; alpha = 0.05)
 end
 
 
-function ks89(X::Array{Float64,2}, y::Array{Float64,1}; alpha = 0.05)::Dict
+function ks89(X::Matrix{Float64}, y::Vector{Float64}; alpha = 0.05)::Dict
     stdres = studentizedResiduals(X, y)
     orderingindices = sortperm(abs.(stdres))
     n, p = size(X)

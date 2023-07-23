@@ -77,7 +77,7 @@ for the given regression setting.
 Hawkins, Douglas M., and David Olive. "Applications and algorithms for least trimmed sum of 
 absolute deviations regression." Computational Statistics & Data Analysis 32.2 (1999): 119-134.
 """
-function lta(X::Array{Float64,2}, y::Array{Float64,1}; exact = false, earlystop = true)
+function lta(X::Matrix{Float64}, y::Vector{Float64}; exact = false, earlystop = true)
     n, p = size(X)
     h = Int(floor((n + p + 1.0) / 2.0))
 
@@ -88,7 +88,7 @@ function lta(X::Array{Float64,2}, y::Array{Float64,1}; exact = false, earlystop 
         psubsets = [sample(1:n, p, replace = false) for i = 1:iters]
     end
 
-    function lta_cost(subsetindices::Array{Int,1})::Tuple{Float64,Array{Float64,1}}
+    function lta_cost(subsetindices::Array{Int,1})::Tuple{Float64,Vector{Float64}}
         try
             betas = coef(ols(X[subsetindices, :], y[subsetindices]))
             res_abs = abs.(y .- X * betas)

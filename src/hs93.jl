@@ -44,7 +44,7 @@ function hs93initialset(setting::RegressionSetting)::Array{Int,1}
     return hs93initialset(X, y)
 end
 
-function hs93initialset(X::Array{Float64,2}, y::Array{Float64,1})::Array{Int,1}
+function hs93initialset(X::Matrix{Float64}, y::Vector{Float64})::Array{Int,1}
     _, p = size(X)
     s = p + 1
     dfs = abs.(dffits(X, y))
@@ -107,8 +107,8 @@ end
 
 
 function hs93basicsubset(
-    X::Array{Float64,2},
-    y::Array{Float64,1},
+    X::Matrix{Float64},
+    y::Vector{Float64},
     initialindices::Array{Int,1},
 )::Array{Int,1}
     n, p = size(X)
@@ -186,8 +186,8 @@ end
 
 
 function hs93(
-    X::Array{Float64,2},
-    y::Array{Float64,1};
+    X::Matrix{Float64},
+    y::Vector{Float64};
     alpha = 0.05,
     basicsubsetindices = nothing,
 )

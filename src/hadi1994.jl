@@ -48,7 +48,7 @@ Dict{Any,Any} with 3 entries:
 Hadi, Ali S. "A modification of a method for the dedection of outliers in multivariate samples"
 Journal of the Royal Statistical Society: Series B (Methodological) 56.2 (1994): 393-396.
 """
-function hadi1994(multivariateData::Array{Float64,2}; alpha = 0.05)
+function hadi1994(multivariateData::Matrix{Float64}; alpha = 0.05)
     n, p = size(multivariateData)
     h = Int(round((n + p + 1.0) / 2.0))
     cnp = (1 + ((2) / (n - 1 - 3p)) + ((p + 1) / (n - p)))^2

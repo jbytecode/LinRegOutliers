@@ -141,13 +141,13 @@ end
 # Example
 ```julia-repl
 julia> mat = [1.0 2.0; 3.0 4.0; 5.0 6.0]
-3×2 Array{Float64,2}:
+3×2 Matrix{Float64}:
  1.0  2.0
  3.0  4.0
  5.0  6.0
 
 julia> coordinatwisemedians(mat)
-2-element Array{Float64,1}:
+2-element Vector{Float64}:
  3.0
  4.0
 ```
@@ -224,7 +224,7 @@ Calculate `dffit` for all observations.
 julia> reg = createRegressionSetting(@formula(calls ~ year), phones);
 
 julia> dffits(reg)
-24-element Array{Float64,1}:
+24-element Vector{Float64}:
    2.3008326745719785
    1.2189579001467337
    0.35535667547543426
@@ -305,7 +305,7 @@ Calculate Studentized residuals for a given regression setting.
 julia> reg = createRegressionSetting(@formula(calls ~ year), phones);
 
 julia> studentizedResiduals(reg)
-24-element Array{Float64,1}:
+24-element Vector{Float64}:
   0.2398783264505892
   0.1463945666608097
   0.04934549995087145
@@ -361,7 +361,7 @@ Calculate adjusted residuals for a given regression setting.
 ```julia-repl
 julia> reg = createRegressionSetting(@formula(calls ~ year), phones);
 julia> adjustedResiduals(reg)
-24-element Array{Float64,1}:
+24-element Vector{Float64}:
   13.486773572526268
    8.2307993473897
    2.774371467851612
@@ -455,7 +455,7 @@ Calculate Cook distances for all observations in a regression setting.
 julia> reg = createRegressionSetting(@formula(calls ~ year), phones);
 
 julia> cooks(reg)
-24-element Array{Float64,1}:
+24-element Vector{Float64}:
  0.005344774190779822
  0.0017088194691033689
  0.00016624914057962608
@@ -617,7 +617,7 @@ Apply DFBETA diagnostic for a given regression setting and observation index.
 ```julia-repl
 julia> setting = createRegressionSetting(@formula(calls ~ year), phones);
 julia> dfbeta(setting, 1)
-2-element Array{Float64,1}:
+2-element Vector{Float64}:
   9.643915678524024
  -0.14686166007904422
 ```

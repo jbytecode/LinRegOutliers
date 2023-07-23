@@ -10,7 +10,7 @@ import ..Basis:
 import Distributions: mean, std
 import ..OrdinaryLeastSquares: ols, residuals, predict, coef
 
-function distances(resids::Array{Float64,1}, fitteds::Array{Float64})::Array{Float64,2}
+function distances(resids::Vector{Float64}, fitteds::Array{Float64})::Matrix{Float64}
     n = length(resids)
     d = zeros(Float64, n, n)
     for i = 1:n
@@ -89,7 +89,7 @@ identifying multiple outliers in linear regression." Computational statistics & 
 27.4 (1998): 461-484.
 """
 
-function smr98(X::Array{Float64,2}, y::Array{Float64,1})
+function smr98(X::Matrix{Float64}, y::Vector{Float64})
     olsreg = ols(X, y)
     #stdres = standardize(ZScoreTransform, residuals(olsreg), dims = 1)
     #stdfit = standardize(ZScoreTransform, predict(olsreg), dims = 1)

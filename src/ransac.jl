@@ -58,8 +58,8 @@ function ransac(
 end
 
 function ransac(
-    X::Array{Float64,2},
-    y::Array{Float64,1};
+    X::Matrix{Float64},
+    y::Vector{Float64};
     t::Float64,
     w::Float64 = 0.5,
     m::Int = 0,
