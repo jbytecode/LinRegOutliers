@@ -30,7 +30,9 @@ function initial_basic_subset_multivariate_data(
 )
     n, _ = size(X)
     if method == "mahalanobis"
-        distances = sqrt.(diag(mahalanobisSquaredMatrix(X)))
+        msm = mahalanobisSquaredMatrix(X)
+        @assert !isnothing(msm)
+        distances = sqrt.(diag(msm))
     elseif method == "median"
         median_vector = applyColumns(median, X)
         distances = [norm(X[i, :] - median_vector, 2) for i = 1:n]
@@ -108,16 +110,12 @@ function bacon_multivariate_outlier_detection(
     while (r_prev != r)
         mean_basic_subset = mean(X[subset], dims = 1)
         cov_basic_subset = X[subset]'X[subset]
-        distances =
-            sqrt.(
-                diag(
-                    mahalanobisSquaredMatrix(
-                        X,
-                        meanvector = mean_basic_subset,
-                        covmatrix = cov_basic_subset,
-                    ),
-                )
-            )
+
+        msm = mahalanobisSquaredMatrix(X, meanvector = mean_basic_subset, covmatrix = cov_basic_subset)
+
+        @assert !isnothing(msm)
+
+        distances = sqrt.(diag(msm))
         c_hr = (h - r) / (h + r)
         c_hr = c_hr < 0 ? 0 : c_hr
         c_npr = c_hr + c_np
@@ -149,13 +147,21 @@ This function computes the t distance for each point and returns the distance ve
  - `subset`: The vector which denotes the points inside the subset, used to scale the residuals accordingly.
 """
 function compute_t_distance(X::Array{Float64,2}, y::Array{Float64}, subset::Array{Int64})
+    
     n, p = size(X)
+
     t = zeros(Float64, n)
+
     least_squares_fit = ols(X[subset, :], y[subset])
+
     betas = coef(least_squares_fit)
+
     err = residuals(least_squares_fit)
+
     sigma = sqrt((err'err) / (n - p))
+
     covmatrix_inv = inv(X[subset, :]'X[subset, :])
+
     for i = 1:n
         scale_factor = (X[i, :]') * (covmatrix_inv * X[i, :])
         residual = (y[i] - X[i, :]' * betas)
@@ -165,6 +171,7 @@ function compute_t_distance(X::Array{Float64,2}, y::Array{Float64}, subset::Arra
             t[i] = residual / (sigma * sqrt(1 + scale_factor))
         end
     end
+
     return abs.(t)
 end
 
@@ -195,6 +202,7 @@ function bacon_regression_initial_subset(
         method = method,
         alpha = alpha,
     )["distances"]
+
     initial_subset = select_subset(X, m, distances)
 
     t = compute_t_distance(X, y, initial_subset)
@@ -257,12 +265,17 @@ function bacon(
     method::String = "mahalanobis",
     alpha = 0.025,
 )::Dict
+
     n, p = size(X)
+
     subset = bacon_regression_initial_subset(X, y, m, method = method, alpha = alpha)
+
     r_prev = 0
+
     r = length(subset)
 
     iter = 0
+
     while (r != r_prev)
         t = compute_t_distance(X, y, subset)
         tdist = TDist(r - p)
@@ -278,10 +291,13 @@ function bacon(
 
     outlierindices = setdiff(1:n, subset)
     inlierindices = subset
+
     cleanols = ols(X[inlierindices, :], y[inlierindices])
+
     cleanbetas = coef(cleanols)
 
     result = Dict("outliers" => outlierindices, "betas" => cleanbetas)
+    
     return result
 end
 

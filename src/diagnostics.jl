@@ -70,7 +70,7 @@ function mahalanobisSquaredBetweenPairs(pairs::Matrix; covmatrix = nothing)::Uni
 	end
 
 	invm = inv(covmatrix)
-    
+
 	for i ∈ 1:n
 		for j ∈ i:n
 			newmat[i, j] =
@@ -101,26 +101,29 @@ Calculate Mahalanobis distances between pairs.
 Marchette, David J., and Jeffrey L. Solka. "Using data images for outlier detection." 
 Computational Statistics & Data Analysis 43.4 (2003): 541-552.
 """
-function mahalanobisBetweenPairs(dataMatrix::Array{Float64, 2})::Array{Float64, 2}
-	n, _ = size(dataMatrix)
-	d = zeros(Float64, n, n)
-	covmat = cov(dataMatrix)
-	if det(covmat) == 0.0
-		@warn "Covariance matrix is singular, mahalanobis distances can not be calculated."
+function mahalanobisBetweenPairs(dataMatrix::Array{Float64, 2})::Union{Nothing, Matrix}
+	
+    n, _ = size(dataMatrix)
+	
+    d = zeros(Float64, n, n)
+	
+    covmat = cov(dataMatrix)
+	
+    if iszero(det(covmat))
+		return nothing
 	end
-	covinv = inv(covmat)
-	for i ∈ 1:n
+	
+    covinv = inv(covmat)
+	
+    for i ∈ 1:n
 		for j ∈ i:n
 			if i != j
-				d[i, j] = sqrt(
-					(dataMatrix[i, :] .- dataMatrix[j, :]) *
-					covinv *
-					(dataMatrix[i, :] .- dataMatrix[j, :])',
-				)
+				d[i, j] = sqrt((dataMatrix[i, :] .- dataMatrix[j, :]) * covinv * (dataMatrix[i, :] .- dataMatrix[j, :])')
 				d[j, i] = d[i, j]
 			end
 		end
 	end
+
 	return d
 end
 

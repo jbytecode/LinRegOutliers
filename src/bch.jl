@@ -81,6 +81,7 @@ function bch(
     maxiter = 1000,
     epsilon = 0.000001,
 )::Dict
+
     n, p = size(Xdesign)
     h = Int(floor((n + p + 1.0) / 2))
     X = Xdesign
@@ -102,26 +103,23 @@ function bch(
     # Algorithm 2 - Step 0.a
     coordmeds = coordinatwisemedians(X)
     A = ((X .- coordmeds')' * (X .- coordmeds')) / (n - 1.0)
-    dsquared = diag(
-        mahalanobisSquaredMatrix(
-            X,
-            meanvector = coordmeds,
-            covmatrix = A,
-        ),
-    )
+    
+    msm = mahalanobisSquaredMatrix(X, meanvector = coordmeds, covmatrix = A)
+    @assert !isnothing(msm)
+
+    dsquared = diag(msm)
     d = sqrt.(dsquared)
 
     # Algorithm 2 - Step 0.b
     bestindicesofd = sortperm(d)[1:h]
     colmeansofh = map(i -> mean(X[bestindicesofd, i]), 1:p)
     covmatofh = cov(X[bestindicesofd, :])
-    newdsquared = diag(
-        mahalanobisSquaredMatrix(
-            X,
-            meanvector = colmeansofh,
-            covmatrix = covmatofh,
-        ),
-    )
+    
+    msm2 = mahalanobisSquaredMatrix(X, meanvector = colmeansofh, covmatrix = covmatofh)
+    @assert !isnothing(msm2)
+
+    newdsquared = diag(msm2)
+
     newd = sqrt.(newdsquared)
 
     # Algorithm 2 - Steps 1, 2, 3
@@ -150,13 +148,10 @@ function bch(
         r = length(basicsubsetindices)
         colmeanofbasicsubset = map(i -> mean(X[basicsubsetindices, i]), 1:p)
         covmatofbasicsubset = cov(X[basicsubsetindices, :])
-        newdsquared = diag(
-            mahalanobisSquaredMatrix(
-                X,
-                meanvector = colmeanofbasicsubset,
-                covmatrix = covmatofbasicsubset,
-            ),
-        )
+
+        msm4 = mahalanobisSquaredMatrix(X, meanvector = colmeanofbasicsubset, covmatrix = covmatofbasicsubset)
+        @assert !isnothing(msm4)
+        newdsquared = diag(msm4)
         newd = sqrt.(newdsquared)
         sortednewdsquared = sort(newdsquared)
         if sortednewdsquared[r + 1] >= crit
@@ -180,6 +175,7 @@ function bch(
     betas = Float64[]
     squared_normalized_resids = Float64[]
     resids = Float64[]
+
     for i = 1:maxiter
         wols = wls(Xdesign, y, weights)
         betas = coef(wols)
@@ -191,6 +187,7 @@ function bch(
         weights = (a .^ 2.0) / (sum(a .^ 2.0))
         estimatedvariance = n * c * sum(resids .^ 2) / (n - p + 1)
         push!(estimatedvariances, estimatedvariance)
+        
         if length(estimatedvariances) > 2
             if abs(estimatedvariance - estimatedvariances[end-1]) < epsilon ||
                abs(estimatedvariance - estimatedvariances[end-2]) < epsilon

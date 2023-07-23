@@ -3,13 +3,13 @@ module DataImage
 export dataimage
 
 import ..Diagnostics:
-    mahalanobisSquaredMatrix, euclideanDistances, mahalanobisSquaredBetweenPairs
+    mahalanobisSquaredMatrix, euclideanDistances, SquaredBetweenPairs
 
 import ..RGBX
 
 """
 
-    dataimage(dataMatrix; distance = :mahalanobis)
+    dataimage(dataMatrix; distance = :)
 
 Generate the Marchette & Solka (2003) data image for a given data matrix. 
 

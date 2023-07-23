@@ -1,7 +1,7 @@
 # v0.10.2 (Upcoming Release)
 
 - mahalanobisSquaredBetweenPairs() return Union{Nothing, Matrix} depending on the determinant of the covariance matrix
-
+- mahalanobisSquaredMatrix return Union{Nothing, Matrix} depending on the determinant of the covariance matrix
 
 
 # v0.10.1 
