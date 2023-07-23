@@ -20,7 +20,7 @@ import Distributions: Chisq
 Perform Hadi (1994) algorithm for a given multivariate data.
 
 # Arguments
-- `multivariateData::Array{Float64, 2}`: Multivariate data.
+- `multivariateData::Matrix{Float64}`: Multivariate data.
 
 # Description
 Algorithm starts with an initial subset and enlarges the subset to 

@@ -22,7 +22,7 @@ import Distributions: Chisq
 Perform the sub-algorithm of handling singularity defined in Hadi (1992).
 
 # Arguments 
-- `S::Array{Float64, 2}`: A covariance matrix.
+- `S::Matrix{Float64}`: A covariance matrix.
 
 # Reference
 Hadi, Ali S. "Identifying multiple outliers in multivariate data." 
@@ -48,7 +48,7 @@ end
 Perform Hadi (1992) algorithm for a given multivariate data. 
 
 # Arguments
-- `multivariateData::Array{Float64, 2}`: Multivariate data.
+- `multivariateData::Matrix{Float64}`: Multivariate data.
 
 # Description
 Algorithm starts with an initial subset and enlarges the subset to 

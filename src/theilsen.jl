@@ -34,7 +34,7 @@ function theilsen(setting::RegressionSetting, m::Int; nsamples::Int = 5000)
     return theilsen(X, y, m, nsamples = nsamples)
 end
 
-function theilsen(X::Array{Float64, 2}, y::Array{Float64, 1}, m::Int; nsamples::Int = 5000)
+function theilsen(X::Matrix{Float64}, y::Vector{Float64}, m::Int; nsamples::Int = 5000)
     
     n, p = size(X)
 
@@ -42,7 +42,7 @@ function theilsen(X::Array{Float64, 2}, y::Array{Float64, 1}, m::Int; nsamples::
         error("m must be in the range [p, n]")
     end 
 
-    allbetas = Array{Float64, 2}(undef, nsamples, p)
+    allbetas = Matrix{Float64}(undef, nsamples, p)
 
     for i in 1:nsamples
         luckyindices = sample(1:n, m, replace = false)
@@ -55,7 +55,7 @@ function theilsen(X::Array{Float64, 2}, y::Array{Float64, 1}, m::Int; nsamples::
     return Dict("betas" => multimed)
 end 
 
-function multivariatemedian(X::Array{Float64, 2})
+function multivariatemedian(X::Matrix{Float64})
     n, p = size(X)
    
     function dist(x::Vector{Float64}, y::Vector{Float64})

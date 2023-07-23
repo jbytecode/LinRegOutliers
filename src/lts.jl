@@ -47,7 +47,6 @@ function iterateCSteps(
     maxiter::Int = 10000
     eps::Float64 = 0.1
     while iter < maxiter
-        #try
         olsreg = ols(X[subsetindices, :], y[subsetindices])
         betas = coef(olsreg)
         res = y - X * betas
@@ -59,10 +58,6 @@ function iterateCSteps(
         end
         oldobjective = objective
         iter += 1
-        #catch er
-        #    @warn er
-        #    return (objective, subsetindices)
-        #end
     end
     #if iter >= maxiter
     #    @warn "in c-step stage of LTS, a h-subset is not converged for starting indices " starterset

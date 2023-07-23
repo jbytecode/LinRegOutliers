@@ -3,7 +3,7 @@ module DataImage
 export dataimage
 
 import ..Diagnostics:
-    mahalanobisSquaredMatrix, euclideanDistances, SquaredBetweenPairs
+    mahalanobisSquaredMatrix, euclideanDistances, mahalanobisSquaredBetweenPairs
 
 import ..RGBX
 
@@ -14,7 +14,7 @@ import ..RGBX
 Generate the Marchette & Solka (2003) data image for a given data matrix. 
 
 # Arguments
-- `dataMatrix::Array{Float64, 1}`: Data matrix with dimensions n x p, where n is the number of observations and p is the number of variables.
+- `dataMatrix::Vector{Float64}`: Data matrix with dimensions n x p, where n is the number of observations and p is the number of variables.
 - `distance::Symbol`: Optional argument for the distance function.
 
 # Notes

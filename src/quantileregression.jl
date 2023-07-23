@@ -62,8 +62,8 @@ end
 Estimates parameters of linear regression using Quantile Regression Estimator for a given regression setting.
 
 # Arguments
-- `X::Array{Float64, 2}`: Design matrix of the linear model.
-- `y::Array{Float64, 1}`: Response vector of the linear model.
+- `X::Matrix{Float64}`: Design matrix of the linear model.
+- `y::Vector{Float64}`: Response vector of the linear model.
 - `tau::Float64`: Quantile level. Default is 0.5.
 
 

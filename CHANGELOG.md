@@ -1,7 +1,11 @@
 # v0.10.2 (Upcoming Release)
 
 - mahalanobisSquaredBetweenPairs() return Union{Nothing, Matrix} depending on the determinant of the covariance matrix
-- mahalanobisSquaredMatrix return Union{Nothing, Matrix} depending on the determinant of the covariance matrix
+- mahalanobisSquaredMatrix() returns Union{Nothing, Matrix} depending on the determinant of the covariance matrix
+- import in DataImages fixed.
+- Array{Float64, 1} is replaced by Vector{Float64}.
+- Array{Float64, 2} is replaced by Matrix{Float64}.
+- Use of try/catch reduced, many tries were depending on singularities.
 
 
 # v0.10.1 

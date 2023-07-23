@@ -19,7 +19,7 @@ import LinearAlgebra: eigen
 Process eigen vectors of EDHDE matrix as defined in the Pena & Yohai (1995) algorithm.
 
 # Arguments
-- `v::Array{Float64, 1}`: Eigen vector of EDHDE matrix.
+- `v::Vector{Float64}`: Eigen vector of EDHDE matrix.
 
 # References
 Peña, Daniel, and Victor J. Yohai. "The detection of influential subsets in linear 

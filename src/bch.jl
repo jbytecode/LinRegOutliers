@@ -163,7 +163,7 @@ function bch(
     # Algorithm 3 - Fitting
     squared_normalized_robust_distances = (newd .^ 2.0) / sum(newd .^ 2.0)
     md = median(newd)
-    newdmd = Array{Float64, 1}(undef, n)
+    newdmd = Vector{Float64}(undef, n)
     for i in 1:n
         newdmd[i] = newd[i] / maximum([newd[i], md])
     end 

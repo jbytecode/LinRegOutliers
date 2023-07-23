@@ -66,8 +66,8 @@ Perform the Hawkins & Olive (1999) algorithm (Least Trimmed Absolute Deviations)
 for the given regression setting.
 
 # Arguments
-- `X::Array{Float64, 2}`: Design matrix of linear regression model.
-- `y::Array{Float64, 1}`: Response vector of linear regression model.
+- `X::Matrix{Float64}`: Design matrix of linear regression model.
+- `y::Vector{Float64}`: Response vector of linear regression model.
 - `exact::Bool`: Consider all possible subsets of p or not where p is the number of regression parameters.
 - `earlystop::Bool`: Early stop if the best objective does not change in number of remaining iters / 5 iterations.
 

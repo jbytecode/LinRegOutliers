@@ -79,8 +79,8 @@ end
 Perform signed gradient descent for clipped convex functions for a given regression setting.
 
 # Arguments
-- `X::Array{Float64, 2}`: Design matrix of the linear model.
-- `y::Array{Float64, 1}`: Response vector of the linear model.
+- `X::Matrix{Float64}`: Design matrix of the linear model.
+- `y::Vector{Float64}`: Response vector of the linear model.
 - `starting_lambdas::Array{Float64,1}`: Starting values of weighting parameters used by signed gradient descent.
 - `alpha::Float64`: Loss at which a point is labeled as an outlier. If unspecified, will be chosen as p*mean(residuals.^2), where residuals are OLS residuals.
 - `p::Float64`: Points that have squared OLS residual greater than p times the mean squared OLS residual are considered outliers.

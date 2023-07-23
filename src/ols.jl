@@ -17,9 +17,9 @@ import ..Basis:
     Immutable data structure that holds design matrix, response vector, and estimated regression parameters. 
 
 # Arguments
-- `X::Array{Float64, 2}`: Design matrix.
-- `y::Array{Float64, 1}`: Response vector.
-- `betas::Array{Float64, 1}`: Regression coefficients.
+- `X::Matrix{Float64}`: Design matrix.
+- `y::Vector{Float64}`: Response vector.
+- `betas::Vector{Float64}`: Regression coefficients.
 
 """
 struct OLS
@@ -35,8 +35,8 @@ end
     Create OLS object with estimated regression coefficients.
 
 # Arguments
-- `X::Array{Float64, 2}`: Design matrix.
-- `y::Array{Float64, 1}`: Response vector.
+- `X::Matrix{Float64}`: Design matrix.
+- `y::Vector{Float64}`: Response vector.
 
 # Examples
 ```julia-repl
@@ -67,9 +67,9 @@ end
     Estimate weighted least squares regression and create OLS object with estimated parameters.
 
 # Arguments
-- `X::Array{Float64, 2}`: Design matrix.
-- `y::Array{Float64, 1}`: Response vector.
-- `wts::Array{Float64, 1}`: Weights vector.
+- `X::Matrix{Float64}`: Design matrix.
+- `y::Vector{Float64}`: Response vector.
+- `wts::Vector{Float64}`: Weights vector.
 
 
 # Examples

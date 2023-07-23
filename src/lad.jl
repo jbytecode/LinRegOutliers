@@ -68,8 +68,8 @@ end
 Perform Least Absolute Deviations regression for a given regression setting.
 
 # Arguments
-- `X::Array{Float64, 2}`: Design matrix of the linear model.
-- `y::Array{Float64, 1}`: Response vector of the linear model.
+- `X::Matrix{Float64}`: Design matrix of the linear model.
+- `y::Vector{Float64}`: Response vector of the linear model.
 - `exact::Bool`: If true, use exact LAD regression. If false, estimate LAD regression parameters using GA. Default is true.
 """
 function lad(X::Array{Float64,2}, y::Array{Float64,1}; exact::Bool = true)

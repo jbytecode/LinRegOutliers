@@ -980,9 +980,9 @@ const woodgravity = DataFrame(
 Scottish Hill Races Data
 
 # Components
-- `dist::Array{Float64, 1}`: Distance in miles (Independent). 
-- `climb::Array{Float64, 1}`: Heights in feet (Independent).
-- `time::Array{Float64, 1}`: Record times in hours (Dependent).
+- `dist::Vector{Float64}`: Distance in miles (Independent). 
+- `climb::Vector{Float64}`: Heights in feet (Independent).
+- `time::Vector{Float64}`: Record times in hours (Dependent).
 
 # Model 
 time ~ dist + climb
@@ -1111,9 +1111,9 @@ const hills = DataFrame(
     Soft Drink Delivery Data
 
 # Components 
-- `cases::Array{Float64, 1}`: Independent variable. 
-- `distance::Array{Float64, 1}`: Independent variable. 
-- `time::Array{Float64, 1}`: Dependent variable. 
+- `cases::Vector{Float64}`: Independent variable. 
+- `distance::Vector{Float64}`: Independent variable. 
+- `time::Vector{Float64}`: Dependent variable. 
 
 # Model 
 time ~ distance + cases 

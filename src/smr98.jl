@@ -79,8 +79,8 @@ end
 Perform the Sebert, Monthomery and Rollier (1998) algorithm for the given regression setting.
 
 # Arguments
-- `X::Array{Float64, 2}`: Desing matrix of the linear regression model.
-- `y::Array{Float64, 1}`: Response vector of the linear regression model.
+- `X::Matrix{Float64}`: Desing matrix of the linear regression model.
+- `y::Vector{Float64}`: Response vector of the linear regression model.
 
 
 # References
