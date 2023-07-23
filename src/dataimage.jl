@@ -50,12 +50,14 @@ function dataimage(
     d = nothing
     if distance == :mahalanobis
         d = mahalanobisSquaredBetweenPairs(dataMatrix)
+        @assert !isnothing(d)
     elseif distance == :euclidean
         d = euclideanDistances(dataMatrix)
     else
         @error "Distance function unknown: " distance
         @error "Using mahalanobis instead"
         d = mahalanobisSquaredBetweenPairs(dataMatrix)
+        @assert !isnothing(d)
     end
     colours = 1.0 .- d / maximum(d)
     n, _ = size(d)

@@ -67,8 +67,7 @@ function asm2000(X::Array{Float64,2}, y::Array{Float64,1})::Dict
 
     predicteds = [sum(X[i, :] .* betas) for i = 1:n]
     resids = y .- predicteds
-    #stdres = standardize(ZScoreTransform, resids, dims = 1)
-    #stdfit = standardize(ZScoreTransform, predicteds, dims = 1)
+ 
     stdres = zstandardize(resids)
     stdfit = zstandardize(predicteds)
 
@@ -78,6 +77,8 @@ function asm2000(X::Array{Float64,2}, y::Array{Float64,1})::Dict
 
     covmatrix = cov(pairs[hsubset, :])
     mahdist = mahalanobisSquaredBetweenPairs(pairs, covmatrix = covmatrix)
+
+    @assert !isnothing(mahdist)
 
     outlierset = Array{Int,1}(undef, 0)
 
