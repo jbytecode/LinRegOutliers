@@ -10,7 +10,7 @@ import ..Basis:
 import Distributions: mean, std
 import ..OrdinaryLeastSquares: ols, residuals, predict, coef
 
-function distances(resids::Vector{Float64}, fitteds::Array{Float64})::Matrix{Float64}
+function distances(resids::AbstractVector{Float64}, fitteds::Array{Float64})::AbstractMatrix{Float64}
     n = length(resids)
     d = zeros(Float64, n, n)
     for i = 1:n
@@ -79,8 +79,8 @@ end
 Perform the Sebert, Monthomery and Rollier (1998) algorithm for the given regression setting.
 
 # Arguments
-- `X::Matrix{Float64}`: Desing matrix of the linear regression model.
-- `y::Vector{Float64}`: Response vector of the linear regression model.
+- `X::AbstractMatrix{Float64}`: Desing matrix of the linear regression model.
+- `y::AbstractVector{Float64}`: Response vector of the linear regression model.
 
 
 # References
@@ -89,7 +89,7 @@ identifying multiple outliers in linear regression." Computational statistics & 
 27.4 (1998): 461-484.
 """
 
-function smr98(X::Matrix{Float64}, y::Vector{Float64})
+function smr98(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})
     olsreg = ols(X, y)
     #stdres = standardize(ZScoreTransform, residuals(olsreg), dims = 1)
     #stdfit = standardize(ZScoreTransform, predict(olsreg), dims = 1)

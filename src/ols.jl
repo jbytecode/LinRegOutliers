@@ -9,23 +9,23 @@ import ..Basis:
 
 """
     struct OLS
-        X::Matrix{Float64}
-        y::Vector{Float64}
-        betas::Vector{Float64}
+        X::AbstractMatrix{Float64}
+        y::AbstractVector{Float64}
+        betas::AbstractVector{Float64}
     end 
     
     Immutable data structure that holds design matrix, response vector, and estimated regression parameters. 
 
 # Arguments
-- `X::Matrix{Float64}`: Design matrix.
-- `y::Vector{Float64}`: Response vector.
-- `betas::Vector{Float64}`: Regression coefficients.
+- `X::AbstractMatrix{Float64}`: Design matrix.
+- `y::AbstractVector{Float64}`: Response vector.
+- `betas::AbstractVector{Float64}`: Regression coefficients.
 
 """
 struct OLS
-    X::Matrix{Float64}
-    y::Vector{Float64}
-    betas::Vector{Float64}
+    X::AbstractMatrix{Float64}
+    y::AbstractVector{Float64}
+    betas::AbstractVector{Float64}
 end
 
 
@@ -35,8 +35,8 @@ end
     Create OLS object with estimated regression coefficients.
 
 # Arguments
-- `X::Matrix{Float64}`: Design matrix.
-- `y::Vector{Float64}`: Response vector.
+- `X::AbstractMatrix{Float64}`: Design matrix.
+- `y::AbstractVector{Float64}`: Response vector.
 
 # Examples
 ```julia-repl
@@ -50,8 +50,8 @@ julia> reg.betas
 ```
 
 """
-ols(X::Matrix{Float64}, y::Vector{Float64})::OLS = OLS(X, y, qr(X, ColumnNorm()) \ y)
-#ols(X::Matrix{Float64}, y::Vector{Float64})::OLS = OLS(X, y, qr(X, Val(true)) \ y)
+ols(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})::OLS = OLS(X, y, qr(X, ColumnNorm()) \ y)
+#ols(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})::OLS = OLS(X, y, qr(X, Val(true)) \ y)
 
 
 function ols(setting::RegressionSetting)::OLS
@@ -67,9 +67,9 @@ end
     Estimate weighted least squares regression and create OLS object with estimated parameters.
 
 # Arguments
-- `X::Matrix{Float64}`: Design matrix.
-- `y::Vector{Float64}`: Response vector.
-- `wts::Vector{Float64}`: Weights vector.
+- `X::AbstractMatrix{Float64}`: Design matrix.
+- `y::AbstractVector{Float64}`: Response vector.
+- `wts::AbstractVector{Float64}`: Weights vector.
 
 
 # Examples
@@ -87,7 +87,7 @@ julia> reg.betas
 
 
 """
-function wls(X::Matrix{Float64}, y::Vector{Float64}, wts::Vector{Float64})::OLS
+function wls(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}, wts::AbstractVector{Float64})::OLS
     W = Diagonal(sqrt.(wts))
     #  I commented this because passing weighted values of X and y to OLS 
     #  causes wrong calculations of residuals.
@@ -115,7 +115,7 @@ Estimate weighted least squares regression and create OLS object with estimated 
 - `ols::OLS`: OLS object, possible created using `ols` or `wls`.
 
 """
-residuals(ols::OLS)::Vector{Float64} = ols.y .- ols.X * ols.betas
+residuals(ols::OLS)::AbstractVector{Float64} = ols.y .- ols.X * ols.betas
 
 
 """
@@ -127,7 +127,7 @@ Extract regression coefficients from an `OLS` object.
 - `ols::OLS`: OLS object, possible created using `ols` or `wls`.
 
 """
-coef(ols::OLS)::Vector{Float64} = ols.betas
+coef(ols::OLS)::AbstractVector{Float64} = ols.betas
 
 
 """
@@ -139,9 +139,9 @@ Calculate estimated response using an `OLS` object.
 - `ols::OLS`: OLS object, possible created using `ols` or `wls`.
 
 """
-predict(ols::OLS)::Vector{Float64} = ols.X * ols.betas
+predict(ols::OLS)::AbstractVector{Float64} = ols.X * ols.betas
 
-predict(ols::OLS, X::Matrix{Float64})::Vector{Float64} = X * ols.betas
+predict(ols::OLS, X::AbstractMatrix{Float64})::AbstractVector{Float64} = X * ols.betas
 
 
 

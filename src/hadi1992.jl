@@ -22,13 +22,13 @@ import Distributions: Chisq
 Perform the sub-algorithm of handling singularity defined in Hadi (1992).
 
 # Arguments 
-- `S::Matrix{Float64}`: A covariance matrix.
+- `S::AbstractMatrix{Float64}`: A covariance matrix.
 
 # Reference
 Hadi, Ali S. "Identifying multiple outliers in multivariate data." 
 Journal of the Royal Statistical Society: Series B (Methodological) 54.3 (1992): 761-771.
  """
-function hadi1992_handle_singularity(S::Matrix{Float64})::Matrix{Float64}
+function hadi1992_handle_singularity(S::AbstractMatrix{Float64})::AbstractMatrix{Float64}
     p, _ = size(S)
     eigen_structure = eigen(S)
     values = eigen_structure.values
@@ -48,7 +48,7 @@ end
 Perform Hadi (1992) algorithm for a given multivariate data. 
 
 # Arguments
-- `multivariateData::Matrix{Float64}`: Multivariate data.
+- `multivariateData::AbstractMatrix{Float64}`: Multivariate data.
 
 # Description
 Algorithm starts with an initial subset and enlarges the subset to 
@@ -75,7 +75,7 @@ Dict{Any,Any} with 3 entries:
 Hadi, Ali S. "Identifying multiple outliers in multivariate data." 
 Journal of the Royal Statistical Society: Series B (Methodological) 54.3 (1992): 761-771.
 """
-function hadi1992(multivariateData::Matrix{Float64}; alpha = 0.05)
+function hadi1992(multivariateData::AbstractMatrix{Float64}; alpha = 0.05)
     n, p = size(multivariateData)
     h = Int(floor((n + p + 1.0) / 2.0))
     chi_50_quantile = quantile(Chisq(p), 0.50)

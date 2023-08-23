@@ -14,7 +14,7 @@ import ..RGBX
 Generate the Marchette & Solka (2003) data image for a given data matrix. 
 
 # Arguments
-- `dataMatrix::Vector{Float64}`: Data matrix with dimensions n x p, where n is the number of observations and p is the number of variables.
+- `dataMatrix::AbstractVector{Float64}`: Data matrix with dimensions n x p, where n is the number of observations and p is the number of variables.
 - `distance::Symbol`: Optional argument for the distance function.
 
 # Notes
@@ -44,7 +44,7 @@ Computational Statistics & Data Analysis 43.4 (2003): 541-552.
     
 """
 function dataimage(
-    dataMatrix::Matrix{Float64};
+    dataMatrix::AbstractMatrix{Float64};
     distance = :mahalanobis,
 )::Matrix{RGBX{Float64}}
     d = nothing

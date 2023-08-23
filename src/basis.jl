@@ -160,7 +160,7 @@ julia> designMatrix(setting)
  1.0  73.0
 ```
 """
-function designMatrix(setting::RegressionSetting)::Matrix{Float64}
+function designMatrix(setting::RegressionSetting)::AbstractMatrix{Float64}
     mf = ModelFrame(setting.formula, setting.data)
     mm = ModelMatrix(mf)
     return convert(Matrix{Float64}, mm.m)
@@ -209,7 +209,7 @@ julia> responseVector(setting)
   29.0
 ```
 """
-function responseVector(setting::RegressionSetting)::Vector{Float64}
+function responseVector(setting::RegressionSetting)::AbstractVector{Float64}
     mf = ModelFrame(setting.formula, setting.data)
     return convert(Vector{Float64}, setting.data[:, mf.f.lhs.sym])
 end
@@ -292,7 +292,7 @@ end
 - `f::Function`: A function that takes a one dimensional array as argument.
 - `data::Matrix`: A Matrix object.
 """
-function applyColumns(f::Function, data::Matrix)
+function applyColumns(f::Function, data::AbstractMatrix{Float64})
     return [f(col) for col in eachcol(data)]
 end
 
@@ -305,7 +305,7 @@ end
     Return minimum of numbers greater than zero.
 
 # Arguments
-- `arr::Vector{Float64}`: A function that takes a one dimensional array as argument.
+- `arr::AbstractVector{Float64}`: A function that takes a one dimensional array as argument.
 
 # Example
 ```julia-repl
@@ -313,12 +313,12 @@ julia> find_minimum_nonzero([0.0, 0.0, 5.0, 1.0])
 1.0
 ```
 """
-function find_minimum_nonzero(arr::Vector{Float64})
+function find_minimum_nonzero(arr::AbstractVector{Float64})
     return minimum(filter(x -> x > 0, arr))
 end
 
 
-function zstandardize(v::Vector{Float64})::Vector{Float64}
+function zstandardize(v::AbstractVector{Float64})::AbstractVector{Float64}
     return (v .- mean(v)) ./ std(v)
 end
 

@@ -62,8 +62,8 @@ end
 Estimates parameters of linear regression using Quantile Regression Estimator for a given regression setting.
 
 # Arguments
-- `X::Matrix{Float64}`: Design matrix of the linear model.
-- `y::Vector{Float64}`: Response vector of the linear model.
+- `X::AbstractMatrix{Float64}`: Design matrix of the linear model.
+- `y::AbstractVector{Float64}`: Response vector of the linear model.
 - `tau::Float64`: Quantile level. Default is 0.5.
 
 
@@ -80,7 +80,7 @@ julia> result = quantileregression(X, foodexp, tau = 0.25)
 
 
 """
-function quantileregression(X::Matrix{Float64}, y::Vector{Float64}; tau::Float64 = 0.5)
+function quantileregression(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; tau::Float64 = 0.5)
     n, p = size(X)
 
     m = JuMP.Model(HiGHS.Optimizer)

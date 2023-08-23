@@ -35,8 +35,8 @@ end
 
 
 function iterateCSteps(
-    X::Matrix{Float64},
-    y::Vector{Float64},
+    X::AbstractMatrix{Float64},
+    y::AbstractVector{Float64},
     subsetindices::Array{Int,1},
     h::Int,
 )
@@ -66,16 +66,16 @@ function iterateCSteps(
 end
 
 
-function iterateCSteps(setting::RegressionSetting, initialBetas::Vector{Float64}, h::Int)
+function iterateCSteps(setting::RegressionSetting, initialBetas::AbstractVector{Float64}, h::Int)
     X = designMatrix(setting)
     y = responseVector(setting)
     return iterateCSteps(X, y, initialBetas, h)
 end
 
 function iterateCSteps(
-    X::Matrix{Float64},
-    y::Vector{Float64},
-    initialBetas::Vector{Float64},
+    X::AbstractMatrix{Float64},
+    y::AbstractVector{Float64},
+    initialBetas::AbstractVector{Float64},
     h::Int,
 )
     n, p = size(X)
@@ -140,7 +140,7 @@ function lts(setting::RegressionSetting; iters=nothing, crit=2.5, earlystop = tr
     return lts(X, y, iters=iters, crit=crit, earlystop = earlystop)
 end
 
-function lts(X::Matrix{Float64}, y::Vector{Float64}; iters=nothing, crit=2.5, earlystop = true)
+function lts(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; iters=nothing, crit=2.5, earlystop = true)
 
     n, p = size(X)
     h = Int(floor((n + p + 1.0) / 2.0))

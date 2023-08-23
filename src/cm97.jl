@@ -50,7 +50,7 @@ end
 
 
 
-function cm97(X::Matrix{Float64}, y::Vector{Float64}; maxiter::Int = 1000)::Dict
+function cm97(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; maxiter::Int = 1000)::Dict
 
     n, p = size(X)
     pbar::Float64 = p / n

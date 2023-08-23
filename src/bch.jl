@@ -75,8 +75,8 @@ end
 
 
 function bch(
-    Xdesign::Matrix{Float64},
-    y::Vector{Float64};
+    Xdesign::AbstractMatrix{Float64},
+    y::AbstractVector{Float64};
     alpha = 0.05,
     maxiter = 1000,
     epsilon = 0.000001,

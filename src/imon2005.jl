@@ -40,7 +40,7 @@ end
 
 
 
-function imon2005(X::Matrix{Float64}, y::Vector{Float64})
+function imon2005(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})
 
     function SigmaWithoutIndex(X, y, R, i)
         n, p = size(X)

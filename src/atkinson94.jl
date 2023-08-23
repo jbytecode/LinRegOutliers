@@ -59,8 +59,8 @@ function atkinson94(setting::RegressionSetting; iters = nothing, crit = 3.0)::Di
 end
 
 function atkinson94(
-    X::Matrix{Float64},
-    y::Vector{Float64};
+    X::AbstractMatrix{Float64},
+    y::AbstractVector{Float64};
     iters = nothing,
     crit = 3.0,
 )::Dict

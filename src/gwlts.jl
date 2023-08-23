@@ -50,11 +50,11 @@ function galts(setting::RegressionSetting)
     return galts(X, y)
 end
 
-function galts(X::Matrix{Float64}, y::Vector{Float64})
+function galts(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})
     n, p = size(X)
     h = Int(floor((n + p + 1.0) / 2.0))
 
-    function fcost(genes::Vector{Float64})
+    function fcost(genes::AbstractVector{Float64})
         objective, _ = iterateCSteps(X, y, genes, h)
         return objective
     end

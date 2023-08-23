@@ -34,7 +34,7 @@ function theilsen(setting::RegressionSetting, m::Int; nsamples::Int = 5000)
     return theilsen(X, y, m, nsamples = nsamples)
 end
 
-function theilsen(X::Matrix{Float64}, y::Vector{Float64}, m::Int; nsamples::Int = 5000)
+function theilsen(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}, m::Int; nsamples::Int = 5000)
     
     n, p = size(X)
 
@@ -55,14 +55,14 @@ function theilsen(X::Matrix{Float64}, y::Vector{Float64}, m::Int; nsamples::Int 
     return Dict("betas" => multimed)
 end 
 
-function multivariatemedian(X::Matrix{Float64})
+function multivariatemedian(X::AbstractMatrix{Float64})
     n, p = size(X)
    
-    function dist(x::Vector{Float64}, y::Vector{Float64})
+    function dist(x::AbstractVector{Float64}, y::AbstractVector{Float64})
         return sum(abs.(x .- y))
     end
 
-    function objective(candidate::Vector{Float64})
+    function objective(candidate::AbstractVector{Float64})
         val = sum(dist(candidate, X[i, :]) for i in 1:n)
         return val
     end 

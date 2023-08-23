@@ -10,7 +10,7 @@ end
 
 function hj(
     f::FType,
-    par::Vector{Float64};
+    par::AbstractVector{Float64};
     maxiter = 1000,
     startstep = 5.0,
     endstep = 0.0001,

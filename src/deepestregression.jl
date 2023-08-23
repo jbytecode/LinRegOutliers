@@ -39,7 +39,7 @@ function deepestregression(setting::RegressionSetting; maxit::Int = 10000)
 	return deepestregression(X, y, maxit = maxit)
 end
 
-function deepestregression(X::Matrix{Float64}, y::Vector{Float64}; maxit::Int = 10000)::Vector{Float64}
+function deepestregression(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; maxit::Int = 10000)::AbstractVector{Float64}
 	drdata = hcat(X, y)
 	n, p = size(drdata)
 	n = Int32(n)

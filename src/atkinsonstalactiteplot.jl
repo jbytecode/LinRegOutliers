@@ -34,8 +34,8 @@ function atkinsonstalactiteplot(
 end
 
 function atkinsonstalactiteplot(
-    X::Matrix{Float64},
-    y::Vector{Float64};
+    X::AbstractMatrix{Float64},
+    y::AbstractVector{Float64};
     iters = nothing,
     crit = 3.0,
 )::Nothing
@@ -46,7 +46,7 @@ function atkinsonstalactiteplot(
 end
 
 function generate_stalactite_plot(
-    residuals_matrix::Matrix{Float64},
+    residuals_matrix::AbstractMatrix{Float64},
     n::Int64,
     p::Int64,
     crit,

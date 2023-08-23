@@ -256,7 +256,7 @@ function satman2015(setting::RegressionSetting)
 end
 
 
-function satman2015(X::Matrix{Float64}, y::Vector{Float64})
+function satman2015(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})
     n, p = size(X)
     h = Int(floor((n + p + 1.0) / 2.0))
 

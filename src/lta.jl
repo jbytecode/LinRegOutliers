@@ -66,8 +66,8 @@ Perform the Hawkins & Olive (1999) algorithm (Least Trimmed Absolute Deviations)
 for the given regression setting.
 
 # Arguments
-- `X::Matrix{Float64}`: Design matrix of linear regression model.
-- `y::Vector{Float64}`: Response vector of linear regression model.
+- `X::AbstractMatrix{Float64}`: Design matrix of linear regression model.
+- `y::AbstractVector{Float64}`: Response vector of linear regression model.
 - `exact::Bool`: Consider all possible subsets of p or not where p is the number of regression parameters.
 - `earlystop::Bool`: Early stop if the best objective does not change in number of remaining iters / 5 iterations.
 
@@ -77,7 +77,7 @@ for the given regression setting.
 Hawkins, Douglas M., and David Olive. "Applications and algorithms for least trimmed sum of 
 absolute deviations regression." Computational Statistics & Data Analysis 32.2 (1999): 119-134.
 """
-function lta(X::Matrix{Float64}, y::Vector{Float64}; exact = false, earlystop = true)
+function lta(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; exact = false, earlystop = true)
     n, p = size(X)
     h = Int(floor((n + p + 1.0) / 2.0))
 

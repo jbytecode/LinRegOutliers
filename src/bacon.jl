@@ -24,7 +24,7 @@ Two methods V1 and V2 are defined in the paper which use Mahalanobis distance or
  - `method`: The distance method to use for selecting the points for initial subset
 """
 function initial_basic_subset_multivariate_data(
-    X::Matrix{Float64},
+    X::AbstractMatrix{Float64},
     m::Int;
     method::String = "mahalanobis",
 )
@@ -53,7 +53,7 @@ It also guarantees that at least m indices are returned and that the selected in
  - `m`: The minimum number of points to include in the subset indices.
  - `distances`: The distances vector used for selecting minumum distance indices.
 """
-function select_subset(X::Matrix{Float64}, m::Int, distances::Array{Float64})
+function select_subset(X::AbstractMatrix{Float64}, m::Int, distances::Array{Float64})
     rank_x = rank(X)
     sorted_distances = sortperm(distances)
     subset = sorted_distances[1:m]
@@ -88,7 +88,7 @@ This function performs the outlier detection for multivariate data according to 
  - `alpha`: The quantile used for cutoff
 """
 function bacon_multivariate_outlier_detection(
-    X::Matrix{Float64},
+    X::AbstractMatrix{Float64},
     m::Int;
     method::String = "mahalanobis",
     alpha::Float64 = 0.025,
@@ -146,7 +146,7 @@ This function computes the t distance for each point and returns the distance ve
  - `y`: The output vector
  - `subset`: The vector which denotes the points inside the subset, used to scale the residuals accordingly.
 """
-function compute_t_distance(X::Matrix{Float64}, y::Array{Float64}, subset::Array{Int64})
+function compute_t_distance(X::AbstractMatrix{Float64}, y::Array{Float64}, subset::Array{Int64})
     
     n, p = size(X)
 
@@ -187,7 +187,7 @@ This function computes the initial subset having at least m elements which are l
  - `alpha`: The quantile used for cutoff
 """
 function bacon_regression_initial_subset(
-    X::Matrix{Float64},
+    X::AbstractMatrix{Float64},
     y::Array{Float64},
     m::Int;
     method::String = "mahalanobis",
@@ -259,7 +259,7 @@ Billor, Nedret, Ali S. Hadi, and Paul F. Velleman. "BACON: blocked adaptive comp
 Computational statistics & data analysis 34.3 (2000): 279-298.
 """
 function bacon(
-    X::Matrix{Float64},
+    X::AbstractMatrix{Float64},
     y::Array{Float64};
     m::Int,
     method::String = "mahalanobis",

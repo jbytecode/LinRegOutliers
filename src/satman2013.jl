@@ -53,7 +53,7 @@ function satman2013(setting::RegressionSetting)
 end
 
 
-function satman2013(X::Matrix{Float64}, y::Vector{Float64})
+function satman2013(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})
     # Sample size and the number of regression parameters
     n, p = size(X)
 

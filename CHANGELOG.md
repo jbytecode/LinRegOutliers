@@ -1,4 +1,5 @@
 # v0.11.1 (Upcoming Release)
+- Concrete types of X and y changed to AbstractMatrix{Float64} and AbstractVector{Float64}
 
 
 # v0.11.0

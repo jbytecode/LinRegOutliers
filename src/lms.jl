@@ -62,7 +62,7 @@ function lms(setting::RegressionSetting; iters = nothing, crit = 2.5)
 end
 
 
-function lms(X::Matrix{Float64}, y::Vector{Float64}; iters = nothing, crit = 2.5)
+function lms(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; iters = nothing, crit = 2.5)
     n, p = size(X)
     h = Int(floor((n + 1.0) / 2.0))
     if isnothing(iters)

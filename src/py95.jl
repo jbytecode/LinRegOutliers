@@ -19,14 +19,14 @@ import LinearAlgebra: eigen
 Process eigen vectors of EDHDE matrix as defined in the Pena & Yohai (1995) algorithm.
 
 # Arguments
-- `v::Vector{Float64}`: Eigen vector of EDHDE matrix.
+- `v::AbstractVector{Float64}`: Eigen vector of EDHDE matrix.
 
 # References
 Peña, Daniel, and Victor J. Yohai. "The detection of influential subsets in linear 
 regression by using an influence matrix." Journal of the Royal Statistical Society: 
 Series B (Methodological) 57.1 (1995): 145-156.
 """
-function py95ProcessEigenVector(v::Vector{Float64})
+function py95ProcessEigenVector(v::AbstractVector{Float64})
     eps = 0.0001
     n = length(v)
     k = 2.5
@@ -81,7 +81,7 @@ end
 
 
 
-function py95SuspectedObservations(X::Matrix{Float64}, y::Vector{Float64})
+function py95SuspectedObservations(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})
     n, p = size(X)
     nhalf = Int(floor(n / 2.0))
     olsreg = ols(X, y)
@@ -143,8 +143,8 @@ function jacknifedS(setting::RegressionSetting, omittedIndices::Array{Int,1})::F
 end
 
 function jacknifedS(
-    X::Matrix{Float64},
-    y::Vector{Float64},
+    X::AbstractMatrix{Float64},
+    y::AbstractVector{Float64},
     omittedIndices::Array{Int,1},
 )::Float64
     n, p = size(X)
@@ -197,7 +197,7 @@ function py95(setting::RegressionSetting)
 end
 
 
-function py95(X::Matrix{Float64}, y::Vector{Float64})
+function py95(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})
     n, _ = size(X)
     all_indices = collect(1:n)
     suspicious_sets = py95SuspectedObservations(X, y)

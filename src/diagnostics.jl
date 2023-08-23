@@ -33,7 +33,7 @@ import DataFrames: DataFrame
 Calculate Euclidean distances between pairs. 
 
 # Arguments
-- `dataMatrix::Vector{Float64}`: Data matrix with dimensions n x p, where n is the number of observations and p is the number of variables.
+- `dataMatrix::AbstractVector{Float64}`: Data matrix with dimensions n x p, where n is the number of observations and p is the number of variables.
 
 # Notes
 	This is the helper function for the dataimage() function defined in Marchette & Solka (2003).
@@ -42,7 +42,7 @@ Calculate Euclidean distances between pairs.
 Marchette, David J., and Jeffrey L. Solka. "Using data images for outlier detection." 
 Computational Statistics & Data Analysis 43.4 (2003): 541-552.
 """
-function euclideanDistances(dataMatrix::Matrix{Float64})::Matrix{Float64}
+function euclideanDistances(dataMatrix::AbstractMatrix{Float64})::AbstractMatrix{Float64}
 	n, _ = size(dataMatrix)
 	d = zeros(Float64, n, n)
 	for i ∈ 1:n
@@ -58,7 +58,7 @@ end
 
 
 
-function mahalanobisSquaredBetweenPairs(pairs::Matrix; covmatrix = nothing)::Union{Nothing, Matrix}
+function mahalanobisSquaredBetweenPairs(pairs::AbstractMatrix{Float64}; covmatrix = nothing)::Union{Nothing, AbstractMatrix}
 	n, _ = size(pairs)
 	newmat = zeros(Float64, n, n)
 	if isnothing(covmatrix)
@@ -90,7 +90,7 @@ end
 Calculate Mahalanobis distances between pairs. 
 
 # Arguments
-- `dataMatrix::Vector{Float64}`: Data matrix with dimensions n x p, where n is the number of observations and p is the number of variables.
+- `dataMatrix::AbstractVector{Float64}`: Data matrix with dimensions n x p, where n is the number of observations and p is the number of variables.
 
 # Notes
 	Differently from Mahalabonis distances, this function calculates Mahalanobis distances between 
@@ -101,7 +101,7 @@ Calculate Mahalanobis distances between pairs.
 Marchette, David J., and Jeffrey L. Solka. "Using data images for outlier detection." 
 Computational Statistics & Data Analysis 43.4 (2003): 541-552.
 """
-function mahalanobisBetweenPairs(dataMatrix::Matrix{Float64})::Union{Nothing, Matrix}
+function mahalanobisBetweenPairs(dataMatrix::AbstractMatrix{Float64})::Union{Nothing, Matrix}
 	
     n, _ = size(dataMatrix)
 	
@@ -136,7 +136,7 @@ end
 	Return vector of medians of each column in a matrix.
 
 # Arguments
-- `datamat::Matrix{Float64}`: A matrix.
+- `datamat::AbstractMatrix{Float64}`: A matrix.
 
 # Example
 ```julia-repl
@@ -152,7 +152,7 @@ julia> coordinatwisemedians(mat)
  4.0
 ```
 """
-function coordinatwisemedians(datamat::Matrix{Float64})::Vector{Float64}
+function coordinatwisemedians(datamat::AbstractMatrix{Float64})::AbstractVector{Float64}
 	_, p = size(datamat)
 	meds = map(i -> median(datamat[:, i]), 1:p)
 	return meds
@@ -199,7 +199,7 @@ function dffit(setting::RegressionSetting, i::Int)::Float64
 	return dffit(X, y, i)
 end
 
-function dffit(X::Matrix{Float64}, y::Vector{Float64}, i::Int)::Float64
+function dffit(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}, i::Int)::Float64
 	n, _ = size(X)
 	indices = [j for j ∈ 1:n if i != j]
 	olsfull = ols(X, y)
@@ -255,13 +255,13 @@ julia> dffits(reg)
 Belsley, David A., Edwin Kuh, and Roy E. Welsch. Regression diagnostics: 
 Identifying influential data and sources of collinearity. Vol. 571. John Wiley & Sons, 2005.
 """
-function dffits(setting::RegressionSetting)::Vector{Float64}
+function dffits(setting::RegressionSetting)::AbstractVector{Float64}
 	n, _ = size(setting.data)
 	result = [dffit(setting, i) for i ∈ 1:n]
 	return result
 end
 
-function dffits(X::Matrix{Float64}, y::Vector{Float64})::Vector{Float64}
+function dffits(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})::AbstractVector{Float64}
 	n, _ = size(X)
 	result = [dffit(X, y, i) for i ∈ 1:n]
 	return result
@@ -283,12 +283,12 @@ julia> size(hatmatrix(reg))
 
 (24, 24)
 """
-function hatmatrix(setting::RegressionSetting)::Matrix{Float64}
+function hatmatrix(setting::RegressionSetting)::AbstractMatrix{Float64}
 	X = designMatrix(setting)
 	return hatmatrix(X)
 end
 
-function hatmatrix(X::Matrix{Float64})::Matrix{Float64}
+function hatmatrix(X::AbstractMatrix{Float64})::AbstractMatrix{Float64}
 	return X * inv(X'X) * X'
 end
 
@@ -332,12 +332,12 @@ julia> studentizedResiduals(reg)
  -1.529459974327181
 ```
 """
-function studentizedResiduals(setting::RegressionSetting)::Vector{Float64}
+function studentizedResiduals(setting::RegressionSetting)::AbstractVector{Float64}
 	X, y = @extractRegressionSetting setting
 	return studentizedResiduals(X, y)
 end
 
-function studentizedResiduals(X::Matrix{Float64}, y::Vector{Float64})::Vector{Float64}
+function studentizedResiduals(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})::AbstractVector{Float64}
 	olsreg = ols(X, y)
 	n, p = size(X)
 	e = residuals(olsreg)
@@ -388,13 +388,13 @@ julia> adjustedResiduals(reg)
  -85.9914301855088
 ```
 """
-function adjustedResiduals(setting::RegressionSetting)::Vector{Float64}
+function adjustedResiduals(setting::RegressionSetting)::AbstractVector{Float64}
 	X, y = @extractRegressionSetting setting
 	return adjustedResiduals(X, y)
 end
 
 
-function adjustedResiduals(X::Matrix{Float64}, y::Vector{Float64})::Vector{Float64}
+function adjustedResiduals(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})::AbstractVector{Float64}
 	olsreg = ols(X, y)
 	n, _ = size(X)
 	e = residuals(olsreg)
@@ -429,7 +429,7 @@ function jacknifedS(setting::RegressionSetting, k::Int)::Float64
 	return jacknifedS(X, y, k)
 end
 
-function jacknifedS(X::Matrix{Float64}, y::Vector{Float64}, k::Int)::Float64
+function jacknifedS(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}, k::Int)::Float64
 	n, p = size(X)
 	indices = [i for i ∈ 1:n if i != k]
 	Xsub = X[indices, :]
@@ -486,12 +486,12 @@ julia> cooks(reg)
 Cook, R. Dennis. "Detection of influential observation in linear regression." 
 Technometrics 19.1 (1977): 15-18.
 """
-function cooks(setting::RegressionSetting)::Vector{Float64}
+function cooks(setting::RegressionSetting)::AbstractVector{Float64}
 	X, y = @extractRegressionSetting setting
 	return cooks(X, y)
 end
 
-function cooks(X::Matrix{Float64}, y::Vector{Float64})::Vector{Float64}
+function cooks(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})::AbstractVector{Float64}
 	n, p = size(X)
 	olsreg = ols(X, y)
 	res = residuals(olsreg)
@@ -526,7 +526,7 @@ function cooksoutliers(setting::RegressionSetting; alpha::Float64 = 0.5)::Dict
 	return cooksoutliers(X, y, alpha = alpha)
 end
 
-function cooksoutliers(X::Matrix{Float64}, y::Vector{Float64}; alpha::Float64 = 0.5)::Dict
+function cooksoutliers(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; alpha::Float64 = 0.5)::Dict
 	n, p = size(X)
 	d = cooks(X, y)
 	cutoff = cookscritical(n, p)
@@ -542,8 +542,8 @@ Calculate Mahalanobis distances.
 
 # Arguments
 - `data::DataFrame`: A DataFrame object of the multivariate data.
-- `meanvector::Vector{Float64}`: Optional mean vector of variables.
-- `covmatrix::Matrix{Float64}`: Optional covariance matrix of data.
+- `meanvector::AbstractVector{Float64}`: Optional mean vector of variables.
+- `covmatrix::AbstractMatrix{Float64}`: Optional covariance matrix of data.
 
 # References
 Mahalanobis, Prasanta Chandra. "On the generalized distance in statistics." 
@@ -598,7 +598,7 @@ function dfbetas(setting)
 	return mapreduce(permutedims, vcat, results)
 end
 
-function dfbetas(X::Matrix{Float64}, y::Vector{Float64})
+function dfbetas(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})
 	results = map(i -> dfbeta(X, y, i), 1:length(y))
 	return mapreduce(permutedims, vcat, results)
 end
@@ -622,16 +622,16 @@ julia> dfbeta(setting, 1)
  -0.14686166007904422
 ```
 """
-function dfbeta(setting::RegressionSetting, omittedIndex::Int)::Vector{Float64}
+function dfbeta(setting::RegressionSetting, omittedIndex::Int)::AbstractVector{Float64}
 	X, y = @extractRegressionSetting setting
 	return dfbeta(X, y, omittedIndex)
 end
 
 function dfbeta(
-	X::Matrix{Float64},
-	y::Vector{Float64},
+	X::AbstractMatrix{Float64},
+	y::AbstractVector{Float64},
 	omittedIndex::Int,
-)::Vector{Float64}
+)::AbstractVector{Float64}
 	n = length(y)
 	omittedindices = filter(x -> x != omittedIndex, 1:n)
 	regfull = ols(X, y)
@@ -663,7 +663,7 @@ function covratio(setting::RegressionSetting, omittedIndex::Int)
 	return covratio(X, y, omittedIndex)
 end
 
-function covratio(X::Matrix{Float64}, y::Vector{Float64}, omittedIndex::Int)
+function covratio(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}, omittedIndex::Int)
 	n, p = size(X)
 	reg = ols(X, y)
 	r = residuals(reg)
@@ -709,7 +709,7 @@ function hadimeasure(setting::RegressionSetting; c::Float64 = 2.0)
 	hadimeasure(X, y, c = c)
 end
 
-function hadimeasure(X::Matrix{Float64}, y::Vector{Float64}; c::Float64 = 2.0)
+function hadimeasure(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; c::Float64 = 2.0)
 	n, p = size(X)
 	reg = ols(X, y)
 	res = residuals(reg)
@@ -769,7 +769,7 @@ function diagnose(setting::RegressionSetting; alpha = 0.5)
 end
 
 
-function diagnose(X::Matrix{Float64}, y::Vector{Float64}; alpha = 0.5)
+function diagnose(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; alpha = 0.5)
 	n, p = size(X)
 	resultdffits = dffits(X, y)
 	resultdfbetas = dfbetas(X, y)

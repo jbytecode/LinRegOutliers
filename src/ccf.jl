@@ -19,7 +19,7 @@ Perform signed gradient descent for clipped convex functions for a given regress
 
 # Arguments
 - `setting::RegressionSetting`: RegressionSetting object with a formula and dataset.
-- `starting_lambdas::Vector{Float64}`: Starting values of weighting parameters used by signed gradient descent.
+- `starting_lambdas::AbstractVector{Float64}`: Starting values of weighting parameters used by signed gradient descent.
 - `alpha::Float64`: Loss at which a point is labeled as an outlier (points with loss ≥ alpha will be called outliers).
 - `max_iter::Int64`: Maximum number of iterations to run signed gradient descent.
 - `beta::Float64`: Step size parameter.
@@ -79,9 +79,9 @@ end
 Perform signed gradient descent for clipped convex functions for a given regression setting.
 
 # Arguments
-- `X::Matrix{Float64}`: Design matrix of the linear model.
-- `y::Vector{Float64}`: Response vector of the linear model.
-- `starting_lambdas::Vector{Float64}`: Starting values of weighting parameters used by signed gradient descent.
+- `X::AbstractMatrix{Float64}`: Design matrix of the linear model.
+- `y::AbstractVector{Float64}`: Response vector of the linear model.
+- `starting_lambdas::AbstractVector{Float64}`: Starting values of weighting parameters used by signed gradient descent.
 - `alpha::Float64`: Loss at which a point is labeled as an outlier. If unspecified, will be chosen as p*mean(residuals.^2), where residuals are OLS residuals.
 - `p::Float64`: Points that have squared OLS residual greater than p times the mean squared OLS residual are considered outliers.
 - `max_iter::Int64`: Maximum number of iterations to run signed gradient descent.
@@ -100,8 +100,8 @@ Barratt, S., Angeris, G. & Boyd, S. Minimizing a sum of clipped convex functions
 
 """
 function ccf(
-    X::Matrix{Float64},
-    y::Vector{Float64};
+    X::AbstractMatrix{Float64},
+    y::AbstractVector{Float64};
     starting_lambdas = nothing,
     alpha = nothing,
     p = 3,

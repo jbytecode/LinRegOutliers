@@ -68,11 +68,11 @@ end
 Perform Least Absolute Deviations regression for a given regression setting.
 
 # Arguments
-- `X::Matrix{Float64}`: Design matrix of the linear model.
-- `y::Vector{Float64}`: Response vector of the linear model.
+- `X::AbstractMatrix{Float64}`: Design matrix of the linear model.
+- `y::AbstractVector{Float64}`: Response vector of the linear model.
 - `exact::Bool`: If true, use exact LAD regression. If false, estimate LAD regression parameters using GA. Default is true.
 """
-function lad(X::Matrix{Float64}, y::Vector{Float64}; exact::Bool = true)
+function lad(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; exact::Bool = true)
     if exact
         return lad_exact(X, y)
     else
@@ -80,7 +80,7 @@ function lad(X::Matrix{Float64}, y::Vector{Float64}; exact::Bool = true)
     end
 end
 
-function lad_approx(X::Matrix{Float64}, y::Vector{Float64})
+function lad_approx(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})
     n, p = size(X)
 
     mins = ones(Float64, p) * 10^6 * (-1.0)
@@ -100,7 +100,7 @@ function lad_approx(X::Matrix{Float64}, y::Vector{Float64})
     return result
 end
 
-function lad_exact(X::Matrix{Float64}, y::Vector{Float64})
+function lad_exact(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})
     n, p = size(X)
 
     m = JuMP.Model(HiGHS.Optimizer)
