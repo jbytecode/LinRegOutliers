@@ -273,11 +273,11 @@ end
     Apply function f to each columns of data.
 
 # Arguments
-- `f::Function`: A function that takes a one dimensional array as argument.
+- `f <: Function`: A function that takes a one dimensional array as argument.
 - `data::DataFrame`: A DataFrame object.
 
 """
-function applyColumns(f::Function, data::DataFrame)
+function applyColumns(f::F, data::DataFrame) where {F <: Function}
     return [f(col) for col in eachcol(data)]
 end
 
@@ -289,10 +289,10 @@ end
     Apply function f to each columns of data.
 
 # Arguments
-- `f::Function`: A function that takes a one dimensional array as argument.
+- `f <: Function`: A function that takes a one dimensional array as argument.
 - `data::Matrix`: A Matrix object.
 """
-function applyColumns(f::Function, data::AbstractMatrix{Float64})
+function applyColumns(f::F, data::AbstractMatrix{Float64}) where {F <: Function}
     return [f(col) for col in eachcol(data)]
 end
 
