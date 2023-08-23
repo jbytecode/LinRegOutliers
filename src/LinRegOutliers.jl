@@ -5,33 +5,33 @@ using Requires
 # After the module is loaded, we check if Plots is installed and loaded.
 # If Plots is installed and loaded, we load the corresponding modules.
 function __init__()
-    @require Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80" begin
-  
-        import .Plots: RGBX
+	@require Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80" begin
 
-        include("mveltsplot.jl")
-        include("dataimage.jl")
-        include("bchplot.jl")
+		import .Plots: RGBX
 
-        import .MVELTSPlot: mveltsplot
-        import .DataImage: dataimage
-        import .BCHPlot: bchplot
-        
-        export mveltsplot, dataimage, bchplot, RGBX
+		include("mveltsplot.jl")
+		include("dataimage.jl")
+		include("bchplot.jl")
 
-    end
+		import .MVELTSPlot: mveltsplot
+		import .DataImage: dataimage
+		import .BCHPlot: bchplot
+
+		export mveltsplot, dataimage, bchplot, RGBX
+
+	end
 end
 
 # Basis
 include("basis.jl")
 import .Basis:
-    RegressionSetting,
-    createRegressionSetting,
-    @extractRegressionSetting,
-    applyColumns,
-    find_minimum_nonzero,
-    designMatrix,
-    responseVector
+	RegressionSetting,
+	createRegressionSetting,
+	@extractRegressionSetting,
+	applyColumns,
+	find_minimum_nonzero,
+	designMatrix,
+	responseVector
 export RegressionSetting
 export createRegressionSetting
 export designMatrix
@@ -65,20 +65,20 @@ import .OrdinaryLeastSquares: OLS, ols, wls, residuals, predict, coef
 # Regression diagnostics
 include("diagnostics.jl")
 import .Diagnostics:
-    dffit,
-    dffits,
-    dfbeta,
-    dfbetas,
-    hatmatrix,
-    studentizedResiduals,
-    adjustedResiduals,
-    jacknifedS,
-    cooks,
-    cooksoutliers,
-    mahalanobisSquaredMatrix,
-    covratio,
-    hadimeasure,
-    diagnose
+	dffit,
+	dffits,
+	dfbeta,
+	dfbetas,
+	hatmatrix,
+	studentizedResiduals,
+	adjustedResiduals,
+	jacknifedS,
+	cooks,
+	cooksoutliers,
+	mahalanobisSquaredMatrix,
+	covratio,
+	hadimeasure,
+	diagnose
 
 
 # Hadi & Simonoff (1993) algorithm
@@ -205,6 +205,10 @@ import .CM97: cm97
 include("theilsen.jl")
 import .TheilSen: theilsen
 
+# Deepest Regression Estimator
+include("deepestregression.jl")
+import .DeepestRegression: deepestregression
+
 # All-in-one
 include("summary.jl")
 import .Summary: detectOutliers
@@ -267,6 +271,7 @@ export atkinson94, atkinsonstalactiteplot, generate_stalactite_plot
 export bacon
 export cm97
 export theilsen
+export deepestregression
 
 
 # Snoop-Precompile 

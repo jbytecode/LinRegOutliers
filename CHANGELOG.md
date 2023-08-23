@@ -1,4 +1,12 @@
-# v0.10.2 (Upcoming Release)
+# v0.11.1 (Upcoming Release)
+
+
+# v0.11.0
+
+- Deepest Regression Estimator added.
+
+
+# v0.10.2 
 
 - mahalanobisSquaredBetweenPairs() return Union{Nothing, Matrix} depending on the determinant of the covariance matrix
 - mahalanobisSquaredMatrix() returns Union{Nothing, Matrix} depending on the determinant of the covariance matrix

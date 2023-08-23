@@ -38,11 +38,12 @@ A Julia package for outlier detection in linear regression.
 - Hadi (1994) Algorithm
 - Chatterjee & Mächler (1997)
 - Theil-Sen estimator for multiple regression
+- Deepest Regression Estimator
 - Summary
 
 
 ## Unimplemented Methods
-- Depth based estimators (Regression depth, deepest regression, etc.) See [#13](https://github.com/jbytecode/LinRegOutliers/issues/13) for the related issue.
+
 - Pena & Yohai (1999). See [#25](https://github.com/jbytecode/LinRegOutliers/issues/25) for the related issue.
 
 

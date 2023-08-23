@@ -26,5 +26,6 @@ using PrecompileTools
         smr98(reg)
         ransac(reg, t = 0.8, w = 0.85)
         theilsen(reg, 2, nsamples = 10)
+        deepestregression(reg)
     end
 end

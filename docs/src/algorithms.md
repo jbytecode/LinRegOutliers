@@ -135,6 +135,10 @@ LinRegOutliers.quantileregression
 LinRegOutliers.theilsen
 ```
 
+## Deepest Regression Estimator
+```@docs
+LinRegOutliers.deepestregression
+```
 
 
 
