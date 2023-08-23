@@ -277,11 +277,13 @@ Calculate Hat matrix of dimensions n x n for a given regression setting with n o
 - `setting::RegressionSetting`: A regression setting object.
 
 # Examples
+
 ```julia-repl
 julia> reg = createRegressionSetting(@formula(calls ~ year), phones);
 julia> size(hatmatrix(reg))
 
 (24, 24)
+```
 """
 function hatmatrix(setting::RegressionSetting)::AbstractMatrix{Float64}
 	X = designMatrix(setting)
@@ -546,6 +548,7 @@ Calculate Mahalanobis distances.
 - `covmatrix::AbstractMatrix{Float64}`: Optional covariance matrix of data.
 
 # References
+
 Mahalanobis, Prasanta Chandra. "On the generalized distance in statistics." 
 National Institute of Science of India, 1936.
 """
