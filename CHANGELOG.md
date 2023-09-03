@@ -2,6 +2,7 @@
 
 - Concrete types of X and y changed to AbstractMatrix{Float64} and AbstractVector{Float64}
 - Change function signatures from ::Function to ::F where {F <: Function}
+- Increase test coverage
 
 # v0.11.0
 

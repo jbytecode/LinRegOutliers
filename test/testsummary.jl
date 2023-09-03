@@ -4,7 +4,14 @@
             "hs93",
             "ks89",
             "smr98",
-            "lts"
+            "lts",
+            "sat13",
+            "sat15",
+            "asm20",
+            "bch",
+            "bacon",
+            "imon2005",
+            "unknown"
         ]
     sett = LinRegOutliers.createRegressionSetting(@formula(calls ~ year), phones)
     result = LinRegOutliers.detectOutliers(sett, methods = methods)
