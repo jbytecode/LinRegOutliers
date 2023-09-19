@@ -1,4 +1,7 @@
-# v0.11.1 (Upcoming Release)
+# v0.11.2 (Upcoming Release)
+
+
+# v0.11.1
 
 - Concrete types of X and y changed to AbstractMatrix{Float64} and AbstractVector{Float64}
 - Change function signatures from ::Function to ::F where {F <: Function}
