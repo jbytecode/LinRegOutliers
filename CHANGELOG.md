@@ -1,5 +1,7 @@
 # v0.11.2 (Upcoming Release)
 
+- Optional eps and maxiter parameters in iterateCSteps() in LTS.
+
 
 # v0.11.1
 

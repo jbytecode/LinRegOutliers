@@ -17,6 +17,8 @@ Perform a concentration step for a given subset of a regression setting.
 - `setting::RegressionSetting`: RegressionSetting object with a formula and dataset.
 - `subsetindices::Array{Int, 1}`: Indicies of observations in the initial subset.
 - `h::Int`: A constant at least half of the number of observations.
+- `eps::Float64`: A small number, default is 0.01. If difference of last two objectives is less than eps, function terminates.
+- `maxiter::Int`: Maximum number of iteration. Default is 10000.
 
 # Notes
     This function is a helper for the lts function. A concentration step starts with a 
@@ -28,9 +30,11 @@ Rousseeuw, Peter J., and Katrien Van Driessen. "An algorithm for positive-breakd
 regression based on concentration steps." Data Analysis. 
 Springer, Berlin, Heidelberg, 2000. 335-346.
 """
-function iterateCSteps(setting::RegressionSetting, subsetindices::Array{Int,1}, h::Int)
+function iterateCSteps(setting::RegressionSetting, 
+    subsetindices::Array{Int,1}, 
+    h::Int; eps::Float64 = 0.01, maxiter::Int = 10000)
     X, y = @extractRegressionSetting setting
-    return iterateCSteps(X, y, subsetindices, h)
+    return iterateCSteps(X, y, subsetindices, h, eps = eps, maxiter = maxiter)
 end
 
 
@@ -38,14 +42,12 @@ function iterateCSteps(
     X::AbstractMatrix{Float64},
     y::AbstractVector{Float64},
     subsetindices::Array{Int,1},
-    h::Int,
+    h::Int; eps::Float64 = 0.01, maxiter::Int = 10000
 )
     #starterset = subsetindices
     oldobjective::Float64 = Inf64
     objective::Float64 = Inf64
     iter::Int = 0
-    maxiter::Int = 10000
-    eps::Float64 = 0.1
     while iter < maxiter
         olsreg = ols(X[subsetindices, :], y[subsetindices])
         betas = coef(olsreg)
@@ -66,24 +68,26 @@ function iterateCSteps(
 end
 
 
-function iterateCSteps(setting::RegressionSetting, initialBetas::AbstractVector{Float64}, h::Int)
+function iterateCSteps(setting::RegressionSetting, 
+    initialBetas::AbstractVector{Float64}, 
+    h::Int; eps::Float64 = 0.01, maxiter::Int = 10000)
     X = designMatrix(setting)
     y = responseVector(setting)
-    return iterateCSteps(X, y, initialBetas, h)
+    return iterateCSteps(X, y, initialBetas, h, eps = eps, maxiter = maxiter)
 end
 
 function iterateCSteps(
     X::AbstractMatrix{Float64},
     y::AbstractVector{Float64},
     initialBetas::AbstractVector{Float64},
-    h::Int,
+    h::Int; eps::Float64 = 0.01, maxiter::Int = 10000
 )
     n, p = size(X)
     #res = [y[i] - sum(X[i, :] .* initialBetas) for i = 1:n]
     res = y - X * initialBetas
     sortedresindices = sortperm(abs.(res))
     subsetindices = sortedresindices[1:p]
-    return iterateCSteps(X, y, subsetindices, h)
+    return iterateCSteps(X, y, subsetindices, h, eps = eps, maxiter = maxiter)
 end
 
 
