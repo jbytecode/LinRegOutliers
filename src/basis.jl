@@ -290,7 +290,7 @@ end
 
 # Arguments
 - `f <: Function`: A function that takes a one dimensional array as argument.
-- `data::Matrix`: A Matrix object.
+- `data::AbstractMatrix`: A Matrix object.
 """
 function applyColumns(f::F, data::AbstractMatrix{Float64}) where {F <: Function}
     return [f(col) for col in eachcol(data)]

@@ -12,7 +12,7 @@ import ..Basis:
 import ..Diagnostics: mahalanobisSquaredMatrix
 
 
-function enlargesubset(initialsubset, data::DataFrame, dataMatrix::Matrix, h::Int)
+function enlargesubset(initialsubset, data::DataFrame, dataMatrix::AbstractMatrix, h::Int)
     n, _ = size(dataMatrix)
     basicsubset = copy(initialsubset)
     while length(basicsubset) < h

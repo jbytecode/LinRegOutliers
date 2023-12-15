@@ -80,7 +80,7 @@ end
 Sort multidimensional data usin non-dominated sorting algorithm.
 
 # Arguments
-- `data::Matrix`: n x k matrix of observations where n is number of observations and k is number of variables.
+- `data::AbstractMatrix`: n x k matrix of observations where n is number of observations and k is number of variables.
 
 # Examples
 ```julia-repl
@@ -149,7 +149,7 @@ International Journal of Advanced Statistics and Probability 3.1 (2015): 53.
 Deb, Kalyanmoy, et al. "A fast elitist non-dominated sorting genetic algorithm for multi-objective optimization: NSGA-II." 
 International conference on parallel problem solving from nature. Springer, Berlin, Heidelberg, 2000.
 """
-function ndsranks(data::Matrix)::Array{Int}
+function ndsranks(data::AbstractMatrix)::Array{Int}
     n, _ = size(data)
     ranks = zeros(Int, n)
     mat = convert(Matrix, data)
