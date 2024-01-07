@@ -1,7 +1,7 @@
 # v0.11.2 (Upcoming Release)
 
 - Optional eps and maxiter parameters in iterateCSteps() in LTS.
-
+- Replace `ols(X[indices, :], y[indices])` with `X[...] \ y[...]` in highly computational ones such like LTS, LMS, and LTA. 
 
 # v0.11.1
 

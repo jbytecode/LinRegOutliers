@@ -6,7 +6,6 @@ export lms
 
 import ..Basis:
     RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
-import ..OrdinaryLeastSquares: ols, predict, residuals, coef
 
 import Distributions: sample
 
@@ -77,8 +76,7 @@ function lms(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; iters = not
         try
             k = rand(kindices, 1)[1]
             sampledindices = sample(indices, k, replace = false)
-            olsreg = ols(X[sampledindices, :], y[sampledindices])
-            betas = coef(olsreg)
+            betas = X[sampledindices, :] \ y[sampledindices]
             origres = y .- X * betas
             res = sort(origres .^ 2.0)
             m2 = res[h]

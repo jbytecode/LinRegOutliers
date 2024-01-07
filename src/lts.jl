@@ -4,7 +4,7 @@ export lts
 export iterateCSteps
 
 import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector
-import ..OrdinaryLeastSquares: ols, coef, residuals, predict
+
 import Distributions: sample, mean
 
 """
@@ -49,8 +49,7 @@ function iterateCSteps(
     objective::Float64 = Inf64
     iter::Int = 0
     while iter < maxiter
-        olsreg = ols(X[subsetindices, :], y[subsetindices])
-        betas = coef(olsreg)
+        betas = X[subsetindices, :] \ y[subsetindices]
         res = y - X * betas
         sortedresindices = sortperm(abs.(res))
         subsetindices = sortedresindices[1:h]
@@ -82,8 +81,7 @@ function iterateCSteps(
     initialBetas::AbstractVector{Float64},
     h::Int; eps::Float64 = 0.01, maxiter::Int = 10000
 )
-    n, p = size(X)
-    #res = [y[i] - sum(X[i, :] .* initialBetas) for i = 1:n]
+    _, p = size(X)
     res = y - X * initialBetas
     sortedresindices = sortperm(abs.(res))
     subsetindices = sortedresindices[1:p]
@@ -174,10 +172,7 @@ function lts(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; iters=nothi
         end
     end
 
-
-    ltsreg = ols(X[besthsubset, :], y[besthsubset])
-    ltsbetas = coef(ltsreg)
-    #ltsres = [y[i] - sum(X[i, :] .* ltsbetas) for i = 1:n]
+    ltsbetas = X[besthsubset, :] \ y[besthsubset]
     ltsres = y - X * ltsbetas
     ltsS = sqrt(sum((ltsres .^ 2.0)[1:h]) / (h - p))
     ltsresmean = mean(ltsres[besthsubset])

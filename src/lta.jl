@@ -6,7 +6,7 @@ export lta
 
 import ..Basis:
     RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
-import ..OrdinaryLeastSquares: ols, predict, residuals, coef
+
 
 import Combinatorics: combinations
 import Distributions: sample
@@ -90,7 +90,7 @@ function lta(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; exact = fal
 
     function lta_cost(subsetindices::Array{Int,1})::Tuple{Float64,Vector{Float64}}
         try
-            betas = coef(ols(X[subsetindices, :], y[subsetindices]))
+            betas = X[subsetindices, :] \ y[subsetindices]
             res_abs = abs.(y .- X * betas)
             ordered_res = sort(res_abs)
             cost = sum(ordered_res[1:h])
@@ -102,7 +102,7 @@ function lta(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; exact = fal
 
     L = length(psubsets)
     bestobjective = Inf64 
-    bestbetas = coef(ols(X, y))
+    bestbetas = X \ y
     numberofitersunchanged = 0
     for i in 1:L
         objective, betas = lta_cost(psubsets[i])
