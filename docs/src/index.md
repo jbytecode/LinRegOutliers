@@ -34,7 +34,7 @@ A Julia package for outlier detection in linear regression.
 - Theil-Sen estimator for multiple regression
 - Summary
 
-[Algorithms](./algorithms/)
+[Algorithms](./algorithms.md)
 
 
 ## Installation
