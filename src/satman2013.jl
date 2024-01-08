@@ -7,7 +7,7 @@ export satman2013
 import ..Basis:
     RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
 import ..LTS: iterateCSteps
-import ..OrdinaryLeastSquares: ols, coef, wls, residuals
+import ..OrdinaryLeastSquares: coef, wls, residuals
 import ..Diagnostics: mahalanobisSquaredMatrix
 import Distributions: median
 import LinearAlgebra: diag
@@ -106,9 +106,8 @@ function satman2013(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})
     _, bestset = iterateCSteps(X, y, best_h_indices, h)
 
     # Estimate the final regression parameters
-    olsreg = ols(X[bestset, :], y[bestset])
-    betas = coef(olsreg)
-    resids = y .- (X * betas)
+    betas = X[bestset, :] \ y[bestset]
+    resids = y .- X * betas
     med_res = median(resids)
     standardized_resids = (resids .- med_res) / median(abs.(resids .- med_res))
 

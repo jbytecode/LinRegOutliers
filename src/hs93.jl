@@ -6,7 +6,7 @@ export hs93
 
 import ..Basis:
     RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
-import ..OrdinaryLeastSquares: ols, predict, residuals, coef
+
 import ..Diagnostics: dffits
 
 import Distributions: TDist, quantile
@@ -116,8 +116,7 @@ function hs93basicsubset(
     s = length(initialindices)
     indices = initialindices
     for i in range(s + 1, stop = h)
-        olsreg = ols(X[indices, :], y[indices])
-        betas = coef(olsreg)
+        betas = X[indices, :] \ y[indices]
         d = zeros(Float64, n)
         XM = X[indices, :]
         for j = 1:n
@@ -204,9 +203,8 @@ function hs93(
     betas = []
 
     while s < n
-        olsreg = ols(X[indices, :], y[indices])
-        betas = coef(olsreg)
-        resids = residuals(olsreg)
+        betas = X[indices, :] \ y[indices]
+        resids = y[indices] - X[indices,:] * betas
         sigma = sqrt(sum(resids .^ 2.0) / (length(resids) - p))
         d = zeros(Float64, n)
         XM = X[indices, :]
@@ -237,9 +235,7 @@ function hs93(
 
         outlierset = filter(x -> abs(d[x]) > abs(tcalc), 1:n)
         inlierset = setdiff(1:n, outlierset)
-        cleanols = ols(X[inlierset, :], y[inlierset])
-        cleanbetas = coef(cleanols)
-
+        cleanbetas = X[inlierset, :] \ y[inlierset]
         if abs(d[orderingd][s+1]) > abs(tcalc)
             result = Dict(
                 "d" => d,

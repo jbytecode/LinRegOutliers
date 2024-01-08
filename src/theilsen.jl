@@ -46,9 +46,9 @@ function theilsen(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}, m::Int
 
     for i in 1:nsamples
         luckyindices = sample(1:n, m, replace = false)
-        olsresult = ols(X[luckyindices, :], y[luckyindices])
-        betas = coef(olsresult)
-        allbetas[i, :] = betas
+        #olsresult = ols(X[luckyindices, :], y[luckyindices])
+        #betas = coef(olsresult)
+        allbetas[i, :] = X[luckyindices, :] \ y[luckyindices]
     end 
 
     multimed = multivariatemedian(allbetas)
