@@ -45,13 +45,10 @@ function iterateCSteps(
     subsetindices::Array{Int,1},
     h::Int; eps::Float64 = 0.01, maxiter::Int = 10000
 )
-    #starterset = subsetindices
     oldobjective::Float64 = Inf64
     objective::Float64 = Inf64
     iter::Int = 0
     while iter < maxiter
-        #betas = X[subsetindices, :] \ y[subsetindices]
-        #res = y - X * betas
         tempols = ols(X[subsetindices, :], y[subsetindices])
         res = y - X * coef(tempols)
         sortedresindices = sortperm(abs.(res))
@@ -63,9 +60,6 @@ function iterateCSteps(
         oldobjective = objective
         iter += 1
     end
-    #if iter >= maxiter
-    #    @warn "in c-step stage of LTS, a h-subset is not converged for starting indices " starterset
-    #end
     return (objective, subsetindices)
 end
 

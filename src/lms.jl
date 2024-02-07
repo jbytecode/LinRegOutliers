@@ -72,7 +72,7 @@ function lms(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; iters = not
     bestres = []
     indices = collect(1:n)
     kindices = collect(p:n)
-    for iter = 1:iters
+    for _ = 1:iters
         try
             k = rand(kindices, 1)[1]
             sampledindices = sample(indices, k, replace = false)
