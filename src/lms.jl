@@ -91,7 +91,7 @@ function lms(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; iters = not
     end
     s = 1.4826 * sqrt((1.0 + (5.0 / (n - p))) * bestobjective)
     standardizedres = bestres / s
-    d = Dict()
+    d = Dict{String, Any}()
     d["betas"] = bestparamaters
     d["objective"] = bestobjective
     d["S"] = s

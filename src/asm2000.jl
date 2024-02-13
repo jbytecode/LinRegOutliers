@@ -97,7 +97,7 @@ function asm2000(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})::Dict
     cleanols = ols(X[inlierset, :], y[inlierset])
     cleanbetas = coef(cleanols)
 
-    result = Dict()
+    result = Dict{String, Vector}()
     result["outliers"] = outlierset
     result["betas"] = cleanbetas
     return result

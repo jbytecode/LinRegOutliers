@@ -96,7 +96,7 @@ function imon2005(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})
     cleanols = ols(X[inlierindex, :], y[inlierindex])
     cleanbeta = coef(cleanols)
 
-    result::Dict{String,Any} = Dict()
+    result::Dict{String,Any} = Dict{String, Any}()
     result["crit"] = crit
     result["gdffits"] = GDFFITS
     result["outliers"] = outlyingindex

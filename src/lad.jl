@@ -124,7 +124,7 @@ function lad_exact(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})
     betahats = JuMP.value.(beta)
     residuals = y .- X * betahats
 
-    result = Dict()
+    result = Dict{String, Any}()
     result["betas"] = betahats
     result["residuals"] = residuals
     result["model"] = m

@@ -85,7 +85,7 @@ function mveltsplot(setting::RegressionSetting; alpha = 0.05, showplot = true)
         vline!([chicrit])
     end
 
-    result = Dict()
+    result = Dict{String, Any}()
     result["plot"] = scplot
     result["robust.distances"] = robdistances
     result["scaled.residuals"] = scaledresiduals

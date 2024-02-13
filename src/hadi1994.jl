@@ -123,7 +123,7 @@ function hadi1994(multivariateData::AbstractMatrix{Float64}; alpha = 0.05)
 
     outlierset = setdiff(allindices, basic_subset_indices)
 
-    result = Dict()
+    result = Dict{String, Any}()
     result["outliers"] = sort(outlierset)
     result["critical.chi.squared"] = critical_quantile
     result["rth.robust.distance"] = sorted_mah1[r-1]

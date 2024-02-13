@@ -1,5 +1,7 @@
 # v0.11.4 (Upcoming Release)
 
+- More explicit return types, drop `Dict` with `Dict{String, Any}` or `Dict{String, Vector}`
+
 
 # v0.11.3 
 

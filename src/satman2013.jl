@@ -113,7 +113,7 @@ function satman2013(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})
 
     outlierset = filter(i -> abs(standardized_resids[i]) > 2.5, allindices)
 
-    result = Dict()
+    result = Dict{String, Any}()
     result["outliers"] = outlierset
     result["betas"] = betas
     result["residuals"] = resids

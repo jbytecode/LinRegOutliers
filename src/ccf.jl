@@ -139,7 +139,7 @@ function ccf(
         old_lambdas .= curr_lambdas
     end
 
-    result = Dict()
+    result = Dict{String, Any}()
     result["betas"] = curr_betas
     result["lambdas"] = old_lambdas
     result["residuals"] = residuals

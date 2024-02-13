@@ -131,7 +131,7 @@ function bacon_multivariate_outlier_detection(
             break
         end
     end
-    d = Dict()
+    d = Dict{String, Any}()
     d["outliers"] = setdiff(1:n, subset)
     d["distances"] = distances
     return d

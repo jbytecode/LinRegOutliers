@@ -219,7 +219,7 @@ function py95(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})
     cleanols = ols(X[inlierset, :], y[inlierset])
     cleanbetas = coef(cleanols)
 
-    result = Dict()
+    result = Dict{String, Any}()
     result["suspected.sets"] = suspicious_sets
     result["outliers"] = sort(collect(outlierset))
     result["betas"] = cleanbetas

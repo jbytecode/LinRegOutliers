@@ -138,7 +138,7 @@ function atkinson94(
         end
     end
 
-    d = Dict()
+    d = Dict{String, Any}()
     d["coef"] = bestparameters
     d["objective"] = bestobjective
     d["optimum_index"] = bestindex

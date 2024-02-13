@@ -96,7 +96,7 @@ function quantileregression(X::AbstractMatrix{Float64}, y::AbstractVector{Float6
     )
 
     for i = 1:n
-        c = JuMP.@constraint(m, y[i] - sum(X[i, :] .* beta) + d[i] - d[n+i] == 0)
+        _ = JuMP.@constraint(m, y[i] - sum(X[i, :] .* beta) + d[i] - d[n+i] == 0)
     end
 
     for i = 1:(2n)
@@ -108,7 +108,7 @@ function quantileregression(X::AbstractMatrix{Float64}, y::AbstractVector{Float6
     betahats = JuMP.value.(beta)
     residuals = y .- X * betahats
 
-    result = Dict()
+    result = Dict{String, Any}()
     result["betas"] = betahats
     result["residuals"] = residuals
     result["model"] = m

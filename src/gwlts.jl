@@ -72,7 +72,7 @@ function galts(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})
     ltsreg = ols(X[subsetindices, :], y[subsetindices])
     betas = coef(ltsreg)
 
-    result = Dict()
+    result = Dict{String, Any}()
     result["betas"] = betas
     result["best.subset"] = sort(subsetindices)
     result["objective"] = objective

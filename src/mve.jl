@@ -80,7 +80,7 @@ function robcov(data::DataFrame; alpha = 0.01, estimator = :mve)
         ),
     )
     outlierset = filter(x -> md2[x] > chisqcrit, 1:n)
-    result = Dict()
+    result = Dict{String, Any}()
     result["goal"] = mingoal
     result["best.subset"] = sort(besthsubset)
     result["robust.location"] = meanvector
