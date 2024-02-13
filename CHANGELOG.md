@@ -1,6 +1,7 @@
 # v0.11.4 (Upcoming Release)
 
 - More explicit return types, drop `Dict` with `Dict{String, Any}` or `Dict{String, Vector}`
+- Add `Julia v.1.10` to GitHub actions
 
 
 # v0.11.3 
