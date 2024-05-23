@@ -68,22 +68,26 @@ function lms(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; iters = not
         iters = minimum([500 * p, 3000])
     end
     bestobjective = Inf
-    bestparamaters = []
-    bestres = []
+    bestparamaters = zeros(Float64, p)
+    bestres = zeros(Float64, n)
+    origres = zeros(Float64, n)
     indices = collect(1:n)
     kindices = collect(p:n)
+    betas = zeros(Float64, p)
+    res = zeros(Float64, n)
+
     for _ = 1:iters
         try
             k = rand(kindices, 1)[1]
             sampledindices = sample(indices, k, replace = false)
-            betas = X[sampledindices, :] \ y[sampledindices]
-            origres = y .- X * betas
-            res = sort(origres .^ 2.0)
+            betas .= X[sampledindices, :] \ y[sampledindices]
+            origres .= y .- X * betas
+            res .= sort(origres .^ 2.0)
             m2 = res[h]
             if m2 < bestobjective
-                bestparamaters = betas
+                bestparamaters .= betas
                 bestobjective = m2
-                bestres = origres
+                bestres .= origres
             end
         catch e
             @warn e

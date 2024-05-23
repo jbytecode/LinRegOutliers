@@ -2,6 +2,7 @@
 
 - More explicit return types, drop `Dict` with `Dict{String, Any}` or `Dict{String, Vector}`
 - Add `Julia v.1.10` to GitHub actions
+- Reduce memory allocation in `lts()` and `lms()`
 
 
 # v0.11.3 
