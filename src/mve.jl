@@ -149,7 +149,7 @@ function mve(data::DataFrame; alpha = 0.01)
 end
 
 function mve(data::AbstractMatrix{Float64}; alpha = 0.01)
-    return mve(data, alpha = alpha)
+    robcov(data, alpha = alpha, estimator = :mve)
 end
 
 
@@ -193,7 +193,7 @@ function mcd(data::DataFrame; alpha = 0.01)
 end
 
 function mcd(data::AbstractMatrix{Float64}; alpha = 0.01)
-    return mcd(data, alpha = alpha)
+    robcov(data, alpha = alpha, estimator = :mcd)
 end
 
 
