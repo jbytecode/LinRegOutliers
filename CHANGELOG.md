@@ -4,6 +4,7 @@
 - Add `Julia v.1.10` to GitHub actions
 - Reduce memory allocations in `lts()` and `lms()`
 - Reduce memory allocations in `hadi92()` and `hadi94()`
+- Reduce memory allocations in `hs93()`
 
 # v0.11.3 
 

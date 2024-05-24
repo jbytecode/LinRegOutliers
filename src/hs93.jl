@@ -115,9 +115,12 @@ function hs93basicsubset(
     h = floor((n + p - 1) / 2)
     s = length(initialindices)
     indices = initialindices
+    betas = zeros(Float64, p)
+    d = zeros(Float64, n)
+    orderingd = zeros(Int, n)
+
     for i in range(s + 1, stop = h)
-        betas = X[indices, :] \ y[indices]
-        d = zeros(Float64, n)
+        betas = X[indices, :] \ y[indices]    
         XM = X[indices, :]
         for j = 1:n
             if det(XM'XM) > 0
@@ -132,7 +135,7 @@ function hs93basicsubset(
                 d[j] = maximum(y)
             end
         end
-        orderingd = sortperm(abs.(d))
+        orderingd .= sortperm(abs.(d))
         indices = orderingd[1:Int(i)]
     end
     return indices
@@ -200,13 +203,15 @@ function hs93(
     indices = basicsubsetindices
     n, p = size(X)
     s = length(indices)
-    betas = []
-
+    betas = zeros(Float64, p)
+    d = zeros(Float64, n)
+    orderingd = zeros(Int, n)
+    
     while s < n
-        betas = X[indices, :] \ y[indices]
+        betas .= X[indices, :] \ y[indices]
         resids = y[indices] - X[indices,:] * betas
         sigma = sqrt(sum(resids .^ 2.0) / (length(resids) - p))
-        d = zeros(Float64, n)
+        
         XM = X[indices, :]
 
         if det(XM'XM) <= 0
@@ -228,7 +233,7 @@ function hs93(
                 d[j] = (y[j] - sum(X[j, :] .* betas)) / (sigma * sqrt(abs(1.0 + xMMx)))
             end
         end
-        orderingd = sortperm(abs.(d))
+        orderingd .= sortperm(abs.(d))
         tdist = TDist(s - p)
         tcalc = quantile(tdist, alpha / (2 * (s + 1)))
 
