@@ -12,8 +12,8 @@ import ..Basis:
 import ..Diagnostics: mahalanobisSquaredMatrix
 
 
-function enlargesubset(initialsubset, data::DataFrame, dataMatrix::AbstractMatrix, h::Int)
-    n, p = size(dataMatrix)
+function enlargesubset(initialsubset, data::AbstractMatrix, h::Int)
+    n, p = size(data)
 
     basicsubset = copy(initialsubset)
     
@@ -25,7 +25,7 @@ function enlargesubset(initialsubset, data::DataFrame, dataMatrix::AbstractMatri
 
     while length(basicsubset) < h
         meanvector .= applyColumns(mean, data[basicsubset, :])
-        covmatrix .= cov(dataMatrix[basicsubset, :])
+        covmatrix .= cov(data[basicsubset, :])
         md2mat .=
             mahalanobisSquaredMatrix(data, meanvector = meanvector, covmatrix = covmatrix)
         md2 .= diag(md2mat)
@@ -36,9 +36,9 @@ function enlargesubset(initialsubset, data::DataFrame, dataMatrix::AbstractMatri
 end
 
 
-function robcov(data::DataFrame; alpha = 0.01, estimator = :mve)
-    dataMatrix = Matrix(data)
-    n, p = size(dataMatrix)
+function robcov(data::Matrix; alpha = 0.01, estimator = :mve)
+    
+    n, p = size(data)
     chisquared = Chisq(p)
     chisqcrit = quantile(chisquared, 1.0 - alpha)
     c = sqrt(chisqcrit)
@@ -65,8 +65,8 @@ function robcov(data::DataFrame; alpha = 0.01, estimator = :mve)
         goal = Inf
         try
             initialsubset .= sample(indices, k, replace = false)
-            hsubset .= enlargesubset(initialsubset, data, dataMatrix, h)
-            covmatrix .= cov(dataMatrix[hsubset, :])
+            hsubset .= enlargesubset(initialsubset, data, h)
+            covmatrix .= cov(data[hsubset, :])
             if estimator == :mve
                 meanvector .= applyColumns(mean, data[hsubset, :])
                 md2mat .= mahalanobisSquaredMatrix(
@@ -88,8 +88,10 @@ function robcov(data::DataFrame; alpha = 0.01, estimator = :mve)
             besthsubset .= hsubset
         end
     end
+   
+
     meanvector .= applyColumns(mean, data[besthsubset, :])
-    covmatrix .= cov(dataMatrix[besthsubset, :])
+    covmatrix .= cov(data[besthsubset, :])
     md2 .= diag(
         mahalanobisSquaredMatrix(
             data,
@@ -143,11 +145,11 @@ Van Aelst, Stefan, and Peter Rousseeuw. "Minimum volume ellipsoid." Wiley
 Interdisciplinary Reviews: Computational Statistics 1.1 (2009): 71-82.
 """
 function mve(data::DataFrame; alpha = 0.01)
-    robcov(data, alpha = alpha, estimator = :mve)
+    robcov(Matrix(data), alpha = alpha, estimator = :mve)
 end
 
 function mve(data::AbstractMatrix{Float64}; alpha = 0.01)
-    return mve(DataFrame(data), alpha = alpha)
+    return mve(data, alpha = alpha)
 end
 
 
@@ -187,11 +189,11 @@ Rousseeuw, Peter J., and Katrien Van Driessen. "A fast algorithm for the minimum
 determinant estimator." Technometrics 41.3 (1999): 212-223.
 """
 function mcd(data::DataFrame; alpha = 0.01)
-    robcov(data, alpha = alpha, estimator = :mcd)
+    robcov(Matrix(data), alpha = alpha, estimator = :mcd)
 end
 
 function mcd(data::AbstractMatrix{Float64}; alpha = 0.01)
-    return mcd(DataFrame(data), alpha = alpha)
+    return mcd(data, alpha = alpha)
 end
 
 
