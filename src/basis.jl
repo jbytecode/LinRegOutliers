@@ -3,7 +3,7 @@ module Basis
 export RegressionSetting
 export createRegressionSetting
 export @extractRegressionSetting
-export applyColumns
+export applyColumns, applyColumns!
 export find_minimum_nonzero
 
 
@@ -294,6 +294,14 @@ end
 """
 function applyColumns(f::F, data::AbstractMatrix{Float64}) where {F <: Function}
     return [f(col) for col in eachcol(data)]
+end
+
+
+function applyColumns!(target::Vector, f::F, data::AbstractMatrix) where {F <: Function}
+    for i in 1:size(data, 2)
+        target[i] = f(data[:, i])
+    end
+    return target
 end
 
 

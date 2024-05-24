@@ -29,14 +29,17 @@ import .Basis:
 	createRegressionSetting,
 	@extractRegressionSetting,
 	applyColumns,
+	applyColumns!,
 	find_minimum_nonzero,
 	designMatrix,
 	responseVector
+	
 export RegressionSetting
 export createRegressionSetting
 export designMatrix
 export responseVector
 export applyColumns
+export applyColumns!
 export find_minimum_nonzero
 export @extractRegressionSetting
 

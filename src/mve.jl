@@ -8,28 +8,26 @@ import LinearAlgebra: diag, det
 import Distributions: median, cov, mean, quantile, sample, Chisq
 
 import ..Basis:
-    RegressionSetting, @extractRegressionSetting, designMatrix, responseVector, applyColumns
+    RegressionSetting, 
+    @extractRegressionSetting, designMatrix, responseVector, applyColumns, applyColumns!
+
 import ..Diagnostics: mahalanobisSquaredMatrix
 
 
 function enlargesubset(initialsubset, data::AbstractMatrix, h::Int)
-    n, p = size(data)
+    p = size(data, 2)
 
     basicsubset = copy(initialsubset)
     
     meanvector = Array{Float64}(undef, p)
-    covmatrix = Matrix{Float64}(undef, p, p)
-    md2mat = Matrix{Float64}(undef, n, n)
-    md2 = Array{Float64}(undef, n)
-    md2sortedindex = Array{Int}(undef, n)
 
     while length(basicsubset) < h
-        meanvector .= applyColumns(mean, data[basicsubset, :])
-        covmatrix .= cov(data[basicsubset, :])
-        md2mat .=
+        applyColumns!(meanvector, mean, data[basicsubset, :])
+        covmatrix = cov(data[basicsubset, :])
+        md2mat =
             mahalanobisSquaredMatrix(data, meanvector = meanvector, covmatrix = covmatrix)
-        md2 .= diag(md2mat)
-        md2sortedindex .= sortperm(md2)
+        md2 = diag(md2mat)
+        md2sortedindex = sortperm(md2)
         basicsubset = md2sortedindex[1:(length(basicsubset)+1)]
     end
     return basicsubset
@@ -55,21 +53,22 @@ function robcov(data::Matrix; alpha = 0.01, estimator = :mve)
     hsubset = Array{Int}(undef, h)
     besthsubset = Array{Int}(undef, h)
 
-    covmatrix = Matrix{Float64}(undef, p, p)
-    meanvector = Array{Float64}(undef, p)
-    md2mat = Matrix{Float64}(undef, n, n)
 
-    md2 = Array{Float64}(undef, n)
+    meanvector = Array{Float64}(undef, p)
+    fill!(meanvector, 0.0)
+
 
     for iter = 1:maxiter
         goal = Inf
+
+
         try
-            initialsubset .= sample(indices, k, replace = false)
-            hsubset .= enlargesubset(initialsubset, data, h)
-            covmatrix .= cov(data[hsubset, :])
+            initialsubset = sample(indices, k, replace = false)
+            hsubset = enlargesubset(initialsubset, data, h)
+            covmatrix = cov(data[hsubset, :])
             if estimator == :mve
-                meanvector .= applyColumns(mean, data[hsubset, :])
-                md2mat .= mahalanobisSquaredMatrix(
+                applyColumns!(meanvector, mean, data[hsubset, :])
+                md2mat = mahalanobisSquaredMatrix(
                     data,
                     meanvector = meanvector,
                     covmatrix = covmatrix,
@@ -82,17 +81,20 @@ function robcov(data::Matrix; alpha = 0.01, estimator = :mve)
         catch e
             # Possibly singularity
         end
+
+
         if goal < mingoal
             mingoal = goal
-            bestinitialsubset .= initialsubset
-            besthsubset .= hsubset
+            bestinitialsubset = initialsubset
+            besthsubset = hsubset
         end
     end
    
 
-    meanvector .= applyColumns(mean, data[besthsubset, :])
-    covmatrix .= cov(data[besthsubset, :])
-    md2 .= diag(
+
+    applyColumns!(meanvector, mean, data[besthsubset, :])
+    covmatrix = cov(data[besthsubset, :])
+    md2 = diag(
         mahalanobisSquaredMatrix(
             data,
             meanvector = meanvector,
