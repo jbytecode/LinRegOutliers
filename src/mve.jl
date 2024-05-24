@@ -13,15 +13,23 @@ import ..Diagnostics: mahalanobisSquaredMatrix
 
 
 function enlargesubset(initialsubset, data::DataFrame, dataMatrix::AbstractMatrix, h::Int)
-    n, _ = size(dataMatrix)
+    n, p = size(dataMatrix)
+
     basicsubset = copy(initialsubset)
+    
+    meanvector = Array{Float64}(undef, p)
+    covmatrix = Matrix{Float64}(undef, p, p)
+    md2mat = Matrix{Float64}(undef, n, n)
+    md2 = Array{Float64}(undef, n)
+    md2sortedindex = Array{Int}(undef, n)
+
     while length(basicsubset) < h
-        meanvector = applyColumns(mean, data[basicsubset, :])
-        covmatrix = cov(dataMatrix[basicsubset, :])
-        md2mat =
+        meanvector .= applyColumns(mean, data[basicsubset, :])
+        covmatrix .= cov(dataMatrix[basicsubset, :])
+        md2mat .=
             mahalanobisSquaredMatrix(data, meanvector = meanvector, covmatrix = covmatrix)
-        md2 = diag(md2mat)
-        md2sortedindex = sortperm(md2)
+        md2 .= diag(md2mat)
+        md2sortedindex .= sortperm(md2)
         basicsubset = md2sortedindex[1:(length(basicsubset)+1)]
     end
     return basicsubset
@@ -38,20 +46,30 @@ function robcov(data::DataFrame; alpha = 0.01, estimator = :mve)
     indices = collect(1:n)
     k = p + 1
     mingoal = Inf
-    bestinitialsubset = []
-    besthsubset = []
+
     maxiter = minimum([p * 500, 3000])
-    initialsubset = []
-    hsubset = []
+    
+    initialsubset = Array{Int}(undef, k)
+    bestinitialsubset = Array{Int}(undef, k)
+    
+    hsubset = Array{Int}(undef, h)
+    besthsubset = Array{Int}(undef, h)
+
+    covmatrix = Matrix{Float64}(undef, p, p)
+    meanvector = Array{Float64}(undef, p)
+    md2mat = Matrix{Float64}(undef, n, n)
+
+    md2 = Array{Float64}(undef, n)
+
     for iter = 1:maxiter
         goal = Inf
         try
-            initialsubset = sample(indices, k, replace = false)
-            hsubset = enlargesubset(initialsubset, data, dataMatrix, h)
-            covmatrix = cov(dataMatrix[hsubset, :])
+            initialsubset .= sample(indices, k, replace = false)
+            hsubset .= enlargesubset(initialsubset, data, dataMatrix, h)
+            covmatrix .= cov(dataMatrix[hsubset, :])
             if estimator == :mve
-                meanvector = applyColumns(mean, data[hsubset, :])
-                md2mat = mahalanobisSquaredMatrix(
+                meanvector .= applyColumns(mean, data[hsubset, :])
+                md2mat .= mahalanobisSquaredMatrix(
                     data,
                     meanvector = meanvector,
                     covmatrix = covmatrix,
@@ -66,17 +84,17 @@ function robcov(data::DataFrame; alpha = 0.01, estimator = :mve)
         end
         if goal < mingoal
             mingoal = goal
-            bestinitialsubset = initialsubset
-            besthsubset = hsubset
+            bestinitialsubset .= initialsubset
+            besthsubset .= hsubset
         end
     end
-    meanvector = applyColumns(mean, data[besthsubset, :])
-    covariancematrix = cov(dataMatrix[besthsubset, :])
-    md2 = diag(
+    meanvector .= applyColumns(mean, data[besthsubset, :])
+    covmatrix .= cov(dataMatrix[besthsubset, :])
+    md2 .= diag(
         mahalanobisSquaredMatrix(
             data,
             meanvector = meanvector,
-            covmatrix = covariancematrix,
+            covmatrix = covmatrix,
         ),
     )
     outlierset = filter(x -> md2[x] > chisqcrit, 1:n)
@@ -84,7 +102,7 @@ function robcov(data::DataFrame; alpha = 0.01, estimator = :mve)
     result["goal"] = mingoal
     result["best.subset"] = sort(besthsubset)
     result["robust.location"] = meanvector
-    result["robust.covariance"] = covariancematrix
+    result["robust.covariance"] = covmatrix
     result["squared.mahalanobis"] = md2
     result["chisq.crit"] = chisqcrit
     result["alpha"] = alpha
