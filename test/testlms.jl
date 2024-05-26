@@ -1,4 +1,4 @@
-@testset "LMS" begin
+@testset "LMS" verbose = true begin
 
     @testset "LMS - Algorithm - Random data" begin
         # Create simple data
@@ -32,5 +32,15 @@
         @test 20 in outset
         @test 21 in outset
     end
+
+
+    @testset "LMS - Stress test (n=1000, p=10)" begin
+        n = 1000
+        p = 10
+        x = rand(Float64, n, p)
+        y = rand(Float64, n)
+        result = lms(x, y)
+        @test true 
+    end 
 
 end

@@ -1,4 +1,4 @@
-@testset "LTS" begin
+@testset "LTS" verbose = true begin
 
     @testset "LTS - Algorithm - Random data" begin
         # Create simple data
@@ -32,4 +32,21 @@
         @test 21 in outset
     end
 
+    @testset "LTS - Stress test (n = 1000, p = 10)" begin
+        n = 1000
+        p = 10
+        x = rand(Float64, n, p)
+        y = rand(Float64, n)
+        result = lts(x, y)
+        @test true 
+    end 
+
+    @testset "LTS - Stress test (n = 10000, p = 10)" begin
+        n = 10000
+        p = 10
+        x = rand(Float64, n, p)
+        y = rand(Float64, n)
+        result = lts(x, y)
+        @test true 
+    end 
 end

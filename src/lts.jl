@@ -150,17 +150,17 @@ function lts(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; iters=nothi
 
     allindices = collect(1:n)
     bestobjective = Inf
-    besthsubset = zeros(Int, h)
-    subsetindices = zeros(Int, p)
+    besthsubset = Array{Int}(undef, h)
+    subsetindices = Array{Int}(undef, p)
 
     bestobjectiveunchanged = 0
 
     for _ = 1:iters
-        subsetindices .= sample(allindices, p, replace=false)
+        subsetindices = sample(allindices, p, replace=false)
         objective, hsubsetindices = iterateCSteps(X, y, subsetindices, h)
         if objective < bestobjective
             bestobjective = objective
-            besthsubset .= hsubsetindices
+            besthsubset = hsubsetindices
             bestobjectiveunchanged = 0
         else
             bestobjectiveunchanged += 1
