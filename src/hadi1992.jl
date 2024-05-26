@@ -111,48 +111,48 @@ function hadi1992(multivariateData::AbstractMatrix{Float64}; alpha = 0.05)
     ordering_indices_mah1 = sortperm(mah1)
 
     r = p + 1
-    basic_subset_indices = []
-    basic_subset = []
-    sorted_mah1 = []
+    basic_subset_indices = Int[]
+    basic_subset = Int[]
+    sorted_mah1 = Float64[]
 
-    Cb = zeros(Float64, p)
-    Sb = zeros(Float64, p, p)
-    newSb = zeros(Float64, p, p)
+    Cb = Array{Float64}(undef, p)
+    Sb = Matrix{Float64}(undef, p, p)
+    newSb = Matrix{Float64}(undef, p, p)
     
-    msm3 = zeros(Float64, n, n)
-    msm4 = zeros(Float64, n, n)
+    msm3 = Matrix{Float64}(undef, n, n) 
+    msm4 = Matrix{Float64}(undef, n, n) 
 
     while r < n
         cnpr = 1 + (r / (n - p))^2.0
         basic_subset_indices = ordering_indices_mah1[1:r]
         basic_subset = multivariateData[basic_subset_indices, :]
-        Cb .= applyColumns(mean, basic_subset)
-        Sb .= cov(basic_subset)
+        Cb = applyColumns(mean, basic_subset)
+        Sb = cov(basic_subset)
 
         r += 1
         cfactor = cnpr * sqrt(sort(mah1)[h]) / chi_50_quantile
         if det(cfactor * Sb) == 0
-            @info "singular Sb case"
-            newSb .= hadi1992_handle_singularity(cfactor * Sb)
+            # singular Sb case
+            newSb = hadi1992_handle_singularity(cfactor * Sb)
 
-            msm3 .= mahalanobisSquaredMatrix(multivariateData, meanvector = Cb, covmatrix = newSb,)
+            msm3 = mahalanobisSquaredMatrix(multivariateData, meanvector = Cb, covmatrix = newSb,)
 
             if isnothing(msm3)
                 throw(ErrorException("Mahalanobis distances are not calculated"))
             end
             
-            mah1 .= diag(msm3)
+            mah1 = diag(msm3)
             
             ordering_indices_mah1 = sortperm(mah1)
             basic_subset_indices = ordering_indices_mah1[1:r]
         else
-            msm4 .= mahalanobisSquaredMatrix(multivariateData, meanvector = Cb, covmatrix = (cfactor * Sb))
+            msm4 = mahalanobisSquaredMatrix(multivariateData, meanvector = Cb, covmatrix = (cfactor * Sb))
 
             if isnothing(msm4)
                 throw(ErrorException("Mahalanobis distances are not calculated"))
             end
             
-            mah1 .= diag(msm4)
+            mah1 = diag(msm4)
             ordering_indices_mah1 = sortperm(mah1)
             basic_subset_indices = ordering_indices_mah1[1:r]
         end

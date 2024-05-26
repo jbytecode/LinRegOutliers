@@ -86,14 +86,14 @@ function hadi1994(multivariateData::AbstractMatrix{Float64}; alpha = 0.05)
 
     basic_subset_indices = Int[]
     
-    basic_subset = []
+    basic_subset = Int[]
 
-    sorted_mah1 = []
+    sorted_mah1 = Int[]
     
-    Cb = zeros(Float64, p)
-    Sb = zeros(Float64, p, p)
-    msm3 = zeros(Float64, n, n)
-    sorted_mah1 = zeros(Float64, n)
+    Cb = Float64[]
+    Sb = Matrix{Float64}(undef, p, p)
+    msm3 = Matrix{Float64}(undef, p, p)
+    sorted_mah1 = Vector{Float64}(undef, n)
 
     cfactor = 0
     isFullRank = false
@@ -105,8 +105,8 @@ function hadi1994(multivariateData::AbstractMatrix{Float64}; alpha = 0.05)
         while !isFullRank
             basic_subset_indices = ordering_indices_mah1[1:r]
             basic_subset = multivariateData[basic_subset_indices, :]
-            Cb .= applyColumns(mean, basic_subset)
-            Sb .= cov(basic_subset)
+            Cb = applyColumns(mean, basic_subset)
+            Sb = cov(basic_subset)
             cfactor = cnp * sqrt(sort(mah1)[h]) / chi_50_quantile
             r += 1
 
@@ -117,7 +117,7 @@ function hadi1994(multivariateData::AbstractMatrix{Float64}; alpha = 0.05)
             end
         end
 
-        msm3 .= mahalanobisSquaredMatrix(
+        msm3 = mahalanobisSquaredMatrix(
             multivariateData,
             meanvector = Cb,
             covmatrix = (cfactor * Sb),
@@ -132,7 +132,7 @@ function hadi1994(multivariateData::AbstractMatrix{Float64}; alpha = 0.05)
         ordering_indices_mah1 = sortperm(mah1)
         basic_subset_indices = ordering_indices_mah1[1:r]
 
-        sorted_mah1 .= sort(mah1)
+        sorted_mah1 = sort(mah1)
 
         if sorted_mah1[r] >= critical_quantile
             break
