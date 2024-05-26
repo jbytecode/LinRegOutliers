@@ -60,7 +60,10 @@ function hadi1994(multivariateData::AbstractMatrix{Float64}; alpha = 0.05)
     Sm = (1.0 / (n - 1.0)) * (multivariateData .- meds')' * (multivariateData .- meds')
     
     msm1 = mahalanobisSquaredMatrix(multivariateData, meanvector = meds, covmatrix = Sm)
-    @assert !isnothing(msm1)
+
+    if isnothing(msm1)
+            throw(ErrorException("Mahalanobis distances are not calculated"))
+        end
     
     mah0 = diag(msm1)
 
@@ -71,7 +74,11 @@ function hadi1994(multivariateData::AbstractMatrix{Float64}; alpha = 0.05)
     Cv = coordinatwisemedians(starting_data)
     Sv = (1.0 / (h - 1.0)) * (starting_data .- Cv')' * (starting_data .- Cv')
     msm2 = mahalanobisSquaredMatrix(multivariateData, meanvector = Cv, covmatrix = Sv)
-    @assert !isnothing(msm2)
+
+    if isnothing(msm2)
+        throw(ErrorException("Mahalanobis distances are not calculated"))
+    end
+    
     mah1 = diag(msm2)
     ordering_indices_mah1 = sortperm(mah1)
 
@@ -116,7 +123,9 @@ function hadi1994(multivariateData::AbstractMatrix{Float64}; alpha = 0.05)
             covmatrix = (cfactor * Sb),
         )
 
-        @assert !isnothing(msm3)
+        if isnothing(msm3)
+            throw(ErrorException("Mahalanobis distances are not calculated"))
+        end
 
         mah1 = diag(msm3)
 

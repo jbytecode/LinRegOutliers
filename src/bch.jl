@@ -105,7 +105,10 @@ function bch(
     A = ((X .- coordmeds')' * (X .- coordmeds')) / (n - 1.0)
     
     msm = mahalanobisSquaredMatrix(X, meanvector = coordmeds, covmatrix = A)
-    @assert !isnothing(msm)
+    
+    if isnothing(msm)
+        throw(ErrorException("Mahalanobis distances are not calculated"))
+    end
 
     dsquared = diag(msm)
     d = sqrt.(dsquared)
@@ -116,7 +119,11 @@ function bch(
     covmatofh = cov(X[bestindicesofd, :])
     
     msm2 = mahalanobisSquaredMatrix(X, meanvector = colmeansofh, covmatrix = covmatofh)
-    @assert !isnothing(msm2)
+
+
+    if isnothing(msm2)
+            throw(ErrorException("Mahalanobis distances are not calculated"))
+        end
 
     newdsquared = diag(msm2)
 
@@ -150,7 +157,11 @@ function bch(
         covmatofbasicsubset = cov(X[basicsubsetindices, :])
 
         msm4 = mahalanobisSquaredMatrix(X, meanvector = colmeanofbasicsubset, covmatrix = covmatofbasicsubset)
-        @assert !isnothing(msm4)
+
+        if isnothing(msm4)
+            throw(ErrorException("Mahalanobis distances are not calculated"))
+        end
+        
         newdsquared = diag(msm4)
         newd = sqrt.(newdsquared)
         sortednewdsquared = sort(newdsquared)

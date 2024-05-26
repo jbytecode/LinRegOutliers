@@ -78,7 +78,9 @@ function asm2000(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})::Dict
     covmatrix = cov(pairs[hsubset, :])
     mahdist = mahalanobisSquaredBetweenPairs(pairs, covmatrix = covmatrix)
 
-    @assert !isnothing(mahdist)
+    if isnothing(mahdist)
+        throw(ErrorException("Mahalanobis distances are not calculated"))
+    end 
 
     outlierset = Array{Int,1}(undef, 0)
 

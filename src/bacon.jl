@@ -31,7 +31,11 @@ function initial_basic_subset_multivariate_data(
     n, _ = size(X)
     if method == "mahalanobis"
         msm = mahalanobisSquaredMatrix(X)
-        @assert !isnothing(msm)
+        
+        if isnothing(msm)
+            throw(ErrorException("Mahalanobis distances are not calculated"))
+        end
+
         distances = sqrt.(diag(msm))
     elseif method == "median"
         median_vector = applyColumns(median, X)
@@ -113,7 +117,9 @@ function bacon_multivariate_outlier_detection(
 
         msm = mahalanobisSquaredMatrix(X, meanvector = mean_basic_subset, covmatrix = cov_basic_subset)
 
-        @assert !isnothing(msm)
+        if isnothing(msm)
+            throw(ErrorException("Mahalanobis distances are not calculated"))
+        end
 
         distances = sqrt.(diag(msm))
         c_hr = (h - r) / (h + r)

@@ -49,15 +49,24 @@ function dataimage(
 )::Matrix{RGBX{Float64}}
     d = nothing
     if distance == :mahalanobis
+        
         d = mahalanobisSquaredBetweenPairs(dataMatrix)
-        @assert !isnothing(d)
+
+        if isnothing(d)
+            throw(ErrorException("Mahalanobis distances are not calculated"))
+        end
+
     elseif distance == :euclidean
         d = euclideanDistances(dataMatrix)
     else
         @error "Distance function unknown: " distance
         @error "Using mahalanobis instead"
         d = mahalanobisSquaredBetweenPairs(dataMatrix)
-        @assert !isnothing(d)
+
+        if isnothing(d)
+            throw(ErrorException("Mahalanobis distances are not calculated"))
+        end
+        
     end
     colours = 1.0 .- d / maximum(d)
     n, _ = size(d)

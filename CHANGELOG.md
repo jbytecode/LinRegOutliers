@@ -2,10 +2,8 @@
 
 - More explicit return types, drop `Dict` with `Dict{String, Any}` or `Dict{String, Vector}`
 - Add `Julia v.1.10` to GitHub actions
-- Reduce memory allocations in `lts()` and `lms()`
-- Reduce memory allocations in `hadi92()` and `hadi94()`
-- Reduce memory allocations in `hs93()`
-- Reduce memory allocations in `robcov()`
+- Initial attempt to reduce memory allocations in `lts()`, `lms()`, `hadi92()`, `hadi94()`, `hs93()`, `robcov()`
+- Replace `@assert` macro with `throw(ErrorException())` in whole code
 
 # v0.11.3 
 
