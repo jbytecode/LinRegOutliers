@@ -8,7 +8,7 @@ import LinearAlgebra: diag, det
 import Distributions: median, cov, mean, quantile, sample, Chisq
 
 import ..Basis:
-    RegressionSetting, 
+    RegressionSetting,
     @extractRegressionSetting, designMatrix, responseVector, applyColumns, applyColumns!
 
 import ..Diagnostics: mahalanobisSquaredMatrix
@@ -18,14 +18,14 @@ function enlargesubset(initialsubset, data::AbstractMatrix, h::Int)
     p = size(data, 2)
 
     basicsubset = copy(initialsubset)
-    
+
     meanvector = Array{Float64}(undef, p)
 
     while length(basicsubset) < h
         applyColumns!(meanvector, mean, data[basicsubset, :])
         covmatrix = cov(data[basicsubset, :])
         md2mat =
-            mahalanobisSquaredMatrix(data, meanvector = meanvector, covmatrix = covmatrix)
+            mahalanobisSquaredMatrix(data, meanvector=meanvector, covmatrix=covmatrix)
         md2 = diag(md2mat)
         md2sortedindex = sortperm(md2)
         basicsubset = md2sortedindex[1:(length(basicsubset)+1)]
@@ -34,8 +34,8 @@ function enlargesubset(initialsubset, data::AbstractMatrix, h::Int)
 end
 
 
-function robcov(data::Matrix; alpha = 0.01, estimator = :mve)
-    
+function robcov(data::Matrix; alpha=0.01, estimator=:mve)
+
     n, p = size(data)
     chisquared = Chisq(p)
     chisqcrit = quantile(chisquared, 1.0 - alpha)
@@ -46,10 +46,10 @@ function robcov(data::Matrix; alpha = 0.01, estimator = :mve)
     mingoal = Inf
 
     maxiter = minimum([p * 500, 3000])
-    
+
     initialsubset = Array{Int}(undef, k)
     bestinitialsubset = Array{Int}(undef, k)
-    
+
     hsubset = Array{Int}(undef, h)
     besthsubset = Array{Int}(undef, h)
 
@@ -58,29 +58,28 @@ function robcov(data::Matrix; alpha = 0.01, estimator = :mve)
     fill!(meanvector, 0.0)
 
 
-    for iter = 1:maxiter
+    for _ = 1:maxiter
         goal = Inf
 
 
-        try
-            initialsubset = sample(indices, k, replace = false)
-            hsubset = enlargesubset(initialsubset, data, h)
-            covmatrix = cov(data[hsubset, :])
-            if estimator == :mve
-                applyColumns!(meanvector, mean, data[hsubset, :])
-                md2mat = mahalanobisSquaredMatrix(
-                    data,
-                    meanvector = meanvector,
-                    covmatrix = covmatrix,
-                )
+        initialsubset = sample(indices, k, replace=false)
+        hsubset = enlargesubset(initialsubset, data, h)
+        covmatrix = cov(data[hsubset, :])
+        if estimator == :mve
+            applyColumns!(meanvector, mean, data[hsubset, :])
+            md2mat = mahalanobisSquaredMatrix(
+                data,
+                meanvector=meanvector,
+                covmatrix=covmatrix,
+            )
+            if !isnothing(md2mat)
                 DJ = sqrt(sort(diag(md2mat))[h])
                 goal = (DJ / c)^p * det(covmatrix)
-            else
-                goal = det(covmatrix)
             end
-        catch e
-            # Possibly singularity
+        else
+            goal = det(covmatrix)
         end
+
 
 
         if goal < mingoal
@@ -89,7 +88,7 @@ function robcov(data::Matrix; alpha = 0.01, estimator = :mve)
             besthsubset = hsubset
         end
     end
-   
+
 
 
     applyColumns!(meanvector, mean, data[besthsubset, :])
@@ -97,12 +96,12 @@ function robcov(data::Matrix; alpha = 0.01, estimator = :mve)
     md2 = diag(
         mahalanobisSquaredMatrix(
             data,
-            meanvector = meanvector,
-            covmatrix = covmatrix,
+            meanvector=meanvector,
+            covmatrix=covmatrix,
         ),
     )
     outlierset = filter(x -> md2[x] > chisqcrit, 1:n)
-    result = Dict{String, Any}()
+    result = Dict{String,Any}()
     result["goal"] = mingoal
     result["best.subset"] = sort(besthsubset)
     result["robust.location"] = meanvector
@@ -146,12 +145,12 @@ are directly comparible with quantiles of a ChiSquare Distribution with `p` degr
 Van Aelst, Stefan, and Peter Rousseeuw. "Minimum volume ellipsoid." Wiley 
 Interdisciplinary Reviews: Computational Statistics 1.1 (2009): 71-82.
 """
-function mve(data::DataFrame; alpha = 0.01)
-    robcov(Matrix(data), alpha = alpha, estimator = :mve)
+function mve(data::DataFrame; alpha=0.01)
+    robcov(Matrix(data), alpha=alpha, estimator=:mve)
 end
 
-function mve(data::AbstractMatrix{Float64}; alpha = 0.01)
-    robcov(data, alpha = alpha, estimator = :mve)
+function mve(data::AbstractMatrix{Float64}; alpha=0.01)
+    robcov(data, alpha=alpha, estimator=:mve)
 end
 
 
@@ -190,12 +189,12 @@ However, details about number of iterations are slightly different.
 Rousseeuw, Peter J., and Katrien Van Driessen. "A fast algorithm for the minimum covariance 
 determinant estimator." Technometrics 41.3 (1999): 212-223.
 """
-function mcd(data::DataFrame; alpha = 0.01)
-    robcov(Matrix(data), alpha = alpha, estimator = :mcd)
+function mcd(data::DataFrame; alpha=0.01)
+    robcov(Matrix(data), alpha=alpha, estimator=:mcd)
 end
 
-function mcd(data::AbstractMatrix{Float64}; alpha = 0.01)
-    robcov(data, alpha = alpha, estimator = :mcd)
+function mcd(data::AbstractMatrix{Float64}; alpha=0.01)
+    robcov(data, alpha=alpha, estimator=:mcd)
 end
 
 

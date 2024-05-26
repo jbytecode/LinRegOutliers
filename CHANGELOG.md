@@ -6,7 +6,7 @@
 - Replace `@assert` macro with `throw(ErrorException())` in whole code
 - `depestregression` returns `Dict` instead of a `vector` of betas like other regression methods.
 - `summary()` throws `ErrorException` rather than simply prompting with `@error` macro.
-
+- `robcov` doesn't use try and catch any more.
 
 
 # v0.11.3 
