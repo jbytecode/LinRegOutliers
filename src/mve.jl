@@ -26,9 +26,13 @@ function enlargesubset(initialsubset, data::AbstractMatrix, h::Int)
         covmatrix = cov(data[basicsubset, :])
         md2mat =
             mahalanobisSquaredMatrix(data, meanvector=meanvector, covmatrix=covmatrix)
-        md2 = diag(md2mat)
-        md2sortedindex = sortperm(md2)
-        basicsubset = md2sortedindex[1:(length(basicsubset)+1)]
+        if !isnothing(md2mat)
+            md2 = diag(md2mat)
+            md2sortedindex = sortperm(md2)
+            basicsubset = md2sortedindex[1:(length(basicsubset)+1)]
+        else
+            basicsubset = 1:(length(basicsubset)+1)
+        end 
     end
     return basicsubset
 end
