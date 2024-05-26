@@ -100,6 +100,11 @@ function robcov(data::Matrix; alpha=0.01, estimator=:mve)
             covmatrix=covmatrix,
         ),
     )
+
+    if isnothing(md2)
+        throw(ErrorException("Error in Mahalanobis distance calculation."))
+    end
+
     outlierset = filter(x -> md2[x] > chisqcrit, 1:n)
     result = Dict{String,Any}()
     result["goal"] = mingoal
