@@ -39,7 +39,7 @@ function deepestregression(setting::RegressionSetting; maxit::Int = 10000)
 	return deepestregression(X, y, maxit = maxit)
 end
 
-function deepestregression(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; maxit::Int = 10000)::AbstractVector{Float64}
+function deepestregression(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; maxit::Int = 10000)::Dict
 	drdata = hcat(X, y)
 	n, p = size(drdata)
 	n = Int32(n)
@@ -59,7 +59,8 @@ function deepestregression(X::AbstractMatrix{Float64}, y::AbstractVector{Float64
 			Ref{Cint},            # MDEPAPPR
 		), drdata, n, p, betas, maxit, iter, MDEPAPPR)
 
-	return vcat(betas[end], betas[1:(end-1)])
+	betas = vcat(betas[end], betas[1:(end-1)])
+	return Dict("betas" => betas)
 end
 
 

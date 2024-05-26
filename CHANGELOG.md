@@ -4,6 +4,8 @@
 - Add `Julia v.1.10` to GitHub actions
 - Initial attempt to reduce memory allocations in `lts()`, `lms()`, `hadi92()`, `hadi94()`, `hs93()`, `robcov()`
 - Replace `@assert` macro with `throw(ErrorException())` in whole code
+- `depestregression` returns `Dict` instead of a `vector` of betas like other regression methods.
+
 
 # v0.11.3 
 
