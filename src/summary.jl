@@ -118,8 +118,7 @@ function detectOutliers(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; 
                 result = Int[]
             end
         else
-            @error "Method not found " method
-            result = Int[]
+            throw(ErrorException("Method not found: $method"))
         end
         outlier_matrix[:, method] = makeColorColumn(result, n)
     end

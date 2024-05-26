@@ -5,6 +5,8 @@
 - Initial attempt to reduce memory allocations in `lts()`, `lms()`, `hadi92()`, `hadi94()`, `hs93()`, `robcov()`
 - Replace `@assert` macro with `throw(ErrorException())` in whole code
 - `depestregression` returns `Dict` instead of a `vector` of betas like other regression methods.
+- `summary()` throws `ErrorException` rather than simply prompting with `@error` macro.
+
 
 
 # v0.11.3 
