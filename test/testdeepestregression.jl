@@ -15,9 +15,11 @@ import LinRegOutliers: DataSets
 
         result = deepestregression(X, y)
 
-        @test isapprox(result[1], 15, atol = eps)
-        @test isapprox(result[2], 10, atol = eps)
-        @test isapprox(result[3], 5, atol = eps)
+        betas = result["betas"]
+
+        @test isapprox(betas[1], 15, atol = eps)
+        @test isapprox(betas[2], 10, atol = eps)
+        @test isapprox(betas[3], 5, atol = eps)
     end 
 
     @testset "Stackloss Data Example" begin 
@@ -30,10 +32,12 @@ import LinRegOutliers: DataSets
         
         result = deepestregression(setting)
 
-        @test isapprox(result[1], -35.37610619, atol = eps)
-        @test isapprox(result[2], 0.82522124, atol = eps)
-        @test isapprox(result[3], 0.44247788, atol = eps)
-        @test isapprox(result[4], -0.07964602, atol = eps)
+        betas = result["betas"]
+
+        @test isapprox(betas[1], -35.37610619, atol = eps)
+        @test isapprox(betas[2], 0.82522124, atol = eps)
+        @test isapprox(betas[3], 0.44247788, atol = eps)
+        @test isapprox(betas[4], -0.07964602, atol = eps)
 
     end 
 end 
