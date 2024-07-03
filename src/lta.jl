@@ -85,15 +85,14 @@ function lta(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; exact = fal
         psubsets = collect(combinations(1:n, p))
     else
         iters = p * 3000
-        psubsets = [sample(1:n, p, replace = false) for i = 1:iters]
+        psubsets = [sample(1:n, p, replace = false) for _ = 1:iters]
     end
 
     function lta_cost(subsetindices::Array{Int,1})::Tuple{Float64,Vector{Float64}}
         try
             betas = X[subsetindices, :] \ y[subsetindices]
-            res_abs = abs.(y .- X * betas)
-            ordered_res = sort(res_abs)
-            cost = sum(ordered_res[1:h])
+            sorted_res_abs = sort!(abs.(y .- X * betas))
+            cost = sum(sorted_res_abs[1:h])
             return (cost, betas)
         catch
             return (Inf64, [])

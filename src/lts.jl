@@ -45,15 +45,17 @@ function iterateCSteps(
     subsetindices::Array{Int,1},
     h::Int; eps::Float64 = 0.01, maxiter::Int = 10000
 )
+    n = length(y)
     oldobjective::Float64 = Inf64
     objective::Float64 = Inf64
     iter::Int = 0
+    sortedresindices = Array{Int}(undef, n)
     while iter < maxiter
         tempols = ols(X[subsetindices, :], y[subsetindices])
         res = y - X * coef(tempols)
-        sortedresindices = sortperm(abs.(res))
+        sortperm!(sortedresindices, abs.(res))
         subsetindices = sortedresindices[1:h]
-        objective = sum(sort(res .^ 2.0)[1:h])
+        objective = sum(sort!(res .^ 2.0)[1:h])
         if isapprox(oldobjective, objective, atol=eps)
             break
         end
