@@ -15,11 +15,14 @@ import ..Diagnostics: mahalanobisSquaredMatrix
 
 
 function enlargesubset(initialsubset, data::AbstractMatrix, h::Int)
-    p = size(data, 2)
+    
+    n, p = size(data)
 
     basicsubset = copy(initialsubset)
 
     meanvector = Array{Float64}(undef, p)
+
+    md2sortedindex = Array{Int}(undef, n)
 
     while length(basicsubset) < h
         applyColumns!(meanvector, mean, data[basicsubset, :])
@@ -27,8 +30,9 @@ function enlargesubset(initialsubset, data::AbstractMatrix, h::Int)
         md2mat =
             mahalanobisSquaredMatrix(data, meanvector=meanvector, covmatrix=covmatrix)
         if !isnothing(md2mat)
-            md2 = diag(md2mat)
-            md2sortedindex = sortperm(md2)
+            #md2 = diag(md2mat)
+            #md2sortedindex = sortperm(md2)
+            sortperm!(md2sortedindex, diag(md2mat))
             basicsubset = md2sortedindex[1:(length(basicsubset)+1)]
         else
             basicsubset = 1:(length(basicsubset)+1)

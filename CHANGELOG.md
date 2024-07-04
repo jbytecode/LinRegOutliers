@@ -7,7 +7,7 @@
 - `depestregression` returns `Dict` instead of a `vector` of betas like other regression methods.
 - `summary()` throws `ErrorException` rather than simply prompting with `@error` macro.
 - `robcov` doesn't use try and catch any more.
-
+- Replace `sortperm` with `sortperm!` in mve.
 
 # v0.11.3 
 
