@@ -1,4 +1,7 @@
-# v0.11.4 (Upcoming Release)
+# v0.11.5 (Upcoming Release)
+
+
+# v0.11.4 
 
 - More explicit return types, drop `Dict` with `Dict{String, Any}` or `Dict{String, Vector}`
 - Add `Julia v.1.10` to GitHub actions
@@ -8,6 +11,7 @@
 - `summary()` throws `ErrorException` rather than simply prompting with `@error` macro.
 - `robcov` doesn't use try and catch any more.
 - Replace `sortperm` with `sortperm!` in mve.
+- Set number of iterations to minimum([5 * p, 3000]) of LTS as in the R implementation. This reduces the time required 3x.
 
 # v0.11.3 
 
