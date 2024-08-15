@@ -147,7 +147,7 @@ function lts(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; iters=nothi
     h = Int(floor((n + p + 1.0) / 2.0))
 
     if isnothing(iters)
-        iters = minimum([500 * p, 3000])
+        iters = minimum([5 * p, 3000])
     end
 
     allindices = collect(1:n)
