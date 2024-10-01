@@ -212,6 +212,10 @@ import .TheilSen: theilsen
 include("deepestregression.jl")
 import .DeepestRegression: deepestregression
 
+# Robust Hat matrix based regression 
+include("robhatreg.jl")
+import .RobustHatRegression: robhatreg
+
 # All-in-one
 include("summary.jl")
 import .Summary: detectOutliers
@@ -275,10 +279,11 @@ export bacon
 export cm97
 export theilsen
 export deepestregression
+export robhatreg
 
 
 # Snoop-Precompile 
-include("precompile/precompile.jl")
+# include("precompile/precompile.jl")
 
 
 end # module
