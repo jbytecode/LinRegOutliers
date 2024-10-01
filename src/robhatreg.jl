@@ -1,4 +1,4 @@
-module RobustHatRegression 
+module RobustHatRegression
 
 
 export robhatreg
@@ -7,31 +7,31 @@ import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, resp
 import ..OrdinaryLeastSquares: ols, residuals, coef
 import ..LTS: iterateCSteps
 
-import Distributions: quantile 
+import Distributions: quantile
 import LinearAlgebra: inv, diag
 
 
-function trimean(u::AbstractVector{T})::Float64 where T <: Real
+function trimean(u::AbstractVector{T})::Float64 where {T<:Real}
     return (quantile(u, 0.25) + 2.0 * quantile(u, 0.50) + quantile(u, 0.75)) / 4.0
 end
 
-function m(v::Vector, u::Vector)::Float64
+function m(v::AbstractVector{T}, u::AbstractVector{T})::Float64 where {T<:Real}
     return trimean(u .* v) * length(u)
 end
 
-function m(mat::AbstractMatrix, u::AbstractVector)::AbstractMatrix
+function m(mat::AbstractMatrix{T}, u::AbstractVector{T})::AbstractMatrix where {T<:Real}
     L = length(u)
     y = zeros(Float64, L, 1)
     for i in 1:L
         y[i, 1] = u[i]
     end
-    result =  m(mat, y)
+    result = m(mat, y)
     return result
 end
 
-function m(m1::AbstractMatrix, m2::AbstractMatrix)
+function m(m1::AbstractMatrix{T}, m2::AbstractMatrix{T})::AbstractMatrix where {T<:Real}
     n1, _ = size(m1)
-    _ , p2 = size(m2)
+    _, p2 = size(m2)
     newmat = zeros(Float64, n1, p2)
     for i in 1:n1
         for j in 1:p2
@@ -41,7 +41,7 @@ function m(m1::AbstractMatrix, m2::AbstractMatrix)
     return newmat
 end
 
-function hatrob(x::AbstractMatrix)
+function hatrob(x::AbstractMatrix{T}) where {T<:Real}
     return x * inv(m(x', x)) * x'
 end
 
@@ -64,7 +64,7 @@ Perform robust regression using the robust hat matrix method.
 Satman, Mehmet Hakan, A robust initial basic subset selection 
 method for outlier detection algorithms in linear regression, In Press
 """
-function robhatreg(setting::RegressionSetting)
+function robhatreg(setting::RegressionSetting)::Dict
     X, y = @extractRegressionSetting setting
     return robhatreg(X, y)
 end
@@ -90,9 +90,9 @@ Perform robust regression using the robust hat matrix method.
 Satman, Mehmet Hakan, A robust initial basic subset selection 
 method for outlier detection algorithms in linear regression, In Press
 """
-function robhatreg(X, y)
+function robhatreg(X::AbstractMatrix{T}, y::AbstractVector{T})::Dict where {T<:Real}
     n, p = size(X)
-    h = Int(ceil((n + p + 1)/2))
+    h = Int(ceil((n + p + 1) / 2))
     myhat = hatrob(X)
     diagonals = diag(myhat)
     prms = sortperm(diagonals)
