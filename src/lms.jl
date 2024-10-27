@@ -79,7 +79,7 @@ function lms(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; iters = not
         try
             k = rand(kindices)
             sampledindices = sample(indices, k, replace = false)
-            betas = X[sampledindices, :] \ y[sampledindices]
+            betas = view(X, sampledindices, :) \ view(y, sampledindices)
             res = sort!((y .- X * betas) .^ 2.0)
             m2 = res[h]
             if m2 < bestobjective

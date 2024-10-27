@@ -51,11 +51,11 @@ function iterateCSteps(
     iter::Int = 0
     sortedresindices = Array{Int}(undef, n)
     while iter < maxiter
-        tempols = ols(X[subsetindices, :], y[subsetindices])
+        tempols = ols(view(X, subsetindices, :), view(y, subsetindices))
         res = y - X * coef(tempols)
         sortperm!(sortedresindices, abs.(res))
-        subsetindices = sortedresindices[1:h]
-        objective = sum(sort!(res .^ 2.0)[1:h])
+        subsetindices = view(sortedresindices, 1:h)
+        objective = sum(view(sort!(res .^ 2.0), 1:h))
         if isapprox(oldobjective, objective, atol=eps)
             break
         end
@@ -172,7 +172,7 @@ function lts(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; iters=nothi
         end
     end
 
-    ltsbetas = X[besthsubset, :] \ y[besthsubset]
+    ltsbetas = view(X, besthsubset, :) \ view(y, besthsubset)
     ltsres = y - X * ltsbetas
     ltsS = sqrt(sum((ltsres .^ 2.0)[1:h]) / (h - p))
     ltsresmean = mean(ltsres[besthsubset])

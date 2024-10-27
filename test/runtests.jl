@@ -6,9 +6,9 @@ using LinearAlgebra
 using LinRegOutliers
 import Plots: RGBX
 
-include("testdiagnostics.jl")
 include("testbasis.jl")
 include("testols.jl")
+include("testdiagnostics.jl")
 include("tesths93.jl")
 include("testks89.jl")
 include("testsmr98.jl")

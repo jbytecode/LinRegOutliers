@@ -1,6 +1,7 @@
 # v0.11.5 (Upcoming Release)
 
 - Initial implementation of the robust hat matrix regression estimator
+- Introduce `view` in LTS and LMS.
 
 # v0.11.4 
 
