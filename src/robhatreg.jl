@@ -25,13 +25,12 @@ function m(mat::AbstractMatrix{T}, u::AbstractVector{T})::AbstractMatrix where {
     for i in 1:L
         y[i, 1] = u[i]
     end
-    result = m(mat, y)
-    return result
+    return m(mat, y)
 end
 
 function m(m1::AbstractMatrix{T}, m2::AbstractMatrix{T})::AbstractMatrix where {T<:Real}
-    n1, _ = size(m1)
-    _, p2 = size(m2)
+    n1 = size(m1, 1)
+    p2 = size(m2, 2)
     newmat = zeros(Float64, n1, p2)
     for i in 1:n1
         for j in 1:p2
