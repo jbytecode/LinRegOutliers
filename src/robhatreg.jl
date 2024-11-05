@@ -56,7 +56,7 @@ Perform robust regression using the robust hat matrix method.
 # Returns
 
 - A dictionary containing the following
-    - `betas::AbstractVector`: The estimated coefficients.
+- `betas::AbstractVector`: The estimated coefficients.
 
 # References
 
@@ -82,7 +82,7 @@ Perform robust regression using the robust hat matrix method.
 # Returns
 
 - A dictionary containing the following
-    - `betas::AbstractVector`: The estimated coefficients.
+- `betas::AbstractVector`: The estimated coefficients.
 
 # References
 
