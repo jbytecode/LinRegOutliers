@@ -1,4 +1,7 @@
-# v0.11.5 (Upcoming Release)
+# v0.11.6 (Upcoming Release)
+
+
+# v0.11.5
 
 - Initial implementation of the robust hat matrix regression estimator
 - Add more test to robust hat matrix regression estimator
