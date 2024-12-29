@@ -3,6 +3,7 @@
 A Julia package for outlier detection in linear regression.
 
 ## Implemented Methods
+
 - Ordinary Least Squares and Weighted Least Squares regression 
 - Regression diagnostics (DFBETA, DFFIT, CovRatio, Cook's Distance, Mahalanobis, Hadi's measure, etc.)
 - Hadi & Simonoff (1993)
@@ -32,7 +33,10 @@ A Julia package for outlier detection in linear regression.
 - Hadi (1994) Algorithm
 - Chatterjee & Mächler (1997)
 - Theil-Sen estimator for multiple regression
+- Deepest Regression Estimator
+- Robust Hat Matrix based Initial Subset Regressor
 - Summary
+
 
 [Algorithms](./algorithms.md)
 

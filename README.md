@@ -9,6 +9,7 @@ A Julia package for outlier detection in linear regression.
 ![](https://raw.githubusercontent.com/jbytecode/LinRegOutliers/master/docs/src/assets/logo.png)
 
 ## Implemented Methods
+
 - Ordinary Least Squares and Weighted Least Squares regression 
 - Regression diagnostics (DFBETA, DFFIT, CovRatio, Cook's Distance, Mahalanobis, Hadi's measure, etc.)
 - Hadi & Simonoff (1993)

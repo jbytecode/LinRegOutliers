@@ -140,6 +140,11 @@ LinRegOutliers.theilsen
 LinRegOutliers.deepestregression
 ```
 
+## Robust Hat Matrix based Initial Subset Regressor
+```@docs
+LinRegOutliers.robhatreg
+```
+
 
 
 
