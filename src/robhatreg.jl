@@ -60,8 +60,10 @@ Perform robust regression using the robust hat matrix method.
 
 # References
 
-Satman, Mehmet Hakan, A robust initial basic subset selection 
-method for outlier detection algorithms in linear regression, In Press
+Satman, Mehmet Hakan. "A Robust Initial Basic Subset Selection Method for 
+Outlier Detection Algorithms in Linear Regression." 
+Journal of Statistics and Applied Sciences 10 (2024): 76-85.
+https://doi.org/10.52693/jsas.1512794
 """
 function robhatreg(setting::RegressionSetting)::Dict
     X, y = @extractRegressionSetting setting
@@ -86,8 +88,10 @@ Perform robust regression using the robust hat matrix method.
 
 # References
 
-Satman, Mehmet Hakan, A robust initial basic subset selection 
-method for outlier detection algorithms in linear regression, In Press
+Satman, Mehmet Hakan. "A Robust Initial Basic Subset Selection Method for 
+Outlier Detection Algorithms in Linear Regression." 
+Journal of Statistics and Applied Sciences 10 (2024): 76-85.
+https://doi.org/10.52693/jsas.1512794
 """
 function robhatreg(X::AbstractMatrix{T}, y::AbstractVector{T})::Dict where {T<:Real}
     n, p = size(X)

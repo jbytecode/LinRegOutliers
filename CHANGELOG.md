@@ -1,5 +1,7 @@
 # v0.11.6 (Upcoming Release)
 
+- Update citation of `robhatreg` a.k.a Robust Hat Matrix based Regression Estimator
+
 
 # v0.11.5
 

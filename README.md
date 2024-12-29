@@ -39,6 +39,7 @@ A Julia package for outlier detection in linear regression.
 - Chatterjee & Mächler (1997)
 - Theil-Sen estimator for multiple regression
 - Deepest Regression Estimator
+- Robust Hat Matrix based Initial Subset Regressor
 - Summary
 
 
