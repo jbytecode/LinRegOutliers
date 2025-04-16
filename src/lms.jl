@@ -68,7 +68,7 @@ function lms(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; iters = not
         iters = minimum([500 * p, 3000])
     end
     bestobjective = Inf
-    bestparamaters = Array{Float64}(undef, p)
+    bestparameters = Array{Float64}(undef, p)
     bestres = Array{Float64}(undef, n)
     indices = collect(1:n)
     kindices = collect(p:n)
@@ -83,7 +83,7 @@ function lms(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; iters = not
             res = sort!((y .- X * betas) .^ 2.0)
             m2 = res[h]
             if m2 < bestobjective
-                bestparamaters = betas
+                bestparameters = betas
                 bestobjective = m2
                 bestres = y .- X * betas
             end
@@ -94,7 +94,7 @@ function lms(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; iters = not
     s = 1.4826 * sqrt((1.0 + (5.0 / (n - p))) * bestobjective)
     standardizedres = bestres / s
     d = Dict{String, Any}()
-    d["betas"] = bestparamaters
+    d["betas"] = bestparameters
     d["objective"] = bestobjective
     d["S"] = s
     d["stdres"] = standardizedres

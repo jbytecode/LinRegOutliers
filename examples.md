@@ -19,7 +19,7 @@ where *β₀* and *β₁* are unknown intercept and slope parameters. In `R` and
 @formula(y ~ x)
 ```
 
-where ```~``` operator seperates the dependent and independent variables. When the model includes more than one regressors, the model can similarly be expressed as
+where ```~``` operator separates the dependent and independent variables. When the model includes more than one regressors, the model can similarly be expressed as
 
 ```julia
 @formula(y ~ x1 + x2 + x3)
@@ -119,7 +119,7 @@ defines color using the Euclidean distance, whereas
 
 uses Mahalanobis distances for determining color values. The default distance metric is Euclidean distance. 
 
-In the example below, the distances between observations are calculated and drawn using corresponding colors. Since the method is for multivariate data, only the desing matrix is used. In other terms, the response vector is omitted. 
+In the example below, the distances between observations are calculated and drawn using corresponding colors. Since the method is for multivariate data, only the design matrix is used. In other terms, the response vector is omitted. 
 
 ```julia
 julia> # Matrix of independent variables of Hawkins & Bradu & Kass data

@@ -45,7 +45,7 @@ Dict{Any,Any} with 3 entries:
 ```
 
 # Reference
-Hadi, Ali S. "A modification of a method for the dedection of outliers in multivariate samples"
+Hadi, Ali S. "A modification of a method for the detection of outliers in multivariate samples"
 Journal of the Royal Statistical Society: Series B (Methodological) 56.2 (1994): 393-396.
 """
 function hadi1994(multivariateData::AbstractMatrix{Float64}; alpha = 0.05)

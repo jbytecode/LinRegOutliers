@@ -1,7 +1,7 @@
 # v0.11.6 (Upcoming Release)
 
 - Update citation of `robhatreg` a.k.a Robust Hat Matrix based Regression Estimator
-
+- Fix typos in code, code comments, and documentation
 
 # v0.11.5
 
@@ -107,7 +107,7 @@
 # v0.9.0
 
 - Add exact argument for LAD. If exact is true then the linear programming based exact solution is found. Otherwise, a GA based search is performed to yield approximate solutions. 
-- Remove dependency of Plots.jl. If Plots.jl is installed and loaded manually, the functionality that uses Plot is autmatically loaded by Requires.jl. Affected functions are `dataimage`, `mveltsplot`, and `bchplot`.
+- Remove dependency of Plots.jl. If Plots.jl is installed and loaded manually, the functionality that uses Plot is automatically loaded by Requires.jl. Affected functions are `dataimage`, `mveltsplot`, and `bchplot`.
 
 
 # v0.8.19

@@ -16,7 +16,7 @@ Perform a concentration step for a given subset of a regression setting.
 
 # Arguments
 - `setting::RegressionSetting`: RegressionSetting object with a formula and dataset.
-- `subsetindices::Array{Int, 1}`: Indicies of observations in the initial subset.
+- `subsetindices::Array{Int, 1}`: Indices of observations in the initial subset.
 - `h::Int`: A constant at least half of the number of observations.
 - `eps::Float64`: A small number, default is 0.01. If difference of last two objectives is less than eps, function terminates.
 - `maxiter::Int`: Maximum number of iteration. Default is 10000.

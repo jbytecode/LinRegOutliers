@@ -11,7 +11,7 @@ using mrfDepth_jll: mrfDepth_jll
 """
 	deepestregression(setting; maxit = 1000)
 
-Estimate Deepest Regression paramaters.
+Estimate Deepest Regression parameters.
 
 
 # Arguments

@@ -1,6 +1,6 @@
 @testset "Summary" begin
 
-    @testset "Withour errors" begin
+    @testset "Without errors" begin
         smiley = " 😔 "
         methods = [
             "hs93",
@@ -37,7 +37,7 @@
 
 
 
-    @testset "Withour errors" begin
+    @testset "Without errors" begin
         
         methods = [
             "unknown"

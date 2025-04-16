@@ -52,7 +52,7 @@ end
 
     ndsranks(data)
 
-Sort multidimensional data usin non-dominated sorting algorithm.
+Sort multidimensional data using non-dominated sorting algorithm.
 
 # Arguments
 - `data::DataFrame`: DataFrame of variables.
@@ -77,7 +77,7 @@ end
 
     ndsranks(data)
 
-Sort multidimensional data usin non-dominated sorting algorithm.
+Sort multidimensional data using non-dominated sorting algorithm.
 
 # Arguments
 - `data::AbstractMatrix`: n x k matrix of observations where n is number of observations and k is number of variables.

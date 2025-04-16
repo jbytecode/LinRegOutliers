@@ -121,7 +121,7 @@ end
 
     designMatrix(setting)
 
-    Return matrix of independent variables including the variable (ones) of the constanst term for a given regression setting.
+    Return matrix of independent variables including the variable (ones) of the constants term for a given regression setting.
 
 # Arguments
 - `setting::RegressionSetting`: A regression setting object.

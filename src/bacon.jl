@@ -55,7 +55,7 @@ It also guarantees that at least m indices are returned and that the selected in
 # Arguments
  - `X`: The multivariate matrix where each row is a data point.
  - `m`: The minimum number of points to include in the subset indices.
- - `distances`: The distances vector used for selecting minumum distance indices.
+ - `distances`: The distances vector used for selecting minimum distance indices.
 """
 function select_subset(X::AbstractMatrix{Float64}, m::Int, distances::Array{Float64})
     rank_x = rank(X)
@@ -242,7 +242,7 @@ Run the BACON algorithm to detect outliers on regression data.
  - `alpha`: The quantile used for cutoff
 
 # Description 
-BACON (Blocked Adaptive Computationally efficient Outlier Nominators) algoritm, defined in the citation below,
+BACON (Blocked Adaptive Computationally efficient Outlier Nominators) algorithm, defined in the citation below,
 has many versions, e.g BACON for multivariate data, BACON for regression etc. Since the design matrix of a
 regression model is multivariate data, BACON for multivariate data is performed in early stages of the algorithm.
 After selecting a clean subset of observations, then a forward search is applied. Observations with high

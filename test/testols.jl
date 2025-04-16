@@ -2,7 +2,7 @@
 
     @testset "Ordinary Least Squares" begin
         tol = 0.0001
-        #  The model is exatly y = 5 + 5x
+        #  The model is exactly y = 5 + 5x
         var1 = Float64[1, 2, 3, 4, 5]
         X = hcat(ones(5), var1)
         betas = [5.0, 5.0]
@@ -27,7 +27,7 @@
     @testset "Weighted Least Squares" begin
         tol = 0.0001
         n = 7
-        #  The model is exatly y = 5 + 5x
+        #  The model is exactly y = 5 + 5x
         var1 = Float64[1, 2, 3, 4, 5, 6, 7]
         X = hcat(ones(n), var1)
         betas = [5.0, 5.0]

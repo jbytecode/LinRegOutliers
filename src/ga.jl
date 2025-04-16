@@ -152,12 +152,12 @@ function ga(
     maxs::AbstractVector{Float64},
     pcross::Float64,
     pmutate::Float64,
-    elitisim::Int,
+    elitism::Int,
     iterations::Int,
 )::Array{RealChromosome,1}
     pop = createPopulation(popsize, chsize, mins, maxs)
     for _ = 1:iterations
-        pop = Generation(pop, fcost, elitisim, pcross, pmutate)
+        pop = Generation(pop, fcost, elitism, pcross, pmutate)
     end
     return pop
 end
