@@ -2,6 +2,7 @@
 
 - Update citation of `robhatreg` a.k.a Robust Hat Matrix based Regression Estimator
 - Fix typos in code, code comments, and documentation
+- Replace one dimensional `Array{` definitions with `Vector{`
 
 # v0.11.5
 

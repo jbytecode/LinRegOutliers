@@ -56,8 +56,8 @@ function cm97(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; maxiter::I
     pbar::Float64 = p / n
     hat = hatmatrix(X)
 
-    w_is = Array{Float64}(undef, n)
-    betas = Array{Float64}(undef, p)
+    w_is = Vector{Float64}(undef, n)
+    betas = Vector{Float64}(undef, p)
 
     converged::Bool = false
     iter::Int = 0

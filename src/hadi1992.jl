@@ -115,7 +115,7 @@ function hadi1992(multivariateData::AbstractMatrix{Float64}; alpha = 0.05)
     basic_subset = Int[]
     sorted_mah1 = Float64[]
 
-    Cb = Array{Float64}(undef, p)
+    Cb = Vector{Float64}(undef, p)
     Sb = Matrix{Float64}(undef, p, p)
     newSb = Matrix{Float64}(undef, p, p)
     

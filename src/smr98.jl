@@ -10,7 +10,7 @@ import ..Basis:
 import Distributions: mean, std
 import ..OrdinaryLeastSquares: ols, residuals, predict, coef
 
-function distances(resids::AbstractVector{Float64}, fitteds::Array{Float64})::AbstractMatrix{Float64}
+function distances(resids::AbstractVector{Float64}, fitteds::Vector{Float64})::AbstractMatrix{Float64}
     n = length(resids)
     d = zeros(Float64, n, n)
     for i = 1:n

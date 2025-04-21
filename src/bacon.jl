@@ -57,7 +57,7 @@ It also guarantees that at least m indices are returned and that the selected in
  - `m`: The minimum number of points to include in the subset indices.
  - `distances`: The distances vector used for selecting minimum distance indices.
 """
-function select_subset(X::AbstractMatrix{Float64}, m::Int, distances::Array{Float64})
+function select_subset(X::AbstractMatrix{Float64}, m::Int, distances::Vector{Float64})
     rank_x = rank(X)
     sorted_distances = sortperm(distances)
     subset = sorted_distances[1:m]
@@ -152,7 +152,7 @@ This function computes the t distance for each point and returns the distance ve
  - `y`: The output vector
  - `subset`: The vector which denotes the points inside the subset, used to scale the residuals accordingly.
 """
-function compute_t_distance(X::AbstractMatrix{Float64}, y::Array{Float64}, subset::Array{Int64})
+function compute_t_distance(X::AbstractMatrix{Float64}, y::Vector{Float64}, subset::Vector{Int64})
     
     n, p = size(X)
 
@@ -194,7 +194,7 @@ This function computes the initial subset having at least m elements which are l
 """
 function bacon_regression_initial_subset(
     X::AbstractMatrix{Float64},
-    y::Array{Float64},
+    y::Vector{Float64},
     m::Int;
     method::String = "mahalanobis",
     alpha = 0.025,
@@ -266,7 +266,7 @@ Computational statistics & data analysis 34.3 (2000): 279-298.
 """
 function bacon(
     X::AbstractMatrix{Float64},
-    y::Array{Float64};
+    y::Vector{Float64};
     m::Int,
     method::String = "mahalanobis",
     alpha = 0.025,

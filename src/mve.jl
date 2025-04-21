@@ -20,9 +20,9 @@ function enlargesubset(initialsubset, data::AbstractMatrix, h::Int)
 
     basicsubset = copy(initialsubset)
 
-    meanvector = Array{Float64}(undef, p)
+    meanvector = Vector{Float64}(undef, p)
 
-    md2sortedindex = Array{Int}(undef, n)
+    md2sortedindex = Vector{Int}(undef, n)
 
     while length(basicsubset) < h
         applyColumns!(meanvector, mean, data[basicsubset, :])
@@ -55,14 +55,14 @@ function robcov(data::Matrix; alpha=0.01, estimator=:mve)
 
     maxiter = minimum([p * 500, 3000])
 
-    initialsubset = Array{Int}(undef, k)
-    bestinitialsubset = Array{Int}(undef, k)
+    initialsubset = Vector{Int}(undef, k)
+    bestinitialsubset = Vector{Int}(undef, k)
 
-    hsubset = Array{Int}(undef, h)
-    besthsubset = Array{Int}(undef, h)
+    hsubset = Vector{Int}(undef, h)
+    besthsubset = Vector{Int}(undef, h)
 
 
-    meanvector = Array{Float64}(undef, p)
+    meanvector = Vector{Float64}(undef, p)
     fill!(meanvector, 0.0)
 
 

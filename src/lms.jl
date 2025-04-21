@@ -68,12 +68,12 @@ function lms(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; iters = not
         iters = minimum([500 * p, 3000])
     end
     bestobjective = Inf
-    bestparameters = Array{Float64}(undef, p)
-    bestres = Array{Float64}(undef, n)
+    bestparameters = Vector{Float64}(undef, p)
+    bestres = Vector{Float64}(undef, n)
     indices = collect(1:n)
     kindices = collect(p:n)
-    betas = Array{Float64}(undef, p)
-    res = Array{Float64}(undef, n)
+    betas = Vector{Float64}(undef, p)
+    res = Vector{Float64}(undef, n)
 
     for _ = 1:iters
         try
