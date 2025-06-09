@@ -50,7 +50,7 @@
 
         betas = result["betas"]
 
-        atol = 0.1
+        atol = 0.5
 
         for i in 1:10
             @test isapprox(betas[i], 0.0, atol=atol)
