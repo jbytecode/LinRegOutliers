@@ -86,7 +86,8 @@ function quantileregression(X::AbstractMatrix{Float64}, y::AbstractVector{Float6
     m = JuMP.Model(HiGHS.Optimizer)
     set_silent(m)
 
-    JuMP.@variable(m, d[1:(2n)])
+    # d[i] > 0 for i = 1:2n
+    JuMP.@variable(m, d[1:(2n)] .>= 0)
     JuMP.@variable(m, beta[1:p])
 
     JuMP.@objective(
@@ -97,10 +98,6 @@ function quantileregression(X::AbstractMatrix{Float64}, y::AbstractVector{Float6
 
     for i = 1:n
         _ = JuMP.@constraint(m, y[i] - sum(X[i, :] .* beta) + d[i] - d[n+i] == 0)
-    end
-
-    for i = 1:(2n)
-        JuMP.@constraint(m, d[i] >= 0)
     end
 
     JuMP.optimize!(m)

@@ -3,6 +3,8 @@
 - Update citation of `robhatreg` a.k.a Robust Hat Matrix based Regression Estimator
 - Fix typos in code, code comments, and documentation
 - Replace one dimensional `Array{` definitions with `Vector{`
+- Define deviations and their bounds in a single line and remove additional constraints in LAD and Quantile Regression
+
 
 # v0.11.5
 
