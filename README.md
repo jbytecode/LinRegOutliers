@@ -103,7 +103,7 @@ Satman et al., (2021). LinRegOutliers: A Julia package for detecting outliers in
 
 or the bibtex entry
 
-```
+```bibtex
 @article{Satman2021,
   doi = {10.21105/joss.02892},
   url = {https://doi.org/10.21105/joss.02892},
