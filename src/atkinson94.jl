@@ -45,7 +45,7 @@ Dict{Any,Any} with 6 entries:
   "residuals_matrix" => [0.0286208 0.0620609 … 0.0796249 0.0; 0.0397778 0.120547 … 0.118437 0.0397778; … ; 1.21133 1.80846 … 0.690327 4.14366; 1.61977 0.971592 … 0.616204 3.58098]
   "outliers"         => [1, 3, 4, 21]
   "objective"        => 0.799134
-  "coef"             => [-38.3133, 0.745659, 0.432794, 0.0104587]
+  "betas"             => [-38.3133, 0.745659, 0.432794, 0.0104587]
   "crit"             => 3.0
 
 ```
@@ -139,7 +139,7 @@ function atkinson94(
     end
 
     d = Dict{String, Any}()
-    d["coef"] = bestparameters
+    d["betas"] = bestparameters
     d["objective"] = bestobjective
     d["optimum_index"] = bestindex
     d["residuals_matrix"] = bestres[p:end, :]

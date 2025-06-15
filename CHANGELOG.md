@@ -1,9 +1,13 @@
-# v0.11.6 (Upcoming Release)
+# v0.11.7 (Upcoming Release)
+
+
+# v0.11.6 
 
 - Update citation of `robhatreg` a.k.a Robust Hat Matrix based Regression Estimator
 - Fix typos in code, code comments, and documentation
 - Replace one dimensional `Array{` definitions with `Vector{`
 - Define deviations and their bounds in a single line and remove additional constraints in LAD and Quantile Regression
+- Atkinson94 returns `betas` insteada of `coef` in returned dictionary.
 
 
 # v0.11.5
