@@ -106,7 +106,7 @@ function detectOutliers(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; 
             end
         elseif method == "bacon"
             try
-                _, p = size(X)
+                p = size(X, 2)
                 result = bacon(X, y, m = p + 1)["outliers"]
             catch
                 result = Int[]

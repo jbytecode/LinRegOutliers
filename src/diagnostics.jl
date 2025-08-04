@@ -43,7 +43,7 @@ Marchette, David J., and Jeffrey L. Solka. "Using data images for outlier detect
 Computational Statistics & Data Analysis 43.4 (2003): 541-552.
 """
 function euclideanDistances(dataMatrix::AbstractMatrix{Float64})::AbstractMatrix{Float64}
-	n, _ = size(dataMatrix)
+	n = size(dataMatrix, 1)
 	d = zeros(Float64, n, n)
 	for i ∈ 1:n
 		for j ∈ i:n
@@ -59,7 +59,7 @@ end
 
 
 function mahalanobisSquaredBetweenPairs(pairs::AbstractMatrix{Float64}; covmatrix = nothing)::Union{Nothing, AbstractMatrix}
-	n, _ = size(pairs)
+	n = size(pairs, 1)
 	newmat = zeros(Float64, n, n)
 	if isnothing(covmatrix)
 		covmatrix = cov(pairs)
@@ -103,7 +103,7 @@ Computational Statistics & Data Analysis 43.4 (2003): 541-552.
 """
 function mahalanobisBetweenPairs(dataMatrix::AbstractMatrix{Float64})::Union{Nothing, Matrix}
 	
-    n, _ = size(dataMatrix)
+    n = size(dataMatrix, 1)
 	
     d = zeros(Float64, n, n)
 	
@@ -153,7 +153,7 @@ julia> coordinatwisemedians(mat)
 ```
 """
 function coordinatwisemedians(datamat::AbstractMatrix{Float64})::AbstractVector{Float64}
-	_, p = size(datamat)
+	p = size(datamat, 2)
 	meds = map(i -> median(datamat[:, i]), 1:p)
 	return meds
 end
@@ -200,7 +200,7 @@ function dffit(setting::RegressionSetting, i::Int)::Float64
 end
 
 function dffit(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}, i::Int)::Float64
-	n, _ = size(X)
+	n = size(X, 1)
 	indices = [j for j ∈ 1:n if i != j]
 	olsfull = ols(X, y)
 	Xsub = X[indices, :]
@@ -256,13 +256,13 @@ Belsley, David A., Edwin Kuh, and Roy E. Welsch. Regression diagnostics:
 Identifying influential data and sources of collinearity. Vol. 571. John Wiley & Sons, 2005.
 """
 function dffits(setting::RegressionSetting)::AbstractVector{Float64}
-	n, _ = size(setting.data)
+	n = size(setting.data, 1)
 	result = [dffit(setting, i) for i ∈ 1:n]
 	return result
 end
 
 function dffits(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})::AbstractVector{Float64}
-	n, _ = size(X)
+	n = size(X, 1)
 	result = [dffit(X, y, i) for i ∈ 1:n]
 	return result
 end
@@ -398,7 +398,7 @@ end
 
 function adjustedResiduals(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})::AbstractVector{Float64}
 	olsreg = ols(X, y)
-	n, _ = size(X)
+	n = size(X, 1)
 	e = residuals(olsreg)
 	hat = hatmatrix(X)
 	stde = [e[i] / (sqrt(1 - hat[i, i])) for i ∈ 1:n]

@@ -198,7 +198,7 @@ end
 
 
 function py95(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})
-    n, _ = size(X)
+    n = size(X, 1)
     all_indices = collect(1:n)
     suspicious_sets = py95SuspectedObservations(X, y)
     outlierset = Set{Int}()

@@ -1,5 +1,7 @@
 # v0.11.7 (Upcoming Release)
 
+- Use `size(x, 1)` and `size(x, 2)` instead of `n, _  = size(x)` and `_, p = size(x)`, respectively.
+
 
 # v0.11.6 
 

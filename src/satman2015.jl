@@ -150,7 +150,7 @@ Deb, Kalyanmoy, et al. "A fast elitist non-dominated sorting genetic algorithm f
 International conference on parallel problem solving from nature. Springer, Berlin, Heidelberg, 2000.
 """
 function ndsranks(data::AbstractMatrix)::Array{Int}
-    n, _ = size(data)
+    n = size(data, 1)
     ranks = zeros(Int, n)
     mat = convert(Matrix, data)
     for i = 1:n

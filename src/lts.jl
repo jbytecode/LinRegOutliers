@@ -80,7 +80,7 @@ function iterateCSteps(
     initialBetas::AbstractVector{Float64},
     h::Int; eps::Float64 = 0.01, maxiter::Int = 10000
 )
-    _, p = size(X)
+    p = size(X, 2)
     res = y - X * initialBetas
     sortedresindices = sortperm(abs.(res))
     subsetindices = sortedresindices[1:p]

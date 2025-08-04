@@ -28,7 +28,7 @@ function initial_basic_subset_multivariate_data(
     m::Int;
     method::String = "mahalanobis",
 )
-    n, _ = size(X)
+    n = size(X, 1)
     if method == "mahalanobis"
         msm = mahalanobisSquaredMatrix(X)
         

@@ -29,7 +29,7 @@ Hadi, Ali S. "Identifying multiple outliers in multivariate data."
 Journal of the Royal Statistical Society: Series B (Methodological) 54.3 (1992): 761-771.
  """
 function hadi1992_handle_singularity(S::AbstractMatrix{Float64})::AbstractMatrix{Float64}
-    p, _ = size(S)
+    p = size(S, 2)
     eigen_structure = eigen(S)
     values = eigen_structure.values
     vectors = eigen_structure.vectors

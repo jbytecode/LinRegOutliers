@@ -69,7 +69,7 @@ function dataimage(
         
     end
     colours = 1.0 .- d / maximum(d)
-    n, _ = size(d)
+    n = size(d, 1)
     colormatrix = Array{RGBX{Float64},2}(undef, n, n)
     for i = 1:n
         for j = 1:n
