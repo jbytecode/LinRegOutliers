@@ -2,7 +2,7 @@
 
 - Use `size(x, 1)` and `size(x, 2)` instead of `n, _  = size(x)` and `_, p = size(x)`, respectively.
 - Add `v1.11` of Julia in GitHub CI.
-
+- Export font from Plots in bchplot
 
 # v0.11.6 
 

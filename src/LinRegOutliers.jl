@@ -7,7 +7,7 @@ using Requires
 function __init__()
 	@require Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80" begin
 
-		import .Plots: RGBX
+		import .Plots: RGBX, font
 
 		include("mveltsplot.jl")
 		include("dataimage.jl")
