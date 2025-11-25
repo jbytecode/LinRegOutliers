@@ -1,8 +1,12 @@
-# v0.11.7 (Upcoming Release)
+# v0.11.8 (Upcoming Release)
+
+
+# v0.11.7 
 
 - Use `size(x, 1)` and `size(x, 2)` instead of `n, _  = size(x)` and `_, p = size(x)`, respectively.
-- Add `v1.11` of Julia in GitHub CI.
-- Export font from Plots in bchplot
+- Add Julia `v1.11` of Julia in GitHub CI.
+- Export font from Plots in bchplot.
+- Add Julia `v1.12` to GitHub workflows.
 
 # v0.11.6 
 
