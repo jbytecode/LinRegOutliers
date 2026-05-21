@@ -6,7 +6,7 @@ export iterateCSteps
 import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector
 import ..OrdinaryLeastSquares: ols, residuals, coef
 
-import Distributions: sample, mean
+import Distributions: sample!, mean
 
 """
 
@@ -52,10 +52,10 @@ function iterateCSteps(
     sortedresindices = Array{Int}(undef, n)
     while iter < maxiter
         tempols = ols(view(X, subsetindices, :), view(y, subsetindices))
-        res = y - X * coef(tempols)
-        sortperm!(sortedresindices, abs.(res))
+        absres = abs.(y - X * coef(tempols))
+        sortperm!(sortedresindices, absres)
         subsetindices = view(sortedresindices, 1:h)
-        objective = sum(view(sort!(res .^ 2.0), 1:h))
+        objective = sum(view(sort!(absres .^ 2.0), 1:h))
         if isapprox(oldobjective, objective, atol=eps)
             break
         end
@@ -158,7 +158,7 @@ function lts(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; iters=nothi
     bestobjectiveunchanged = 0
 
     for _ = 1:iters
-        subsetindices = sample(allindices, p, replace=false)
+        sample!(allindices, subsetindices, replace=false)
         objective, hsubsetindices = iterateCSteps(X, y, subsetindices, h)
         if objective < bestobjective
             bestobjective = objective
