@@ -4,7 +4,7 @@ export lts
 export iterateCSteps
 
 import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector
-import ..OrdinaryLeastSquares: ols, residuals, coef
+import ..OrdinaryLeastSquares: residuals, coef, olsf!
 
 import Distributions: sample!, mean
 
@@ -50,9 +50,10 @@ function iterateCSteps(
     objective::Float64 = Inf64
     iter::Int = 0
     sortedresindices = Array{Int}(undef, n)
+    tempbetas = zeros(size(X, 2))
     while iter < maxiter
-        tempols = ols(view(X, subsetindices, :), view(y, subsetindices))
-        absres = abs.(y - X * coef(tempols))
+        olsf!(view(X, subsetindices, :), view(y, subsetindices), tempbetas)
+        absres = abs.(y - X * tempbetas)
         sortperm!(sortedresindices, absres)
         subsetindices = view(sortedresindices, 1:h)
         objective = sum(view(sort!(absres .^ 2.0), 1:h))

@@ -23,6 +23,34 @@
         @test isapprox(result.betas[2], 5.04147826086957, atol = eps)
     end 
 
+    @testset "Ordinary Least Squares (olsf)" begin
+        tol = 0.0001
+        #  The model is exactly y = 5 + 5x
+        var1 = Float64[1, 2, 3, 4, 5]
+        X = hcat(ones(5), var1)
+        betas = [5.0, 5.0]
+        y = X * betas
+
+        # OLS
+        olsreg = olsf(X, y)
+        @test isapprox(olsreg, betas, atol = tol)
+    end
+
+    @testset "Ordinary Least Squares (olsf!)" begin
+        tol = 0.0001
+        #  The model is exactly y = 5 + 5x
+        var1 = Float64[1, 2, 3, 4, 5]
+        X = hcat(ones(5), var1)
+        betas = [5.0, 5.0]
+        y = X * betas
+
+        # OLS
+        tempbetas = zeros(size(X, 2))
+        olsf!(X, y, tempbetas)
+        @test isapprox(tempbetas, betas, atol = tol)
+    end
+
+
 
     @testset "Weighted Least Squares" begin
         tol = 0.0001

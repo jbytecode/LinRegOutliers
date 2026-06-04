@@ -2,6 +2,7 @@ module OrdinaryLeastSquares
 
 
 export OLS, ols, wls, residuals, predict, coef
+export olsf, olsf!
 
 import LinearAlgebra: ColumnNorm, qr, Diagonal
 import ..Basis:
@@ -51,8 +52,14 @@ julia> reg.betas
 
 """
 ols(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})::OLS = OLS(X, y, qr(X, ColumnNorm()) \ y)
-#ols(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})::OLS = OLS(X, y, qr(X, Val(true)) \ y)
 
+function olsf(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})::Vector{Float64}
+     return qr(X, ColumnNorm()) \ y
+end
+
+function olsf!(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}, betas::AbstractVector{Float64})::Vector{Float64}
+     betas .= qr(X, ColumnNorm()) \ y
+end 
 
 function ols(setting::RegressionSetting)::OLS
     X, y = @extractRegressionSetting setting

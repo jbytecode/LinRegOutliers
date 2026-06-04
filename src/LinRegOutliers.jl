@@ -63,7 +63,7 @@ import .DataSets: hills, softdrinkdelivery, animals
 # Ordinary least squares type and functions
 # for fast regression tasks in outlier detection algorithms
 include("ols.jl")
-import .OrdinaryLeastSquares: OLS, ols, wls, residuals, predict, coef
+import .OrdinaryLeastSquares: OLS, ols, wls, residuals, predict, coef, olsf, olsf!
 
 # Regression diagnostics
 include("diagnostics.jl")
@@ -250,7 +250,7 @@ export diagnose
 
 
 # Ordinary least squares
-export OLS, ols, wls, residuals, predict, coef
+export OLS, ols, wls, residuals, predict, coef, olsf, olsf!
 
 # Algorithms
 export hs93, hs93initialset, hs93basicsubset
