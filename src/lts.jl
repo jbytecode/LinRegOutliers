@@ -4,7 +4,7 @@ export lts
 export iterateCSteps
 
 import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector
-import ..OrdinaryLeastSquares: residuals, coef, olsf!
+import ..OrdinaryLeastSquares: residuals, coef, olsf!, olsf
 
 import Distributions: sample!, mean
 
@@ -51,13 +51,14 @@ function iterateCSteps(
     iter::Int = 0
     sortedresindices = Array{Int}(undef, n)
     tempbetas = zeros(size(X, 2))
+    absres = zeros(n)
     while iter < maxiter
         olsf!(view(X, subsetindices, :), view(y, subsetindices), tempbetas)
-        absres = abs.(y - X * tempbetas)
+        absres .= abs.(y - X * tempbetas)
         sortperm!(sortedresindices, absres)
         subsetindices = view(sortedresindices, 1:h)
         objective = sum(view(sort!(absres .^ 2.0), 1:h))
-        if isapprox(oldobjective, objective, atol=eps)
+        if abs(oldobjective - objective) < eps
             break
         end
         oldobjective = objective
@@ -163,7 +164,7 @@ function lts(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; iters=nothi
         objective, hsubsetindices = iterateCSteps(X, y, subsetindices, h)
         if objective < bestobjective
             bestobjective = objective
-            besthsubset = hsubsetindices
+            besthsubset .= hsubsetindices
             bestobjectiveunchanged = 0
         else
             bestobjectiveunchanged += 1
@@ -173,7 +174,7 @@ function lts(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; iters=nothi
         end
     end
 
-    ltsbetas = view(X, besthsubset, :) \ view(y, besthsubset)
+    ltsbetas = olsf(view(X, besthsubset, :), view(y, besthsubset))
     ltsres = y - X * ltsbetas
     ltsS = sqrt(sum((ltsres .^ 2.0)[1:h]) / (h - p))
     ltsresmean = mean(ltsres[besthsubset])
