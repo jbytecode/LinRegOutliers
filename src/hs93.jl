@@ -11,7 +11,53 @@ import ..Diagnostics: dffits
 
 import Distributions: TDist, quantile
 
-import LinearAlgebra: det
+import LinearAlgebra: ColumnNorm, PosDefException, Symmetric, cholesky, ldiv!, qr
+
+@inline function _rowdot(
+    X::AbstractMatrix{Float64},
+    rowindex::Int,
+    betas::AbstractVector{Float64},
+)::Float64
+    s = 0.0
+    @inbounds @simd for j in eachindex(betas)
+        s += X[rowindex, j] * betas[j]
+    end
+    return s
+end
+
+function _set_membership!(
+    membership::AbstractVector{Bool},
+    indices::AbstractVector{Int},
+)::Nothing
+    fill!(membership, false)
+    @inbounds for idx in indices
+        membership[idx] = true
+    end
+    return nothing
+end
+
+function _gramian!(
+    target::AbstractMatrix{Float64},
+    X::AbstractMatrix{Float64},
+    indices::AbstractVector{Int},
+)::AbstractMatrix{Float64}
+    fill!(target, 0.0)
+    p = size(X, 2)
+    @inbounds for idx in indices
+        for col = 1:p
+            xcol = X[idx, col]
+            for row = 1:col
+                target[row, col] += X[idx, row] * xcol
+            end
+        end
+    end
+    @inbounds for col = 1:p
+        for row = (col + 1):p
+            target[row, col] = target[col, row]
+        end
+    end
+    return target
+end
 
 """
 
@@ -112,31 +158,55 @@ function hs93basicsubset(
     initialindices::Array{Int,1},
 )::Array{Int,1}
     n, p = size(X)
-    h = floor((n + p - 1) / 2)
+    h = fld(n + p - 1, 2)
     s = length(initialindices)
-    indices = initialindices
+    indices = copy(initialindices)
+    if h > s
+        resize!(indices, h)
+    end
     betas = zeros(Float64, p)
     d = zeros(Float64, n)
-    orderingd = zeros(Int, n)
+    orderingd = Array{Int}(undef, n)
+    xtx = Matrix{Float64}(undef, p, p)
+    insubset = falses(n)
+    solvework = Vector{Float64}(undef, p)
+    ymax = maximum(y)
 
-    for i in range(s + 1, stop = h)
-        betas = X[indices, :] \ y[indices]    
-        XM = X[indices, :]
-        for j = 1:n
-            if det(XM'XM) > 0
-                xxxx = X[j, :]' * inv(XM'XM) * X[j, :]
-                if j in indices
-                    d[j] = abs.(y[j] - sum(X[j, :] .* betas)) / sqrt(abs(1 - xxxx))
-                else
-                    d[j] = abs.(y[j] - sum(X[j, :] .* betas)) / sqrt(abs(1 + xxxx))
-                end
+    for i in (s + 1):h
+        activeindices = view(indices, 1:(i - 1))
+        betas .= qr(view(X, activeindices, :), ColumnNorm()) \ view(y, activeindices)
+        _set_membership!(insubset, activeindices)
+        _gramian!(xtx, X, activeindices)
+
+        chol = try
+            cholesky(Symmetric(xtx))
+        catch err
+            if err isa PosDefException
+                nothing
             else
-                # When XM'XM is singular, the corresponding d[j] is set to the maximum of y.
-                d[j] = maximum(y)
+                rethrow(err)
             end
         end
-        orderingd .= sortperm(abs.(d))
-        indices = orderingd[1:Int(i)]
+
+        for j = 1:n
+            if !isnothing(chol)
+                @inbounds for k = 1:p
+                    solvework[k] = X[j, k]
+                end
+                ldiv!(chol, solvework)
+                xxxx = _rowdot(X, j, solvework)
+                resid = abs(y[j] - _rowdot(X, j, betas))
+                if insubset[j]
+                    d[j] = resid / sqrt(abs(1 - xxxx))
+                else
+                    d[j] = resid / sqrt(abs(1 + xxxx))
+                end
+            else
+                d[j] = ymax
+            end
+        end
+        sortperm!(orderingd, d, by = abs)
+        copyto!(indices, 1, orderingd, 1, i)
     end
     return indices
 end
@@ -205,16 +275,41 @@ function hs93(
     s = length(indices)
     betas = zeros(Float64, p)
     d = zeros(Float64, n)
-    orderingd = zeros(Int, n)
+    orderingd = Array{Int}(undef, n)
+    if s < n
+        workingsubset = copy(indices)
+        resize!(workingsubset, n)
+    else
+        workingsubset = copy(indices)
+    end
+    indices = workingsubset
+    xtx = Matrix{Float64}(undef, p, p)
+    insubset = falses(n)
+    solvework = Vector{Float64}(undef, p)
     
     while s < n
-        betas .= X[indices, :] \ y[indices]
-        resids = y[indices] - X[indices,:] * betas
-        sigma = sqrt(sum(resids .^ 2.0) / (length(resids) - p))
-        
-        XM = X[indices, :]
+        activeindices = view(indices, 1:s)
+        betas .= qr(view(X, activeindices, :), ColumnNorm()) \ view(y, activeindices)
 
-        if det(XM'XM) <= 0
+        rss = 0.0
+        @inbounds for idx in activeindices
+            resid = y[idx] - _rowdot(X, idx, betas)
+            rss += resid * resid
+        end
+        sigma = sqrt(rss / (s - p))
+
+        _gramian!(xtx, X, activeindices)
+        chol = try
+            cholesky(Symmetric(xtx))
+        catch err
+            if err isa PosDefException
+                nothing
+            else
+                rethrow(err)
+            end
+        end
+
+        if isnothing(chol)
             return Dict(
                 "d" => [],
                 "t" => [],
@@ -223,25 +318,45 @@ function hs93(
                 "converged" => false,
             )
         end
-
-        iXmXm = inv(XM'XM)
+        _set_membership!(insubset, activeindices)
         for j = 1:n
-            xMMx = X[j, :]' * iXmXm * X[j, :]
-            if j in indices
-                d[j] = (y[j] - sum(X[j, :] .* betas)) / (sigma * sqrt(abs(1.0 - xMMx)))
+            @inbounds for k = 1:p
+                solvework[k] = X[j, k]
+            end
+            ldiv!(chol, solvework)
+            xMMx = _rowdot(X, j, solvework)
+            resid = y[j] - _rowdot(X, j, betas)
+            if insubset[j]
+                d[j] = resid / (sigma * sqrt(abs(1.0 - xMMx)))
             else
-                d[j] = (y[j] - sum(X[j, :] .* betas)) / (sigma * sqrt(abs(1.0 + xMMx)))
+                d[j] = resid / (sigma * sqrt(abs(1.0 + xMMx)))
             end
         end
-        orderingd .= sortperm(abs.(d))
+        sortperm!(orderingd, d, by = abs)
         tdist = TDist(s - p)
         tcalc = quantile(tdist, alpha / (2 * (s + 1)))
 
-
-        outlierset = filter(x -> abs(d[x]) > abs(tcalc), 1:n)
-        inlierset = setdiff(1:n, outlierset)
-        cleanbetas = X[inlierset, :] \ y[inlierset]
-        if abs(d[orderingd][s+1]) > abs(tcalc)
+        if abs(d[orderingd[s + 1]]) > abs(tcalc)
+            outliercount = 0
+            @inbounds for j = 1:n
+                if abs(d[j]) > abs(tcalc)
+                    outliercount += 1
+                end
+            end
+            outlierset = Vector{Int}(undef, outliercount)
+            inlierset = Vector{Int}(undef, n - outliercount)
+            outlierpos = 1
+            inlierpos = 1
+            @inbounds for j = 1:n
+                if abs(d[j]) > abs(tcalc)
+                    outlierset[outlierpos] = j
+                    outlierpos += 1
+                else
+                    inlierset[inlierpos] = j
+                    inlierpos += 1
+                end
+            end
+            cleanbetas = qr(view(X, inlierset, :), ColumnNorm()) \ view(y, inlierset)
             result = Dict(
                 "d" => d,
                 "t" => tcalc,
@@ -252,7 +367,7 @@ function hs93(
             return result
         end
         s += 1
-        indices = orderingd[1:s]
+        copyto!(indices, 1, orderingd, 1, s)
     end
 
     return Dict(
