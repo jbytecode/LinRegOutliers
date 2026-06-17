@@ -6,7 +6,8 @@ export iterateCSteps
 import ..Basis: RegressionSetting, @extractRegressionSetting, designMatrix, responseVector
 import ..OrdinaryLeastSquares: residuals, coef, olsf!, olsf
 
-import Distributions: sample!, mean
+import Distributions: sample!
+import LinearAlgebra: mul!
 
 """
 
@@ -42,29 +43,45 @@ end
 function iterateCSteps(
     X::AbstractMatrix{Float64},
     y::AbstractVector{Float64},
-    subsetindices::Array{Int,1},
+    subsetindices::AbstractVector{Int},
     h::Int; eps::Float64 = 0.01, maxiter::Int = 10000
 )
-    n = length(y)
+    n, p = size(X)
     oldobjective::Float64 = Inf64
     objective::Float64 = Inf64
     iter::Int = 0
     sortedresindices = Array{Int}(undef, n)
-    tempbetas = zeros(size(X, 2))
-    absres = zeros(n)
+    tempbetas = Vector{Float64}(undef, p)
+    fitted = Vector{Float64}(undef, n)
+    absres = Vector{Float64}(undef, n)
+    workingsubset = copy(subsetindices)
+    if h > length(workingsubset)
+        resize!(workingsubset, h)
+    end
+    workingsubsetlen = length(subsetindices)
     while iter < maxiter
-        olsf!(view(X, subsetindices, :), view(y, subsetindices), tempbetas)
-        absres .= abs.(y - X * tempbetas)
+        activeindices = view(workingsubset, 1:workingsubsetlen)
+        olsf!(view(X, activeindices, :), view(y, activeindices), tempbetas)
+        mul!(fitted, X, tempbetas)
+        @inbounds for i in eachindex(y)
+            absres[i] = abs(y[i] - fitted[i])
+        end
         sortperm!(sortedresindices, absres)
-        subsetindices = view(sortedresindices, 1:h)
-        objective = sum(view(sort!(absres .^ 2.0), 1:h))
+        objective = 0.0
+        @inbounds for i = 1:h
+            idx = sortedresindices[i]
+            workingsubset[i] = idx
+            objective += abs2(absres[idx])
+        end
+        workingsubsetlen = h
         if abs(oldobjective - objective) < eps
             break
         end
         oldobjective = objective
         iter += 1
     end
-    return (objective, subsetindices)
+    resize!(workingsubset, workingsubsetlen)
+    return (objective, workingsubset)
 end
 
 
@@ -83,9 +100,15 @@ function iterateCSteps(
     h::Int; eps::Float64 = 0.01, maxiter::Int = 10000
 )
     p = size(X, 2)
-    res = y - X * initialBetas
-    sortedresindices = sortperm(abs.(res))
-    subsetindices = sortedresindices[1:p]
+    res = Vector{Float64}(undef, length(y))
+    mul!(res, X, initialBetas)
+    @inbounds for i in eachindex(y)
+        res[i] = abs(y[i] - res[i])
+    end
+    sortedresindices = Array{Int}(undef, length(y))
+    sortperm!(sortedresindices, res)
+    subsetindices = Vector{Int}(undef, p)
+    copyto!(subsetindices, 1, sortedresindices, 1, p)
     return iterateCSteps(X, y, subsetindices, h, eps = eps, maxiter = maxiter)
 end
 
@@ -149,7 +172,7 @@ function lts(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; iters=nothi
     h = Int(floor((n + p + 1.0) / 2.0))
 
     if isnothing(iters)
-        iters = minimum([5 * p, 3000])
+        iters = min(5 * p, 3000)
     end
 
     allindices = collect(1:n)
@@ -175,11 +198,36 @@ function lts(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; iters=nothi
     end
 
     ltsbetas = olsf(view(X, besthsubset, :), view(y, besthsubset))
-    ltsres = y - X * ltsbetas
-    ltsS = sqrt(sum((ltsres .^ 2.0)[1:h]) / (h - p))
-    ltsresmean = mean(ltsres[besthsubset])
-    ltsScaledRes = (ltsres .- ltsresmean) / ltsS
-    outlierindices = filter(i -> abs(ltsScaledRes[i]) > crit, 1:n)
+    ltsres = Vector{Float64}(undef, n)
+    mul!(ltsres, X, ltsbetas)
+    @inbounds for i in eachindex(y)
+        ltsres[i] = y[i] - ltsres[i]
+    end
+
+    ltsSsum = 0.0
+    @inbounds for i = 1:h
+        ltsSsum += abs2(ltsres[i])
+    end
+    ltsS = sqrt(ltsSsum / (h - p))
+
+    ltsresmean = 0.0
+    @inbounds for idx in besthsubset
+        ltsresmean += ltsres[idx]
+    end
+    ltsresmean /= h
+
+    ltsScaledRes = Vector{Float64}(undef, n)
+    @inbounds for i in eachindex(ltsres)
+        ltsScaledRes[i] = (ltsres[i] - ltsresmean) / ltsS
+    end
+
+    outlierindices = Int[]
+    sizehint!(outlierindices, n)
+    @inbounds for i = 1:n
+        if abs(ltsScaledRes[i]) > crit
+            push!(outlierindices, i)
+        end
+    end
 
     result = Dict(
         "objective" => bestobjective,
