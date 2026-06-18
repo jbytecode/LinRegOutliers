@@ -107,7 +107,7 @@ function bacon_multivariate_outlier_detection(
     r_prev = 0
     r = length(initial_basic_subset)
     subset = initial_basic_subset
-    distances = zeros(Float64, n)
+    distances = Array{Float64, 1}(undef, n)
 
     # iterate until the size of the subset no longer changes
     iter = 0
@@ -156,7 +156,7 @@ function compute_t_distance(X::AbstractMatrix{Float64}, y::Vector{Float64}, subs
     
     n, p = size(X)
 
-    t = zeros(Float64, n)
+    t = Array{Float64, 1}(undef, n)
 
     least_squares_fit = ols(X[subset, :], y[subset])
 

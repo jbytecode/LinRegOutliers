@@ -33,8 +33,8 @@ function py95ProcessEigenVector(v::AbstractVector{Float64})
     c1 = Int(floor(n / 4.0))
     c2 = Int(floor(n / 4.0))
     ordered_coordinates = sortperm(v)
-    a = zeros(Float64, n)
-    b = zeros(Float64, n)
+    a = Array{Float64, 1}(undef, n)
+    b = Array{Float64, 1}(undef, n)
     for i = n:(-1):(n-c1)
         a[i] = v[i] / v[i-1]
     end
@@ -88,8 +88,10 @@ function py95SuspectedObservations(X::AbstractMatrix{Float64}, y::AbstractVector
     resids = residuals(olsreg)
     H = hatmatrix(X)
     s2 = sum(resids .^ 2.0) / (n - p)
-    D = zeros(Float64, (n, n))
-    E = zeros(Float64, (n, n))
+    D = Array{Float64, 2}(undef, n, n)
+    E = Array{Float64, 2}(undef, n, n)
+    fill!(D, 0.0)
+    fill!(E, 0.0)
     for i = 1:n
         D[i, i] = 1 / (1 - H[i, i])
         E[i, i] = resids[i]

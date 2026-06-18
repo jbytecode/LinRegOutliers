@@ -64,7 +64,7 @@ function imon2005(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})
     XRXR = transpose(XR) * XR
     invXRXR = inv(XRXR)
     wiiR = [X[i, :]' * invXRXR * X[i, :] for i in allindex]
-    wiiRAsterix = zeros(Float64, n)
+    wiiRAsterix = Array{Float64, 1}(undef, n)
     for i in allindex
         if i in R
             wiiRAsterix[i] = wiiR[i] / (1.0 - wiiR[i])
@@ -76,7 +76,7 @@ function imon2005(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})
     BetaHatR = coef(RegR)
     resR = y - X * BetaHatR
     sigmaR = sum(resR .^ 2.0) / (n - p)
-    tAsterix = zeros(Float64, n)
+    tAsterix = Array{Float64, 1}(undef, n)
     for i in allindex
         if i in R
             tAsterix[i] = resR[i] / (SigmaWithoutIndex(X, y, R, i) * sqrt(1.0 - wiiR[i]))
@@ -85,7 +85,7 @@ function imon2005(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})
         end
     end
 
-    GDFFITS = zeros(Float64, n)
+    GDFFITS = Array{Float64, 1}(undef, n)
     for i in allindex
         GDFFITS[i] = sqrt(wiiRAsterix[i]) * tAsterix[i]
     end

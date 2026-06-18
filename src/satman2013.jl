@@ -71,7 +71,7 @@ function satman2013(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})
     allindices = collect(1:n)
 
     # Initial covariance matrix 
-    covmat = zeros(p0, p0)
+    covmat = Array{Float64, 2}(undef, p0, p0)
 
     # Construct an estimation of the covariance matrix
     for i = 1:p0

@@ -44,7 +44,7 @@ function deepestregression(X::AbstractMatrix{Float64}, y::AbstractVector{Float64
 	n, p = size(drdata)
 	n = Int32(n)
 	p = Int32(p)
-	betas = zeros(Float64, p)
+	betas = Array{Float64, 1}(undef, p)
 	maxit = Int32(maxit)
 	iter = Int32(1)
 	MDEPAPPR = Int32(p)

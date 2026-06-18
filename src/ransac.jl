@@ -81,10 +81,10 @@ function ransac(
         m = p
     end
 
-    iteration_inlier_indices = zeros(Int, n)
+    iteration_inlier_indices = Array{Int, 1}(undef, n)
 
     maximum_count = d - 1
-    maximum_inlier_indices = zeros(Int, n)
+    maximum_inlier_indices = Array{Int, 1}(undef, n)
     minimum_error = Inf
 
     for iteration = 1:k

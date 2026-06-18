@@ -21,7 +21,7 @@ end
 
 function m(mat::AbstractMatrix{T}, u::AbstractVector{T})::AbstractMatrix where {T<:Real}
     L = length(u)
-    y = zeros(Float64, L, 1)
+    y = Array{Float64, 2}(undef, L, 1)
     for i in 1:L
         y[i, 1] = u[i]
     end
@@ -31,8 +31,8 @@ end
 function m(m1::AbstractMatrix{T}, m2::AbstractMatrix{T})::AbstractMatrix where {T<:Real}
     n1 = size(m1, 1)
     p2 = size(m2, 2)
-    newmat = zeros(Float64, n1, p2)
-    for i in 1:n1
+    newmat = Array{Float64, 2}(undef, n1, p2)
+    @inbounds for i in 1:n1
         for j in 1:p2
             newmat[i, j] = m(m1[i, :], m2[:, j])
         end

@@ -34,7 +34,7 @@ function hadi1992_handle_singularity(S::AbstractMatrix{Float64})::AbstractMatrix
     values = eigen_structure.values
     vectors = eigen_structure.vectors
     lambda_s = find_minimum_nonzero(values)
-    W = zeros(Float64, p, p)
+    W = Array{Float64, 2}(undef, p, p)
     for i = 1:p
         W[i, i] = 1 / max(values[i], lambda_s)
     end

@@ -74,22 +74,22 @@ function atkinson94(
     end
 
     bestobjective = Inf
-    bestparameters = zeros(Float64, p)
-    bestres = zeros(Float64, n, n)
+    bestparameters = Array{Float64, 1}(undef, p)
+    bestres = Array{Float64, 2}(undef, n, n)
     bestindex = 0
     indices = collect(1:n)
 
     # store all the sigma values across all iterations
-    sigmas = zeros(Float64, iters, n)
+    sigmas = Array{Float64, 2}(undef, iters, n)
 
     for iter = 1:iters
         m_subset_indices = sample(indices, p, replace = false)
 
         # stores the n - p sigma values of a forward run
-        sigma_tilde = zeros(Float64, n)
+        sigma_tilde = Array{Float64, 1}(undef, n)
 
         # stores the (n - p) * n residuals during the forward run
-        studentized_residuals = zeros(Float64, n, n)
+        studentized_residuals = Array{Float64, 2}(undef, n, n)
         copy_parameters = false
 
         for m = p:n

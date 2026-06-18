@@ -164,8 +164,8 @@ function hs93basicsubset(
     if h > s
         resize!(indices, h)
     end
-    betas = zeros(Float64, p)
-    d = zeros(Float64, n)
+    betas = Array{Float64, 1}(undef, p)
+    d = Array{Float64, 1}(undef, n)
     orderingd = Array{Int}(undef, n)
     xtx = Matrix{Float64}(undef, p, p)
     insubset = falses(n)
@@ -273,9 +273,9 @@ function hs93(
     indices = basicsubsetindices
     n, p = size(X)
     s = length(indices)
-    betas = zeros(Float64, p)
-    d = zeros(Float64, n)
-    orderingd = Array{Int}(undef, n)
+    betas = Array{Float64, 1}(undef, p)
+    d = Array{Float64, 1}(undef, n)
+    orderingd = Array{Int, 1}(undef, n)
     if s < n
         workingsubset = copy(indices)
         resize!(workingsubset, n)

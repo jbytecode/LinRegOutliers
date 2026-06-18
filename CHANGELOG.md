@@ -2,6 +2,7 @@
 
 - Reduce allocations in OLS and LTS. Implements new olsf() and olsf!() functions.
 - Recude allocations in hs93.
+- Replace zeros() with Array{Type, dim}(undef, ...) if possible to reduce redundant assignments.
 
 
 # v0.11.7 

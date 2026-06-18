@@ -44,7 +44,7 @@ Computational Statistics & Data Analysis 43.4 (2003): 541-552.
 """
 function euclideanDistances(dataMatrix::AbstractMatrix{Float64})::AbstractMatrix{Float64}
 	n = size(dataMatrix, 1)
-	d = zeros(Float64, n, n)
+	d = Array{Float64, 2}(undef, n, n)
 	for i ∈ 1:n
 		for j ∈ i:n
 			if i != j
@@ -60,7 +60,7 @@ end
 
 function mahalanobisSquaredBetweenPairs(pairs::AbstractMatrix{Float64}; covmatrix = nothing)::Union{Nothing, AbstractMatrix}
 	n = size(pairs, 1)
-	newmat = zeros(Float64, n, n)
+	newmat = Array{Float64, 2}(undef, n, n)
 	if isnothing(covmatrix)
 		covmatrix = cov(pairs)
 	end
@@ -105,7 +105,7 @@ function mahalanobisBetweenPairs(dataMatrix::AbstractMatrix{Float64})::Union{Not
 	
     n = size(dataMatrix, 1)
 	
-    d = zeros(Float64, n, n)
+    d = Array{Float64, 2}(undef, n, n)
 	
     covmat = cov(dataMatrix)
 	
@@ -499,7 +499,7 @@ function cooks(X::AbstractMatrix{Float64}, y::AbstractVector{Float64})::Abstract
 	res = residuals(olsreg)
 	hat = hatmatrix(X)
 	s2 = sum(res .* res) / (n - p)
-	d = zeros(Float64, n)
+	d = Array{Float64, 1}(undef, n)
 	for i ∈ 1:n
 		d[i] = ((res[i]^2.0) / (p * s2)) * (hat[i, i] / (1 - hat[i, i])^2.0)
 	end
@@ -719,7 +719,7 @@ function hadimeasure(X::AbstractMatrix{Float64}, y::AbstractVector{Float64}; c::
 	res2 = res .^ 2.0
 	sumres = sum(res2)
 	hat = hatmatrix(X)
-	H = zeros(Float64, n)
+	H = Array{Float64, 1}(undef, n)
 	for i ∈ 1:n
 		H[i] =
 			(p * res2[i]) / ((1 - hat[i, i]) * (sumres - res2[i])) +
