@@ -1,4 +1,8 @@
-# v0.11.8 (Upcoming Release)
+# v0.11.9 (Upcoming Release)
+
+
+
+# v0.11.8 
 
 - Reduce allocations in OLS and LTS. Implements new olsf() and olsf!() functions.
 - Recude allocations in hs93.
