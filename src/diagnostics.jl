@@ -45,6 +45,7 @@ Computational Statistics & Data Analysis 43.4 (2003): 541-552.
 function euclideanDistances(dataMatrix::AbstractMatrix{Float64})::AbstractMatrix{Float64}
 	n = size(dataMatrix, 1)
 	d = Array{Float64, 2}(undef, n, n)
+	fill!(d, 0.0)
 	for i ∈ 1:n
 		for j ∈ i:n
 			if i != j
@@ -60,7 +61,7 @@ end
 
 function mahalanobisSquaredBetweenPairs(pairs::AbstractMatrix{Float64}; covmatrix = nothing)::Union{Nothing, AbstractMatrix}
 	n = size(pairs, 1)
-	newmat = Array{Float64, 2}(undef, n, n)
+	newmat = zeros(n, n)
 	if isnothing(covmatrix)
 		covmatrix = cov(pairs)
 	end
