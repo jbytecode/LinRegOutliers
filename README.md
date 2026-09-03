@@ -21,6 +21,7 @@ A Julia package for outlier detection in linear regression.
 - MVE & LTS Plot 
 - Billor & Chatterjee & Hadi (2006)
 - Pena & Yohai (1995)
+- Pena & Yohai (1999)
 - Satman (2013)
 - Satman (2015)
 - Setan & Halim & Mohd (2000)
@@ -42,13 +43,6 @@ A Julia package for outlier detection in linear regression.
 - Deepest Regression Estimator
 - Robust Hat Matrix based Initial Subset Regressor
 - Summary
-
-
-## Unimplemented Methods
-
-- Pena & Yohai (1999). See [#25](https://github.com/jbytecode/LinRegOutliers/issues/25) for the related issue.
-
-
 
 ## Installation
 

@@ -1,6 +1,9 @@
-# v0.11.9 (Upcoming Release)
+# v0.11.10 (Upcoming Release)
 
 
+# v0.11.9
+
+- Implement Pena and Yohai (1999) algorithm (py99()).
 
 # v0.11.8 
 

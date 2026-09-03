@@ -129,6 +129,11 @@ import .BCH: bch
 include("py95.jl")
 import .PY95: py95, py95SuspectedObservations
 
+# Pena & Yohai (1999) algorithm
+include("py99.jl")
+import .PY99: py99
+export py99
+
 # Satman (2013) algorithm
 include("satman2013.jl")
 import .Satman2013: satman2013

@@ -45,6 +45,11 @@ LinRegOutliers.bch
 LinRegOutliers.py95
 ```
 
+## Pena & Yohai (1999)
+```@docs
+LinRegOutliers.py99
+```
+
 ## Satman (2013)
 ```@docs
 LinRegOutliers.satman2013
@@ -144,7 +149,6 @@ LinRegOutliers.deepestregression
 ```@docs
 LinRegOutliers.robhatreg
 ```
-
 
 
 
