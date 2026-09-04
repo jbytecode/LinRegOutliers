@@ -22,7 +22,7 @@
         Random.seed!(12345)
         X = hcat(ones(40), collect(1.0:40.0))
         y = -4.0 .+ 1.5 .* X[:, 2]
-        y[38:40] .+= 80.0
+        y[38:40] .+= 800.0
 
         result = mm(X, y, initial = :lts)
 
