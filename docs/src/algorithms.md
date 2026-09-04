@@ -25,6 +25,11 @@ LinRegOutliers.lms
 LinRegOutliers.lts
 ```
 
+## Yohai (1987) MM-estimator
+```@docs
+LinRegOutliers.mm
+```
+
 ## Minimum Volume Ellipsoid (MVE)
 ```@docs
 LinRegOutliers.mve
@@ -149,7 +154,6 @@ LinRegOutliers.deepestregression
 ```@docs
 LinRegOutliers.robhatreg
 ```
-
 
 
 

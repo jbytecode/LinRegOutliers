@@ -17,6 +17,7 @@ A Julia package for outlier detection in linear regression.
 - Sebert & Montgomery & Rollier (1998)
 - Least Median of Squares 
 - Least Trimmed Squares 
+- Yohai (1987) MM-estimator
 - Minimum Volume Ellipsoid (MVE)
 - MVE & LTS Plot 
 - Billor & Chatterjee & Hadi (2006)

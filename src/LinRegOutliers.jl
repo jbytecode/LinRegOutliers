@@ -105,6 +105,10 @@ import .LMS: lms
 include("lts.jl")
 import .LTS: lts
 
+# Yohai's MM estimator
+include("mm.jl")
+import .Yohai87: mm
+
 
 # asm (2000) algorithm
 include("asm2000.jl")
@@ -264,6 +268,7 @@ export smr98
 export asm2000
 export lms
 export lts
+export mm
 export mve, mcd
 export bch
 export py95, py95SuspectedObservations

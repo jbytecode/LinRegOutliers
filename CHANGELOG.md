@@ -1,5 +1,6 @@
 # v0.11.10 (Upcoming Release)
 
+- Implement Yohai (1987) MM-Estimator
 
 # v0.11.9
 
