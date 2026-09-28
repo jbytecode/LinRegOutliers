@@ -135,6 +135,11 @@ LinRegOutliers.hadi1994
 LinRegOutliers.cm97
 ```
 
+## Hubert & Rousseeuw (1998) Catline Estimator
+```@docs
+LinRegOutliers.catline
+```
+
 ## Quantile Regression 
 ```@docs
 LinRegOutliers.quantileregression
@@ -154,7 +159,6 @@ LinRegOutliers.deepestregression
 ```@docs
 LinRegOutliers.robhatreg
 ```
-
 
 
 

@@ -40,6 +40,7 @@ A Julia package for outlier detection in linear regression.
 - BACON Algorithm (Billor & Hadi & Velleman (2000))
 - Hadi (1994) Algorithm
 - Chatterjee & Mächler (1997)
+- Hubert & Rousseeuw (1998) Catline estimator
 - Theil-Sen estimator for multiple regression
 - Deepest Regression Estimator
 - Robust Hat Matrix based Initial Subset Regressor

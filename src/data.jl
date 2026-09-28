@@ -43,6 +43,37 @@ const phones = DataFrame(
     ],
 )
 
+"""
+Stars in the CYG OB1 cluster
+
+# Components
+- `log_te::Float64`: logarithm of the star's effective surface temperature.
+- `log_light::Float64`: logarithm of the star's light intensity.
+
+# Outliers
+Observations 11, 20, 30, and 34 are giant stars.
+
+# Reference
+P. J. Rousseeuw and A. M. Leroy (1987) _Robust Regression &
+     Outlier Detection._ Wiley, p. 27, Table 3.
+"""
+const starscyg = DataFrame(
+    log_te = [
+        4.37, 4.56, 4.26, 4.56, 4.3, 4.46, 3.84, 4.57, 4.26, 4.37,
+        3.49, 4.43, 4.48, 4.01, 4.29, 4.42, 4.23, 4.42, 4.23, 3.49,
+        4.29, 4.29, 4.42, 4.49, 4.38, 4.42, 4.29, 4.38, 4.22, 3.48,
+        4.38, 4.56, 4.45, 3.49, 4.23, 4.62, 4.53, 4.45, 4.53, 4.43,
+        4.38, 4.45, 4.5, 4.45, 4.55, 4.45, 4.42,
+    ],
+    log_light = [
+        5.23, 5.74, 4.93, 5.74, 5.19, 5.46, 4.65, 5.27, 5.57, 5.12,
+        5.73, 5.45, 5.42, 4.05, 4.26, 4.58, 3.94, 4.18, 4.18, 5.89,
+        4.38, 4.22, 4.42, 4.85, 5.02, 4.66, 4.66, 4.9, 4.39, 6.05,
+        4.42, 5.1, 5.22, 6.29, 4.34, 5.62, 5.1, 5.22, 5.18, 5.57,
+        4.62, 5.06, 5.34, 5.34, 5.54, 4.98, 4.5,
+    ],
+)
+
 
 
 """

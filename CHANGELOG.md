@@ -1,6 +1,11 @@
-# v0.11.10 (Upcoming Release)
+# v0.11.11 (Upcoming Release)
+
+
+# v0.11.10
 
 - Implement Yohai (1987) MM-Estimator
+- Implement Catline Regression estimator
+
 
 # v0.11.9
 

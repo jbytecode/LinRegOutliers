@@ -56,7 +56,7 @@ import .GA: ga, RealChromosome
 
 # Predefined datasets used in outlier detection literature
 include("data.jl")
-import .DataSets: phones, hbk, stackloss
+import .DataSets: phones, starscyg, hbk, stackloss
 import .DataSets: weightloss, hs93randomdata, woodgravity
 import .DataSets: hills, softdrinkdelivery, animals
 
@@ -225,6 +225,11 @@ import .DeepestRegression: deepestregression
 include("robhatreg.jl")
 import .RobustHatRegression: robhatreg
 
+
+# Catline 
+include("catline.jl")
+import .Catline: catline
+
 # All-in-one
 include("summary.jl")
 import .Summary: detectOutliers
@@ -240,7 +245,7 @@ export mean, quantile
 
 
 # Data
-export phones, hbk, stackloss
+export phones, starscyg, hbk, stackloss
 export weightloss, hs93randomdata, woodgravity
 export hills, softdrinkdelivery, animals
 
@@ -290,6 +295,7 @@ export cm97
 export theilsen
 export deepestregression
 export robhatreg
+export catline
 
 
 # Snoop-Precompile 

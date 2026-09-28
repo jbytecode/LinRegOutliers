@@ -5,6 +5,10 @@
 LinRegOutliers.phones
 ```
 
+## Stars in the CYG OB1 cluster
+```@docs
+LinRegOutliers.starscyg
+```
 
 ## Hawkings & Bradu & Kass data
 ```@docs
@@ -46,4 +50,3 @@ LinRegOutliers.hills
 ```@docs
 LinRegOutliers.softdrinkdelivery
 ```
-
